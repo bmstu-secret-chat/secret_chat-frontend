@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-
 'use client';
 
 import { IconMenu2, IconX } from '@tabler/icons-react';
@@ -55,7 +54,7 @@ export const SidebarProvider = ({
 	);
 };
 
-export const Sidebar = ({
+export const SidebarLib = ({
 	children,
 	open,
 	setOpen,

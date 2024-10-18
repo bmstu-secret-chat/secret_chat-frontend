@@ -1,22 +1,7 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import React from 'react';
 import './globals.css';
-import AppSidebar from '@/components/ui/Sidebar/Sidebar';
-import AppMSidebar from '@/components/ui/Sidebar/Sidebar';
-import SidebarDemo from '@/components/ui/Sidebar/Sidebar';
-// import { Sidebar } from '@/components/Sidebar/Sidebar';
-
-const geistSans = localFont({
-	src: './fonts/GeistVF.woff',
-	variable: '--font-geist-sans',
-	weight: '100 900',
-});
-const geistMono = localFont({
-	src: './fonts/GeistMonoVF.woff',
-	variable: '--font-geist-mono',
-	weight: '100 900',
-});
+import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -30,12 +15,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-			>
+			<body>
+				<Sidebar />
 				{children}
-				{/*<AppMSidebar />*/}
-				<SidebarDemo />
 			</body>
 		</html>
 	);
