@@ -18,7 +18,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    // 'prettier',
+    'prettier',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:react/recommended',
