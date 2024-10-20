@@ -1,7 +1,7 @@
 // app/chat/page.tsx
 import Link from 'next/link';
 
-const ChatPage = () => {
+const ChatsList = () => {
 	return (
 		<div>
 			<h1>Чаты</h1>
@@ -19,5 +19,4 @@ const ChatPage = () => {
 		</div>
 	);
 };
-
-export default ChatPage;
+export default ChatsList;
