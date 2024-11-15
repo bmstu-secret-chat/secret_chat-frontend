@@ -1,16 +1,9 @@
-import ChatPage from '@/app/chats/_chatsMenu/page';
-export default function Layout({
-	children,
-	// chatId,
-}: {
-	children: React.ReactNode;
-	// chatId: React.ReactNode;
-}) {
+import ChatsList from '@/app/chats/_chatsList/page';
+export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<>
-			<ChatPage />
+			<ChatsList />
 			{children}
-			{/*{chatId}*/}
 		</>
 	);
 }

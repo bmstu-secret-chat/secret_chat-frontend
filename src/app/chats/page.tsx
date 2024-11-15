@@ -1,5 +1,5 @@
 const ChatPage = () => {
-	return <></>;
+	return <>asdfaljsdhflk</>;
 };
 
 export default ChatPage;

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
 import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
+import { EnvProvider } from '@/contexts/EnvContext';
+import WebSocketProvider from '@/contexts/WebSocketContext';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -16,8 +18,12 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body>
-				<Sidebar />
-				{children}
+				<EnvProvider>
+					<WebSocketProvider>
+						<Sidebar />
+						{children}
+					</WebSocketProvider>
+				</EnvProvider>
 			</body>
 		</html>
 	);
