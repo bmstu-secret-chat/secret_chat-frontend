@@ -4,6 +4,7 @@ import './globals.css';
 import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
 import { EnvProvider } from '@/contexts/EnvContext';
 import WebSocketProvider from '@/contexts/WebSocketContext';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -21,7 +22,7 @@ export default function RootLayout({
 				<EnvProvider>
 					<WebSocketProvider>
 						<Sidebar />
-						{children}
+						<div className={cn('ml-[60px]')}>{children}</div>
 					</WebSocketProvider>
 				</EnvProvider>
 			</body>

@@ -7,6 +7,7 @@ import {
 	useWebSocketContext,
 	WSListenerCallback,
 } from '@/contexts/WebSocketContext';
+import { cn } from '@/lib/utils';
 
 export default function Chat({ params }: { params: { id: string } }) {
 	const { id } = params;
@@ -39,7 +40,13 @@ export default function Chat({ params }: { params: { id: string } }) {
 	};
 
 	return (
-		<div>
+		<div
+			className={cn(
+				'flex absolute flex-col',
+				'md:ml-[30vw] md:w-[calc(70vw-60px)] w-[calc(100vw-60px)]',
+				'h-full overflow-y-auto',
+			)}
+		>
 			<h1>Чат {id}</h1>
 			<ul>
 				{messages.map((msg, index) => (

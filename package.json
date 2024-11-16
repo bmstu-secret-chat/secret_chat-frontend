@@ -15,12 +15,13 @@
     "@tsparticles/slim": "^3.5.0",
     "antd": "^5.21.4",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.11.9",
+    "framer-motion": "^11.11.17",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "react-use-websocket": "^4.9.0",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "tailwind-scrollbar": "^3.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",

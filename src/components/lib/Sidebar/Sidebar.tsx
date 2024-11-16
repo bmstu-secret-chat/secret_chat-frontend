@@ -1,10 +1,16 @@
 /* eslint-disable react/prop-types */
 'use client';
 
-import { IconMenu2, IconX } from '@tabler/icons-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link, { LinkProps } from 'next/link';
-import React, { useState, createContext, useContext, useRef } from 'react';
+import React, {
+	useState,
+	createContext,
+	useContext,
+	useRef,
+	useCallback,
+	useEffect,
+} from 'react';
 import { cn } from '@/lib/utils';
 
 interface Links {
@@ -77,12 +83,7 @@ export const SidebarLib = ({
 };
 
 export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
-	return (
-		<>
-			<DesktopSidebar {...props} />
-			{/*<MobileSidebar {...(props as React.ComponentProps<'div'>)} />*/}
-		</>
-	);
+	return <DesktopSidebar {...props} />;
 };
 
 export const DesktopSidebar = ({
@@ -91,10 +92,11 @@ export const DesktopSidebar = ({
 	...props
 }: React.ComponentProps<typeof motion.div>) => {
 	const { open, setOpen } = useSidebar();
-	const touchStartX = useRef(0); // Для отслеживания начальной точки касания
-	const [currentWidth, setCurrentWidth] = useState(60); // Начальная ширина сайдбара
+	const touchStartX = useRef(0);
+	const sidebarRef = useRef<HTMLDivElement>(null); // Создаем реф для сайдбара
+	const [currentWidth, setCurrentWidth] = useState(60);
 
-	const MAX_SIDEBAR_WIDTH = 300;
+	const MAX_SIDEBAR_WIDTH = 200;
 	const MIN_SIDEBAR_WIDTH = 60;
 
 	const handleTouchStart = (e: React.TouchEvent) => {
@@ -121,90 +123,61 @@ export const DesktopSidebar = ({
 	};
 
 	const handleTouchEnd = () => {
-		// Если ширина больше половины максимальной — оставляем сайдбар открытым
 		if (currentWidth > MAX_SIDEBAR_WIDTH / 2) {
 			setOpen(true);
 			setCurrentWidth(MAX_SIDEBAR_WIDTH);
 		} else {
-			// Если меньше — закрываем
 			setOpen(false);
 			setCurrentWidth(MIN_SIDEBAR_WIDTH);
 		}
 	};
 
-	return (
-		<>
-			<motion.div
-				className={cn(
-					'h-full px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
-					className,
-				)}
-				// style={{ width: currentWidth }} // Применяем динамическую ширину
-				onTouchStart={handleTouchStart} // Начало касания
-				onTouchMove={handleTouchMove} // Движение пальца
-				onTouchEnd={handleTouchEnd} // Завершение касания
-				onMouseEnter={() => setOpen(true)}
-				onMouseLeave={() => setOpen(false)}
-				animate={{
-					// width: animate ? (open ? '300px' : '60px') : '300px',
-					width: currentWidth !== 60 ? currentWidth : open ? '300px' : '60px',
-				}}
-				{...props}
-			>
-				{children}
-			</motion.div>
-		</>
+	// Функция для обработки кликов вне сайдбара
+	const handleClickOutside = useCallback(
+		(event: MouseEvent) => {
+			if (
+				sidebarRef.current &&
+				!sidebarRef.current.contains(event.target as Node)
+			) {
+				setOpen(false);
+				setCurrentWidth(MIN_SIDEBAR_WIDTH);
+			}
+		},
+		[setOpen],
 	);
-};
 
-export const MobileSidebar = ({
-	className,
-	children,
-	...props
-}: React.ComponentProps<'div'>) => {
-	const { open, setOpen } = useSidebar();
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [handleClickOutside]);
 
 	return (
-		<>
-			<div
-				className={cn(
-					'h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full',
-				)}
-				{...props}
-			>
-				<div className='flex justify-end z-20 w-full'>
-					<IconMenu2
-						className='text-neutral-800 dark:text-neutral-200'
-						onClick={() => setOpen(!open)}
-					/>
-				</div>
-				<AnimatePresence>
-					{open && (
-						<motion.div
-							initial={{ x: '-100%', opacity: 0 }}
-							animate={{ x: 0, opacity: 1 }}
-							exit={{ x: '-100%', opacity: 0 }}
-							transition={{
-								duration: 0.3,
-								ease: 'easeInOut',
-							}}
-							className={cn(
-								'fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between',
-								className,
-							)}
-						>
-							<div
-								className='absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200'
-								onClick={() => setOpen(!open)}
-							>
-								<IconX />
-							</div>
-							{children}
-						</motion.div>
-					)}
-				</AnimatePresence>
-			</div>
-		</>
+		<motion.div
+			ref={sidebarRef} // Привязываем реф к контейнеру сайдбара
+			className={cn(
+				'h-full w-[60px] px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
+				className,
+			)}
+			onTouchStart={handleTouchStart}
+			onTouchMove={handleTouchMove}
+			onTouchEnd={handleTouchEnd}
+			onMouseEnter={() => setOpen(true)}
+			onMouseLeave={() => setOpen(false)}
+			animate={{
+				width:
+					currentWidth !== 60
+						? currentWidth
+						: open
+							? MAX_SIDEBAR_WIDTH
+							: MIN_SIDEBAR_WIDTH,
+			}}
+			{...props}
+		>
+			{children}
+		</motion.div>
 	);
 };
 
