@@ -20,10 +20,7 @@ const ChatsList = () => {
 
 	return (
 		<div
-			className={cn(
-				'h-screen overflow-y-auto',
-				'border-r border-neutral-200 dark:border-neutral-700',
-			)}
+			className={cn('h-screen overflow-y-auto', 'border-r border-neutral-700')}
 		>
 			{chats.map((chat) => (
 				<Link
@@ -33,7 +30,7 @@ const ChatsList = () => {
 					<div
 						className={cn(
 							'flex justify-start items-center h-[100px] p-8',
-							'border-b border-neutral-200 dark:border-neutral-700 overflow-hidden',
+							'border-b border-neutral-700 overflow-hidden',
 						)}
 					>
 						Чат {chat.id}

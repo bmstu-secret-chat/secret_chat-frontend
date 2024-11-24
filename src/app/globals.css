@@ -26,16 +26,19 @@ body {
   }
 }
 
-::-webkit-scrollbar {
-  width: 12px;
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #222;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #555;
-  border-radius: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #222;
-}
 

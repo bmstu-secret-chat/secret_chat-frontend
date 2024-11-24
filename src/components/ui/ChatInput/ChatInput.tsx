@@ -1,5 +1,6 @@
 import React from 'react';
 import { VanishInput } from '@/components/lib/VanishInput/VanishInput';
+import { cn } from '@/lib/utils';
 
 type Props = {
 	value: string;
@@ -17,11 +18,18 @@ export default function ChatInput({ value, setValue, onSubmit }: Props) {
 	];
 
 	return (
-		<VanishInput
-			value={value}
-			placeholders={placeholders}
-			setValue={setValue}
-			onSubmit={onSubmit}
-		/>
+		<div
+			className={cn(
+				'flex absolute bottom-0 items-center justify-center',
+				'w-full h-[76px] border-t border-neutral-700 bg-neutral-800',
+			)}
+		>
+			<VanishInput
+				value={value}
+				placeholders={placeholders}
+				setValue={setValue}
+				onSubmit={onSubmit}
+			/>
+		</div>
 	);
 }

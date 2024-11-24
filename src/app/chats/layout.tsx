@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatsList from '@/app/chats/_chatsList/page';
 import { cn } from '@/lib/utils';
 
@@ -12,7 +12,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 	useEffect(() => {
 		const isChatPage = pathname.includes('/chats/');
-		console.log(isChatPage);
 		setShowChatsList(!isChatPage);
 
 		const handleEscape = (event: KeyboardEvent) => {

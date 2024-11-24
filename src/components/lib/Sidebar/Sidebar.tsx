@@ -11,6 +11,7 @@ import React, {
 	useCallback,
 	useEffect,
 } from 'react';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
 
 interface Links {
@@ -91,6 +92,8 @@ export const DesktopSidebar = ({
 	children,
 	...props
 }: React.ComponentProps<typeof motion.div>) => {
+	const { isMobileDevice } = useScreenWidth();
+
 	const { open, setOpen } = useSidebar();
 	const touchStartX = useRef(0);
 	const sidebarRef = useRef<HTMLDivElement>(null); // Создаем реф для сайдбара
@@ -156,7 +159,7 @@ export const DesktopSidebar = ({
 
 	return (
 		<motion.div
-			ref={sidebarRef} // Привязываем реф к контейнеру сайдбара
+			ref={sidebarRef}
 			className={cn(
 				'h-full w-[60px] px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
 				className,
@@ -166,6 +169,12 @@ export const DesktopSidebar = ({
 			onTouchEnd={handleTouchEnd}
 			onMouseEnter={() => setOpen(true)}
 			onMouseLeave={() => setOpen(false)}
+			onClick={() => {
+				if (isMobileDevice) {
+					setOpen(false);
+					setCurrentWidth(60);
+				}
+			}}
 			animate={{
 				width:
 					currentWidth !== 60
@@ -176,7 +185,7 @@ export const DesktopSidebar = ({
 			}}
 			{...props}
 		>
-			{children}
+			<>{children}</>
 		</motion.div>
 	);
 };
