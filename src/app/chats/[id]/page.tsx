@@ -1,6 +1,5 @@
 'use client';
 
-import { ClockCircleOutlined } from '@ant-design/icons';
 import { notFound } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import ChatInput from '@/components/ui/ChatInput/ChatInput';
@@ -11,9 +10,10 @@ import {
 } from '@/contexts/WebSocketContext';
 import { cn } from '@/lib/utils';
 
-type MessageProps = {
+type MessageDto = {
 	fromMe: boolean;
 	content: string;
+	status: 'sent' | 'received' | 'error';
 };
 
 export default function Chat({ params }: { params: { id: string } }) {
@@ -25,28 +25,68 @@ export default function Chat({ params }: { params: { id: string } }) {
 		notFound();
 	}
 
+	const randomStatus = (): MessageDto['status'] => {
+		const statuses: MessageDto['status'][] = ['sent', 'received', 'error'];
+		return statuses[Math.floor(Math.random() * statuses.length)];
+	};
+
 	const [message, setMessage] = useState('');
-	const [messages, setMessages] = useState<MessageProps[]>([
-		{ fromMe: true, content: 'Привет! Как дела?' },
-		{ fromMe: false, content: 'Привет! Все хорошо, спасибо. У тебя как?' },
-		{ fromMe: true, content: 'Тоже все отлично, спасибо!' },
-		{ fromMe: false, content: 'Чем занят сегодня?' },
-		{ fromMe: true, content: 'Работаю над новым проектом.' },
-		{ fromMe: false, content: 'Звучит интересно! Расскажи подробнее.' },
-		{ fromMe: true, content: 'Это приложение для совместных тренировок.' },
-		{ fromMe: false, content: 'Вау, отличная идея!' },
-		{ fromMe: true, content: 'Спасибо! А ты чем занимаешься?' },
-		{ fromMe: false, content: 'Учусь новому. Пробую Next.js.' },
-		{ fromMe: true, content: 'Next.js — крутая штука. Мне нравится.' },
-		{ fromMe: false, content: 'Согласен. Уже чувствую себя увереннее.' },
-		{ fromMe: true, content: 'Если что, пиши, помогу разобраться.' },
-		{ fromMe: false, content: 'Обязательно. Спасибо!' },
-		{ fromMe: false, content: 'Учусь новому. Пробую Next.js.' },
-		{ fromMe: true, content: 'Next.js — крутая штука. Мне нравится.' },
-		{ fromMe: false, content: 'Согласен. Уже чувствую себя увереннее.' },
-		{ fromMe: true, content: 'Если что, пиши, помогу разобраться.' },
-		{ fromMe: false, content: 'Обязательно. Спасибо!' },
-		{ fromMe: true, content: 'Не за что. Удачи!' },
+	const [messages, setMessages] = useState<MessageDto[]>([
+		{ fromMe: true, content: 'Привет! Как дела?', status: randomStatus() },
+		{
+			fromMe: false,
+			content: 'Привет! Все хорошо, спасибо. У тебя как?',
+			status: randomStatus(),
+		},
+		{
+			fromMe: true,
+			content: 'Тоже все отлично, спасибо!',
+			status: randomStatus(),
+		},
+		{ fromMe: false, content: 'Чем занят сегодня?', status: randomStatus() },
+		{
+			fromMe: true,
+			content: 'Работаю над новым проектом.',
+			status: randomStatus(),
+		},
+		{
+			fromMe: false,
+			content: 'Звучит интересно! Расскажи подробнее.',
+			status: randomStatus(),
+		},
+		{
+			fromMe: true,
+			content: 'Это приложение для совместных тренировок.',
+			status: randomStatus(),
+		},
+		{ fromMe: false, content: 'Вау, отличная идея!', status: randomStatus() },
+		{
+			fromMe: true,
+			content: 'Спасибо! А ты чем занимаешься?',
+			status: randomStatus(),
+		},
+		{
+			fromMe: false,
+			content: 'Учусь новому. Пробую Next.js.',
+			status: randomStatus(),
+		},
+		{
+			fromMe: true,
+			content: 'Next.js — крутая штука. Мне нравится.',
+			status: randomStatus(),
+		},
+		{
+			fromMe: false,
+			content: 'Согласен. Уже чувствую себя увереннее.',
+			status: randomStatus(),
+		},
+		{
+			fromMe: true,
+			content: 'Если что, пиши, помогу разобраться.',
+			status: randomStatus(),
+		},
+		{ fromMe: false, content: 'Обязательно. Спасибо!', status: randomStatus() },
+		{ fromMe: true, content: 'Не за что. Удачи!', status: randomStatus() },
 	]);
 
 	const { addListener, removeListener, send } = useWebSocketContext();
@@ -83,7 +123,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{ fromMe: true, content: message },
+			{ fromMe: true, content: message, status: randomStatus() },
 		]);
 	};
 
@@ -95,15 +135,15 @@ export default function Chat({ params }: { params: { id: string } }) {
 				'h-full overflow-y-auto bg-neutral-800',
 			)}
 		>
-			<h1
+			<span
 				className={cn(
 					'flex absolute top-0 justify-center items-center p-2',
 					'w-full h-[64px] bg-neutral-800',
-					'border-b border-neutral-700',
+					'border-b border-neutral-700 text-white font-normal text-xl',
 				)}
 			>
 				Чат {id}
-			</h1>
+			</span>
 			<div
 				ref={messagesContainerRef}
 				className={cn(
@@ -116,7 +156,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 						key={index}
 						fromMe={msg.fromMe}
 						content={msg.content}
-						status={<ClockCircleOutlined />}
+						status={msg.status}
 					/>
 				))}
 			</div>

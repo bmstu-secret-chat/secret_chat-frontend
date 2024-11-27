@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html
-			lang='en'
+			lang='ru'
 			className='dark'
 		>
 			<body>
