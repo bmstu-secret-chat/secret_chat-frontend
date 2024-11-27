@@ -30,7 +30,7 @@ const ChatsList = () => {
 					<div
 						className={cn(
 							'flex justify-start items-center h-[100px] p-8',
-							'border-b border-neutral-700 overflow-hidden',
+							'border-b border-neutral-700 overflow-hidden pc:hover:bg-black',
 						)}
 					>
 						Чат {chat.id}

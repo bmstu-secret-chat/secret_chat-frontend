@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 const MOBILE_DISPLAY_WIDTH = 768;
 
 export const useScreenWidth = () => {
-	const [size, setSize] = useState<number>(window.innerWidth);
+	const [size, setSize] = useState<number>(0);
 
 	const isMobileDevice = size <= MOBILE_DISPLAY_WIDTH;
 

@@ -14,11 +14,11 @@ const Message: React.FC<MessageProps> = ({ fromMe, content }) => {
 		>
 			<span
 				className={cn(
-					'my-2 px-4 py-2 max-w-max leading-tight',
-					'text-white rounded-tl-full rounded-tr-full',
+					'my-2 px-4 py-2 max-w-max leading-tight break-all',
+					'text-white rounded-tl-[18px] rounded-tr-[18px] tablet:max-w-[40vw] max-w-[70vw]',
 					fromMe
-						? 'bg-zinc-700 rounded-bl-full'
-						: 'bg-zinc-950 rounded-br-full',
+						? 'bg-zinc-700 rounded-bl-[18px]'
+						: 'bg-zinc-950 rounded-br-[18px]',
 				)}
 			>
 				{content}

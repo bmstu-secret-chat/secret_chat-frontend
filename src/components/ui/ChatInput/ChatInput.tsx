@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { VanishInput } from '@/components/lib/VanishInput/VanishInput';
 import { cn } from '@/lib/utils';
 
@@ -9,6 +9,8 @@ type Props = {
 };
 
 export default function ChatInput({ value, setValue, onSubmit }: Props) {
+	const inputRef = useRef<HTMLInputElement | null>(null);
+
 	const placeholders = [
 		"What's the first rule of Fight Club?",
 		'Who is Tyler Durden?',
@@ -16,6 +18,10 @@ export default function ChatInput({ value, setValue, onSubmit }: Props) {
 		'Write a Javascript method to reverse a string',
 		'How to assemble your own PC?',
 	];
+
+	useEffect(() => {
+		inputRef.current?.focus();
+	}, []);
 
 	return (
 		<div
@@ -25,6 +31,7 @@ export default function ChatInput({ value, setValue, onSubmit }: Props) {
 			)}
 		>
 			<VanishInput
+				inputRef={inputRef}
 				value={value}
 				placeholders={placeholders}
 				setValue={setValue}

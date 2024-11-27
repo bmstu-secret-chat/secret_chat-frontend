@@ -13,6 +13,10 @@ const config: Config = {
 				background: 'var(--background)',
 				foreground: 'var(--foreground)',
 			},
+			screens: {
+				pc: '1024px',
+				tablet: '768px',
+			},
 		},
 	},
 	plugins: [tailwindScrollbar],

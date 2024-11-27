@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatInput from '@/components/ui/ChatInput/ChatInput';
 import Message from '@/components/ui/Message';
 import {
@@ -16,6 +16,8 @@ type MessageProps = {
 };
 
 export default function Chat({ params }: { params: { id: string } }) {
+	const messagesContainerRef = useRef<HTMLDivElement>(null);
+
 	const { id } = params;
 
 	if (isNaN(Number(id))) {
@@ -56,15 +58,31 @@ export default function Chat({ params }: { params: { id: string } }) {
 		};
 		addListener(listener);
 
+		messagesContainerRef.current?.scrollTo({
+			top: messagesContainerRef.current.scrollHeight,
+		});
+
 		return () => {
 			removeListener(listener);
 		};
 	}, []);
 
+	useEffect(() => {
+		messagesContainerRef.current?.scrollTo({
+			top: messagesContainerRef.current.scrollHeight,
+			behavior: 'smooth',
+		});
+	}, [messages]);
+
 	const sendMessage = () => {
 		if (message.trim()) {
 			send(message);
 		}
+
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ fromMe: true, content: message },
+		]);
 	};
 
 	return (
@@ -85,6 +103,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 				Чат {id}
 			</h1>
 			<div
+				ref={messagesContainerRef}
 				className={cn(
 					'flex absolute flex-col items-center p-2 top-[64px]',
 					'w-full h-[calc(100vh-64px-76px)] overflow-y-auto bg-neutral-800',

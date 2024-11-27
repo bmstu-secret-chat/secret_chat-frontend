@@ -2,13 +2,14 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
 
 type Props = {
 	value: string;
 	placeholders: string[];
+	inputRef: React.RefObject<HTMLInputElement>;
 	setValue: (value: string) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
@@ -18,6 +19,7 @@ const MAX_DISPLAY_WIDTH = 1250; // Отвечает за разбиение те
 export function VanishInput({
 	value,
 	placeholders,
+	inputRef,
 	setValue,
 	onSubmit,
 }: Props) {
@@ -55,7 +57,6 @@ export function VanishInput({
 
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const newDataRef = useRef<any[]>([]);
-	const inputRef = useRef<HTMLInputElement>(null);
 	const [animating, setAnimating] = useState(false);
 
 	const draw = useCallback(() => {
@@ -70,7 +71,7 @@ export function VanishInput({
 		);
 
 		const width =
-			window.innerWidth * (isMobileDevice ? 0.8 : 0.5) - remInPx * 5;
+			window.innerWidth * (isMobileDevice ? 0.8 : 0.5) - remInPx * 4;
 		const height = 48;
 		canvas.width = width;
 		canvas.height = height;
@@ -219,7 +220,7 @@ export function VanishInput({
 				value={value}
 				type='text'
 				className={cn(
-					'w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-10 pr-20',
+					'w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-10 pr-16',
 					animating && 'text-transparent dark:text-transparent',
 				)}
 			/>
