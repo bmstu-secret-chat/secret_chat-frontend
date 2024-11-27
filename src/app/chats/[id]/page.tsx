@@ -1,9 +1,10 @@
 'use client';
 
+import { ClockCircleOutlined } from '@ant-design/icons';
 import { notFound } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import ChatInput from '@/components/ui/ChatInput/ChatInput';
-import Message from '@/components/ui/Message';
+import Message from '@/components/ui/Message/Message';
 import {
 	useWebSocketContext,
 	WSListenerCallback,
@@ -65,6 +66,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 		return () => {
 			removeListener(listener);
 		};
+		// eslint-disable-next-line  react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -114,6 +116,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 						key={index}
 						fromMe={msg.fromMe}
 						content={msg.content}
+						status={<ClockCircleOutlined />}
 					/>
 				))}
 			</div>

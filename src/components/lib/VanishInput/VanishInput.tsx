@@ -56,6 +56,7 @@ export function VanishInput({
 	}, [placeholders]);
 
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	// eslint-disable-next-line
 	const newDataRef = useRef<any[]>([]);
 	const [animating, setAnimating] = useState(false);
 
@@ -90,6 +91,7 @@ export function VanishInput({
 			MAX_DISPLAY_WIDTH,
 		);
 		const pixelData = imageData.data;
+		// eslint-disable-next-line
 		const newData: any[] = [];
 
 		for (let t = 0; t < MAX_DISPLAY_WIDTH; t++) {

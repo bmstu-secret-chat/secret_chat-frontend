@@ -1,3 +1,4 @@
+import { ConfigProvider } from 'antd';
 import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
@@ -17,12 +18,25 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='en'>
+		<html
+			lang='en'
+			className='dark'
+		>
 			<body>
 				<EnvProvider>
 					<WebSocketProvider>
-						<Sidebar />
-						<div className={cn('ml-[60px]')}>{children}</div>
+						<ConfigProvider
+							theme={{
+								token: {
+									colorPrimary: '#1f1f1f',
+									colorBgBase: '#000000',
+									colorTextBase: '#ffffff',
+								},
+							}}
+						>
+							<Sidebar />
+							<div className={cn('ml-[60px]')}>{children}</div>
+						</ConfigProvider>
 					</WebSocketProvider>
 				</EnvProvider>
 			</body>
