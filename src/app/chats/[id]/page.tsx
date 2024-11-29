@@ -6,6 +6,7 @@ import ChatInput from '@/components/ui/ChatInput/ChatInput';
 import Message from '@/components/ui/Message/Message';
 import {
 	useWebSocketContext,
+	WSEventType,
 	WSListenerCallback,
 } from '@/contexts/WebSocketContext';
 import { cn } from '@/lib/utils';
@@ -93,20 +94,25 @@ export default function Chat({ params }: { params: { id: string } }) {
 
 	useEffect(() => {
 		const listener: WSListenerCallback = (event, data) => {
-			if (event === 'message' && data instanceof MessageEvent) {
-				setMessages((prevMessages) => [...prevMessages, data.data]);
+			if (event === WSEventType.MESSAGE && data instanceof MessageEvent) {
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{ fromMe: true, content: data.data, status: randomStatus() },
+				]);
 			}
 		};
 		addListener(listener);
-
-		messagesContainerRef.current?.scrollTo({
-			top: messagesContainerRef.current.scrollHeight,
-		});
 
 		return () => {
 			removeListener(listener);
 		};
 		// eslint-disable-next-line  react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		messagesContainerRef.current?.scrollTo({
+			top: messagesContainerRef.current.scrollHeight,
+		});
 	}, []);
 
 	useEffect(() => {
