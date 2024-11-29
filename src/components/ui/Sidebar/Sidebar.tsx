@@ -15,7 +15,7 @@ import {
 import { cn } from '@/lib/utils';
 
 export const Sidebar = () => {
-	const links = [
+	const upperLinks = [
 		{
 			label: 'Chats',
 			href: '/chats',
@@ -37,6 +37,9 @@ export const Sidebar = () => {
 				<IconSettings className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
 		},
+	];
+
+	const downLinks = [
 		{
 			label: 'Logout',
 			href: '#',
@@ -51,7 +54,9 @@ export const Sidebar = () => {
 	return (
 		<div
 			className={cn(
-				'rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-500 flex-1 mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden',
+				'top-0 left-0 rounded-md fixed z-10 h-screen flex flex-col md:flex-row',
+				'bg-gray-100 dark:bg-neutral-500 flex-1 mx-auto border',
+				'border-neutral-200 dark:border-neutral-700 overflow-hidden',
 			)}
 		>
 			<SidebarLib
@@ -59,9 +64,17 @@ export const Sidebar = () => {
 				setOpen={setOpen}
 			>
 				<SidebarBody className='justify-between gap-10'>
-					<div className='flex flex-col flex-1 overflow-y-auto overflow-x-hidden'>
+					<div className='flex flex-col flex-1 justify-between overflow-hidden'>
 						<div className='mt-8 flex flex-col gap-2'>
-							{links.map((link, idx) => (
+							{upperLinks.map((link, idx) => (
+								<SidebarLink
+									key={idx}
+									link={link}
+								/>
+							))}
+						</div>
+						<div className='mb-8 flex flex-col gap-2'>
+							{downLinks.map((link, idx) => (
 								<SidebarLink
 									key={idx}
 									link={link}

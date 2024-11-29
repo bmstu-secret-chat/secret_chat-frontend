@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { VanishInput } from '@/components/lib/VanishInput/VanishInput';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
+import { cn } from '@/lib/utils';
 
 type Props = {
 	value: string;
@@ -8,6 +10,10 @@ type Props = {
 };
 
 export default function ChatInput({ value, setValue, onSubmit }: Props) {
+	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	const { isPcDevice } = useScreenWidth();
+
 	const placeholders = [
 		"What's the first rule of Fight Club?",
 		'Who is Tyler Durden?',
@@ -16,12 +22,26 @@ export default function ChatInput({ value, setValue, onSubmit }: Props) {
 		'How to assemble your own PC?',
 	];
 
+	useEffect(() => {
+		if (isPcDevice) {
+			inputRef.current?.focus();
+		}
+	}, [isPcDevice]);
+
 	return (
-		<VanishInput
-			value={value}
-			placeholders={placeholders}
-			setValue={setValue}
-			onSubmit={onSubmit}
-		/>
+		<div
+			className={cn(
+				'flex absolute bottom-0 items-center justify-center',
+				'w-full h-[76px] border-t border-neutral-700 bg-neutral-800',
+			)}
+		>
+			<VanishInput
+				inputRef={inputRef}
+				value={value}
+				placeholders={placeholders}
+				setValue={setValue}
+				onSubmit={onSubmit}
+			/>
+		</div>
 	);
 }

@@ -13,6 +13,7 @@ module.exports = {
   },
   env: {
     browser: true,
+    serviceworker: true,
     es6: true,
     node: true,
   },

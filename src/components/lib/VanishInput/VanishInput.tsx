@@ -2,23 +2,30 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
 
 type Props = {
 	value: string;
 	placeholders: string[];
+	inputRef: React.RefObject<HTMLInputElement>;
 	setValue: (value: string) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
+const MAX_DISPLAY_WIDTH = 1250; // Отвечает за разбиение текста на пиксели
+
 export function VanishInput({
 	value,
 	placeholders,
+	inputRef,
 	setValue,
 	onSubmit,
 }: Props) {
 	const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+
+	const { isMobileDevice } = useScreenWidth();
 
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 	const startAnimation = () => {
@@ -49,8 +56,8 @@ export function VanishInput({
 	}, [placeholders]);
 
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	// eslint-disable-next-line
 	const newDataRef = useRef<any[]>([]);
-	const inputRef = useRef<HTMLInputElement>(null);
 	const [animating, setAnimating] = useState(false);
 
 	const draw = useCallback(() => {
@@ -60,9 +67,16 @@ export function VanishInput({
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 
-		canvas.width = 800;
-		canvas.height = 800;
-		ctx.clearRect(0, 0, 800, 800);
+		const remInPx = parseFloat(
+			getComputedStyle(document.documentElement).fontSize,
+		);
+
+		const width =
+			window.innerWidth * (isMobileDevice ? 0.8 : 0.5) - remInPx * 4;
+		const height = 48;
+		canvas.width = width;
+		canvas.height = height;
+		ctx.clearRect(0, 0, MAX_DISPLAY_WIDTH, MAX_DISPLAY_WIDTH);
 		const computedStyles = getComputedStyle(inputRef.current);
 
 		const fontSize = parseFloat(computedStyles.getPropertyValue('font-size'));
@@ -70,13 +84,19 @@ export function VanishInput({
 		ctx.fillStyle = '#FFF';
 		ctx.fillText(value, 40, 29);
 
-		const imageData = ctx.getImageData(0, 0, 800, 800);
+		const imageData = ctx.getImageData(
+			0,
+			0,
+			MAX_DISPLAY_WIDTH,
+			MAX_DISPLAY_WIDTH,
+		);
 		const pixelData = imageData.data;
+		// eslint-disable-next-line
 		const newData: any[] = [];
 
-		for (let t = 0; t < 800; t++) {
-			const i = 4 * t * 800;
-			for (let n = 0; n < 800; n++) {
+		for (let t = 0; t < MAX_DISPLAY_WIDTH; t++) {
+			const i = 4 * t * MAX_DISPLAY_WIDTH;
+			for (let n = 0; n < MAX_DISPLAY_WIDTH; n++) {
 				const e = i + 4 * n;
 				if (
 					pixelData[e] !== 0 &&
@@ -114,7 +134,7 @@ export function VanishInput({
 			requestAnimationFrame(() => {
 				const ctx = canvasRef.current?.getContext('2d');
 				if (ctx) {
-					ctx.clearRect(0, 0, 800, 800);
+					ctx.clearRect(0, 0, MAX_DISPLAY_WIDTH, MAX_DISPLAY_WIDTH);
 
 					newDataRef.current.forEach((t) => {
 						const { x, y, r, color } = t;
@@ -175,14 +195,18 @@ export function VanishInput({
 	return (
 		<form
 			className={cn(
-				'w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200',
-				value && 'bg-gray-50',
+				'md:w-[50vw] w-[80vw] relative bg-zinc-950 h-12',
+				'rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),',
+				'_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)]',
+				'transition duration-200',
+				// value && 'bg-zinc-950',
 			)}
 			onSubmit={handleSubmit}
 		>
 			<canvas
 				className={cn(
-					'absolute pointer-events-none text-base transform origin-top-left filter invert dark:invert-0 pr-20',
+					'absolute pointer-events-none text-base transform origin-top-left',
+					'filter invert dark:invert-0',
 					!animating ? 'opacity-0' : 'opacity-100',
 				)}
 				ref={canvasRef}
@@ -198,7 +222,7 @@ export function VanishInput({
 				value={value}
 				type='text'
 				className={cn(
-					'w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20',
+					'w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-10 pr-16',
 					animating && 'text-transparent dark:text-transparent',
 				)}
 			/>
@@ -265,7 +289,7 @@ export function VanishInput({
 								duration: 0.3,
 								ease: 'linear',
 							}}
-							className='dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate'
+							className='dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-10 text-left w-[calc(100%-2rem)] truncate'
 						>
 							{placeholders[currentPlaceholder]}
 						</motion.p>

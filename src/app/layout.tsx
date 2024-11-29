@@ -1,9 +1,11 @@
+import { ConfigProvider } from 'antd';
 import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
 import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
 import { EnvProvider } from '@/contexts/EnvContext';
 import WebSocketProvider from '@/contexts/WebSocketContext';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -16,12 +18,25 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='en'>
+		<html
+			lang='ru'
+			className='dark'
+		>
 			<body>
 				<EnvProvider>
 					<WebSocketProvider>
-						<Sidebar />
-						{children}
+						<ConfigProvider
+							theme={{
+								token: {
+									colorPrimary: '#1f1f1f',
+									colorBgBase: '#000000',
+									colorTextBase: '#ffffff',
+								},
+							}}
+						>
+							<Sidebar />
+							<div className={cn('ml-[60px]')}>{children}</div>
+						</ConfigProvider>
 					</WebSocketProvider>
 				</EnvProvider>
 			</body>

@@ -4,8 +4,15 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useEnv } from '@/contexts/EnvContext';
 
+export enum WSEventType {
+	OPEN = 'open',
+	CLOSE = 'close',
+	ERROR = 'error',
+	MESSAGE = 'message',
+}
+
 export type WSListenerCallback = (
-	event: string,
+	event: WSEventType,
 	data?: MessageEvent | CloseEvent | Event,
 ) => void;
 
@@ -47,24 +54,24 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	} = useWebSocket(apiUrl, {
 		onOpen: () => {
 			setReadyState(ReadyState.OPEN);
-			notifyListeners('open');
+			notifyListeners(WSEventType.OPEN);
 		},
 		onClose: (event) => {
 			setReadyState(ReadyState.CLOSED);
-			notifyListeners('close', event);
+			notifyListeners(WSEventType.CLOSE, event);
 		},
 		onError: (event) => {
-			notifyListeners('error', event);
+			notifyListeners(WSEventType.ERROR, event);
 		},
 		onMessage: (message) => {
 			setLastMessage(message);
-			notifyListeners('message', message);
+			notifyListeners(WSEventType.MESSAGE, message);
 		},
 		shouldReconnect: () => true,
 	});
 
 	const notifyListeners = (
-		event: string,
+		event: WSEventType,
 		data?: MessageEvent | CloseEvent | Event,
 	) => {
 		listeners.forEach((callback) => callback(event, data));
