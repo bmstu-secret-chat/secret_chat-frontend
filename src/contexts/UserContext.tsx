@@ -13,12 +13,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const [userId] = useState<string>(() => {
-		const storedUserId = localStorage.getItem('userId');
-		return storedUserId ? storedUserId : uuidv4();
+		if (typeof window !== 'undefined') {
+			const storedUserId = localStorage.getItem('userId');
+			return storedUserId ? storedUserId : uuidv4();
+		}
+
+		return '';
 	});
 
 	useEffect(() => {
-		localStorage.setItem('userId', userId);
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('userId', userId);
+		}
 	}, [userId]);
 
 	return (

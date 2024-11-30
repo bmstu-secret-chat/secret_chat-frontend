@@ -34,6 +34,9 @@ export class WsMessage {
 		this.message = message;
 	}
 
+	/**
+	 * Создает экземпляр модели с текущем временем
+	 */
 	static create(userId: string, status: WsMessageStatusEnum, content: string) {
 		return new WsMessage(userId, status, {
 			content,
@@ -59,6 +62,9 @@ export class WsMessage {
 		};
 	}
 
+	/**
+	 * Преобразует в простой объект
+	 */
 	toPlain(): WsMessageModel {
 		return {
 			userId: this.userId,
