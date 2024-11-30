@@ -2,23 +2,18 @@
 
 import { notFound } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ChatInput from '@/components/ui/ChatInput/ChatInput';
 import Message from '@/components/ui/Message/Message';
-import {
-	useWebSocketContext,
-	WSEventType,
-	WSListenerCallback,
-} from '@/contexts/WebSocketContext';
+import { useWebSocketContext } from '@/contexts/WebSocketContext';
 import { cn } from '@/lib/utils';
-
-type MessageDto = {
-	fromMe: boolean;
-	content: string;
-	status: 'sent' | 'received' | 'error';
-};
+import { selectMessages } from '@/stores/Messages/MessagesState';
 
 export default function Chat({ params }: { params: { id: string } }) {
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
+	const [content, setContent] = useState('');
+
+	const messages = useSelector(selectMessages);
 
 	const { id } = params;
 
@@ -26,88 +21,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 		notFound();
 	}
 
-	const randomStatus = (): MessageDto['status'] => {
-		const statuses: MessageDto['status'][] = ['sent', 'received', 'error'];
-		return statuses[Math.floor(Math.random() * statuses.length)];
-	};
-
-	const [message, setMessage] = useState('');
-	const [messages, setMessages] = useState<MessageDto[]>([
-		{ fromMe: true, content: 'Привет! Как дела?', status: randomStatus() },
-		{
-			fromMe: false,
-			content: 'Привет! Все хорошо, спасибо. У тебя как?',
-			status: randomStatus(),
-		},
-		{
-			fromMe: true,
-			content: 'Тоже все отлично, спасибо!',
-			status: randomStatus(),
-		},
-		{ fromMe: false, content: 'Чем занят сегодня?', status: randomStatus() },
-		{
-			fromMe: true,
-			content: 'Работаю над новым проектом.',
-			status: randomStatus(),
-		},
-		{
-			fromMe: false,
-			content: 'Звучит интересно! Расскажи подробнее.',
-			status: randomStatus(),
-		},
-		{
-			fromMe: true,
-			content: 'Это приложение для совместных тренировок.',
-			status: randomStatus(),
-		},
-		{ fromMe: false, content: 'Вау, отличная идея!', status: randomStatus() },
-		{
-			fromMe: true,
-			content: 'Спасибо! А ты чем занимаешься?',
-			status: randomStatus(),
-		},
-		{
-			fromMe: false,
-			content: 'Учусь новому. Пробую Next.js.',
-			status: randomStatus(),
-		},
-		{
-			fromMe: true,
-			content: 'Next.js — крутая штука. Мне нравится.',
-			status: randomStatus(),
-		},
-		{
-			fromMe: false,
-			content: 'Согласен. Уже чувствую себя увереннее.',
-			status: randomStatus(),
-		},
-		{
-			fromMe: true,
-			content: 'Если что, пиши, помогу разобраться.',
-			status: randomStatus(),
-		},
-		{ fromMe: false, content: 'Обязательно. Спасибо!', status: randomStatus() },
-		{ fromMe: true, content: 'Не за что. Удачи!', status: randomStatus() },
-	]);
-
-	const { addListener, removeListener, send } = useWebSocketContext();
-
-	useEffect(() => {
-		const listener: WSListenerCallback = (event, data) => {
-			if (event === WSEventType.MESSAGE && data instanceof MessageEvent) {
-				setMessages((prevMessages) => [
-					...prevMessages,
-					{ fromMe: true, content: data.data, status: randomStatus() },
-				]);
-			}
-		};
-		addListener(listener);
-
-		return () => {
-			removeListener(listener);
-		};
-		// eslint-disable-next-line  react-hooks/exhaustive-deps
-	}, []);
+	const { send } = useWebSocketContext();
 
 	useEffect(() => {
 		messagesContainerRef.current?.scrollTo({
@@ -123,14 +37,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 	}, [messages]);
 
 	const sendMessage = () => {
-		if (message.trim()) {
-			send(message);
-		}
-
-		setMessages((prevMessages) => [
-			...prevMessages,
-			{ fromMe: true, content: message, status: randomStatus() },
-		]);
+		send(content);
 	};
 
 	return (
@@ -160,15 +67,13 @@ export default function Chat({ params }: { params: { id: string } }) {
 				{messages.map((msg, index) => (
 					<Message
 						key={index}
-						fromMe={msg.fromMe}
-						content={msg.content}
-						status={msg.status}
+						msg={msg}
 					/>
 				))}
 			</div>
 			<ChatInput
-				value={message}
-				setValue={setMessage}
+				value={content}
+				setValue={setContent}
 				onSubmit={sendMessage}
 			/>
 		</div>

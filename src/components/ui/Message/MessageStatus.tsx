@@ -4,16 +4,17 @@ import {
 	LoadingOutlined,
 } from '@ant-design/icons';
 import React from 'react';
+import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 
 const MessageStatus: React.FC<{
-	status: 'sent' | 'received' | 'error';
+	status: WsMessageStatusEnum;
 }> = ({ status }) => {
 	switch (status) {
-		case 'sent':
+		case WsMessageStatusEnum.SENT:
 			return <LoadingOutlined />;
-		case 'received':
+		case WsMessageStatusEnum.RECEIVED:
 			return <CheckOutlined />;
-		case 'error':
+		case WsMessageStatusEnum.ERROR:
 			return <CloseOutlined />;
 	}
 };

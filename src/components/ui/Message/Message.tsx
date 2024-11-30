@@ -2,20 +2,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import Popover from '@/components/lib/Popover/Popover';
 import MessageMenu from '@/components/ui/Message/MessageMenu';
 import MessageStatus from '@/components/ui/Message/MessageStatus';
+import { useUser } from '@/contexts/UserContext';
 import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
+import { WsMessageModel } from '@/types/WsMessages';
+import { formatTime } from '@/utils/formatTime';
 
-type MessageDto = {
-	fromMe: boolean;
-	content: string;
-	status: 'sent' | 'received' | 'error';
+type Props = {
+	msg: WsMessageModel;
 };
 
-const Message: React.FC<MessageDto> = ({ fromMe, content, status }) => {
+const Message: React.FC<Props> = ({
+	msg: { userId, status, content, time },
+}) => {
 	const popoverRef = useRef<HTMLDivElement | null>(null);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const { isMobileDevice } = useScreenWidth();
+	const { userId: currentUserId } = useUser();
+	const fromMe = currentUserId === userId;
 
 	const handleClick = () => {
 		if (isMobileDevice) setIsMenuOpen(true);
@@ -67,7 +72,7 @@ const Message: React.FC<MessageDto> = ({ fromMe, content, status }) => {
 						{content}
 					</span>
 					<div className={cn('flex justify-end mt-2 gap-2 text-white')}>
-						<span>10:50:45</span>
+						<span>{formatTime(time)}</span>
 						<MessageStatus status={status} />
 					</div>
 				</div>
