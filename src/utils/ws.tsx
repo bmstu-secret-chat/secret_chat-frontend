@@ -38,7 +38,6 @@ const WsUtils = () => {
 								: WsMessageStatusEnum.ERROR,
 						time: wsMessage.time,
 					};
-					// console.log(message);
 					dispatch(updateMessageAction(message));
 				}
 			}

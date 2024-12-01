@@ -109,7 +109,6 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 			WsMessageStatusEnum.SENT,
 			messageContent,
 		);
-		console.log(message);
 
 		dispatch(addMessageAction(message.toPlain()));
 
