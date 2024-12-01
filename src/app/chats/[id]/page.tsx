@@ -1,7 +1,6 @@
 // app/chat/page.tsx
 'use client';
 
-import { Skeleton } from 'antd';
 import { notFound } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -15,18 +14,18 @@ export default function Chat({ params }: { params: { id: string } }) {
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
 	const [content, setContent] = useState('');
 
-	const [isLoading, setIsLoading] = useState(true); // состояние загрузки
-
-	const loadMessages = async () => {
-		await new Promise((resolve) => {
-			setTimeout(resolve, 5 * 1000);
-		});
-		setIsLoading(false);
-	};
-
-	useEffect(() => {
-		loadMessages();
-	}, []);
+	// const [isLoading, setIsLoading] = useState(true); // состояние загрузки
+	//
+	// const loadMessages = async () => {
+	// 	await new Promise((resolve) => {
+	// 		setTimeout(resolve, 5 * 1000);
+	// 	});
+	// 	setIsLoading(false);
+	// };
+	//
+	// useEffect(() => {
+	// 	loadMessages();
+	// }, []);
 
 	const messages = useSelector(selectMessages);
 
@@ -79,12 +78,12 @@ export default function Chat({ params }: { params: { id: string } }) {
 					'w-full h-[calc(100vh-64px-76px)] overflow-y-auto bg-neutral-800',
 				)}
 			>
-				{isLoading && (
-					<Skeleton
-						active
-						paragraph={{ rows: 5 }}
-					/>
-				)}
+				{/*{isLoading && (*/}
+				{/*	<Skeleton*/}
+				{/*		active*/}
+				{/*		paragraph={{ rows: 5 }}*/}
+				{/*	/>*/}
+				{/*)}*/}
 				{messages.map((msg, index) => (
 					<Message
 						key={index}

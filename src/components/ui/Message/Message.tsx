@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import Popover from '@/components/lib/Popover/Popover';
 import MessageMenu from '@/components/ui/Message/MessageMenu';
 import MessageStatus from '@/components/ui/Message/MessageStatus';
@@ -81,4 +81,4 @@ const Message: React.FC<Props> = ({
 	);
 };
 
-export default Message;
+export default memo(Message);

@@ -11,6 +11,7 @@ import {
 	addMessageAction,
 	updateMessageAction,
 } from '@/stores/Messages/MessagesState';
+import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 import { WsMessage, WsMessageResponseApi } from '@/types/WsMessages';
 
 const WsUtils = () => {
@@ -31,9 +32,13 @@ const WsUtils = () => {
 				// Обновление сообщения
 				else {
 					const message: WsMessageResponseApi = {
-						status: wsMessage.status,
+						status:
+							wsMessage.status === 'ok'
+								? WsMessageStatusEnum.RECEIVED
+								: WsMessageStatusEnum.ERROR,
 						time: wsMessage.time,
 					};
+					// console.log(message);
 					dispatch(updateMessageAction(message));
 				}
 			}
