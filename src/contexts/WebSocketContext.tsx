@@ -109,6 +109,7 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 			WsMessageStatusEnum.SENT,
 			messageContent,
 		);
+		console.log(message);
 
 		dispatch(addMessageAction(message.toPlain()));
 
@@ -116,13 +117,12 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
 		// если сервак не отвечает в течение 5 секунд, то ставим ошибку
 		setTimeout(() => {
-			const messageWithError = new WsMessage(
-				message.userId,
-				WsMessageStatusEnum.ERROR,
-				message.message,
+			dispatch(
+				updateMessageAction({
+					status: WsMessageStatusEnum.ERROR,
+					time: message.message.time,
+				}),
 			);
-
-			dispatch(updateMessageAction(messageWithError.toPlain()));
 		}, 5 * 1000);
 	};
 

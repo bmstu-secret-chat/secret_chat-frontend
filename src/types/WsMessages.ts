@@ -1,12 +1,16 @@
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 
-export type WsMessageReceiveApi = {
+export type WsMessageMessageApi = {
 	user_id: string;
-	status: WsMessageStatusEnum;
 	message: {
 		content: string;
 		time: string;
 	};
+};
+
+export type WsMessageResponseApi = {
+	status: WsMessageStatusEnum;
+	time: string;
 };
 
 export type WsMessageModel = {
@@ -40,24 +44,25 @@ export class WsMessage {
 	static create(userId: string, status: WsMessageStatusEnum, content: string) {
 		return new WsMessage(userId, status, {
 			content,
-			time: new Date().toISOString(),
+			time: new Date().getTime().toString(),
 		});
 	}
 
 	/**
-	 * Создает экземпляр модели из API-объекта
+	 * Полученное сообщение из API-объекта
 	 */
-	static createFromApi(from: WsMessageReceiveApi): WsMessage {
-		return new WsMessage(from.user_id, from.status, { ...from.message });
+	static createMessageFromApi(from: WsMessageMessageApi): WsMessage {
+		return new WsMessage(from.user_id, WsMessageStatusEnum.RECEIVED, {
+			...from.message,
+		});
 	}
 
 	/**
 	 * Конвертирует экземпляр модели в API-формат
 	 */
-	toApi(): WsMessageReceiveApi {
+	toApi(): WsMessageMessageApi {
 		return {
 			user_id: this.userId,
-			status: this.status,
 			message: { ...this.message },
 		};
 	}

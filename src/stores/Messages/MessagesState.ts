@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/stores/store';
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
-import { WsMessageModel } from '@/types/WsMessages';
+import { WsMessageModel, WsMessageResponseApi } from '@/types/WsMessages';
 
 export type MessagesState = {
 	messages: WsMessageModel[];
@@ -21,7 +21,7 @@ export const messagesSlice = createSlice({
 		addMessage: (state, action: PayloadAction<WsMessageModel>) => {
 			state.messages = [...state.messages, action.payload];
 		},
-		updateMessage: (state, action: PayloadAction<WsMessageModel>) => {
+		updateMessage: (state, action: PayloadAction<WsMessageResponseApi>) => {
 			state.messages = state.messages.map((message) =>
 				message.time === action.payload.time &&
 				message.status === WsMessageStatusEnum.SENT

@@ -7,8 +7,11 @@ import {
 	WSEventType,
 	WSListenerCallback,
 } from '@/contexts/WebSocketContext';
-import { addMessageAction } from '@/stores/Messages/MessagesState';
-import { WsMessage } from '@/types/WsMessages';
+import {
+	addMessageAction,
+	updateMessageAction,
+} from '@/stores/Messages/MessagesState';
+import { WsMessage, WsMessageResponseApi } from '@/types/WsMessages';
 
 const WsUtils = () => {
 	const { addListener, removeListener } = useWebSocketContext();
@@ -18,8 +21,21 @@ const WsUtils = () => {
 	useEffect(() => {
 		const listener: WSListenerCallback = (event, data) => {
 			if (event === WSEventType.MESSAGE && data instanceof MessageEvent) {
-				const message = WsMessage.createFromApi(JSON.parse(data.data));
-				dispatch(addMessageAction(message.toPlain()));
+				const wsMessage = JSON.parse(data.data);
+
+				// Новое сообщение
+				if (wsMessage?.message?.content) {
+					const message = WsMessage.createMessageFromApi(wsMessage);
+					dispatch(addMessageAction(message.toPlain()));
+				}
+				// Обновление сообщения
+				else {
+					const message: WsMessageResponseApi = {
+						status: wsMessage.status,
+						time: wsMessage.time,
+					};
+					dispatch(updateMessageAction(message));
+				}
 			}
 		};
 		addListener(listener);

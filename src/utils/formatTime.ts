@@ -7,18 +7,12 @@ locale('ru');
 extend(utc);
 extend(timezone);
 
-export const formatDateDDMMMMYYYY = (
-	time: Date | dayjs.Dayjs | string,
-): string => {
-	return dayjs(time).format('DD MMMM YYYY');
-};
-
-export const formatDateYYYYMMDD = (
-	time: Date | dayjs.Dayjs | string,
-): string => {
-	return dayjs(time).tz('Europe/Moscow').format('YYYY-MM-DD');
-};
-
-export const formatTime = (time: Date | dayjs.Dayjs | string): string => {
-	return dayjs(time).format('HH:mm:ss');
+export const formatTime = (time: string): string => {
+	try {
+		const timeInMs = parseInt(time, 10);
+		return dayjs(timeInMs).format('HH:mm:ss');
+	} catch (e) {
+		console.error(e);
+		return 'aboba';
+	}
 };
