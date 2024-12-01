@@ -1,8 +1,16 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useEnv } from '@/contexts/EnvContext';
+import { useUser } from '@/contexts/UserContext';
+import {
+	addMessageAction,
+	updateMessageAction,
+} from '@/stores/Messages/MessagesState';
+import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
+import { WsMessage } from '@/types/WsMessages';
 
 export enum WSEventType {
 	OPEN = 'open',
@@ -46,6 +54,9 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [lastMessage, setLastMessage] = useState<MessageEvent | null>(null);
 
 	const { apiUrl } = useEnv();
+	const { userId } = useUser();
+
+	const dispatch = useDispatch();
 
 	const {
 		sendMessage,
@@ -86,7 +97,32 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	};
 
 	const send = (data: string | ArrayBuffer | Blob | ArrayBufferView) => {
-		sendMessage(data);
+		if (typeof data !== 'string') return;
+
+		const messageContent = data.trim();
+		if (!messageContent || messageContent.length === 0) {
+			return;
+		}
+
+		const message = WsMessage.create(
+			userId,
+			WsMessageStatusEnum.SENT,
+			messageContent,
+		);
+
+		dispatch(addMessageAction(message.toPlain()));
+
+		sendMessage(JSON.stringify(message.toApi()));
+
+		// если сервак не отвечает в течение 5 секунд, то ставим ошибку
+		setTimeout(() => {
+			dispatch(
+				updateMessageAction({
+					status: WsMessageStatusEnum.ERROR,
+					time: message.message.time,
+				}),
+			);
+		}, 5 * 1000);
 	};
 
 	useEffect(() => {

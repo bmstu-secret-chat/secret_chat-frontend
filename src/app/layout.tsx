@@ -3,9 +3,9 @@ import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
 import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
-import { EnvProvider } from '@/contexts/EnvContext';
-import WebSocketProvider from '@/contexts/WebSocketContext';
+import { AppContextProvider } from '@/contexts/AppContextProvider';
 import { cn } from '@/lib/utils';
+import Ws from '@/utils/ws';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -23,22 +23,21 @@ export default function RootLayout({
 			className='dark'
 		>
 			<body>
-				<EnvProvider>
-					<WebSocketProvider>
-						<ConfigProvider
-							theme={{
-								token: {
-									colorPrimary: '#1f1f1f',
-									colorBgBase: '#000000',
-									colorTextBase: '#ffffff',
-								},
-							}}
-						>
-							<Sidebar />
-							<div className={cn('ml-[60px]')}>{children}</div>
-						</ConfigProvider>
-					</WebSocketProvider>
-				</EnvProvider>
+				<AppContextProvider>
+					<ConfigProvider
+						theme={{
+							token: {
+								colorPrimary: '#1f1f1f',
+								colorBgBase: '#000000',
+								colorTextBase: '#ffffff',
+							},
+						}}
+					>
+						<Ws />
+						<Sidebar />
+						<div className={cn('ml-[60px]')}>{children}</div>
+					</ConfigProvider>
+				</AppContextProvider>
 			</body>
 		</html>
 	);
