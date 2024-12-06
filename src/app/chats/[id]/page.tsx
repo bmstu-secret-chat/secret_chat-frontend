@@ -52,7 +52,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 			top: messagesContainerRef.current.scrollHeight,
 			behavior: 'smooth',
 		});
-	}, [messages]);
+	}, [messages.length]);
 
 	const sendMessage = () => {
 		send(content);

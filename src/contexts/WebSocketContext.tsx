@@ -11,7 +11,6 @@ import {
 } from '@/stores/Messages/MessagesState';
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 import { WsMessage } from '@/types/WsMessages';
-import vibrate from '@/utils/vibrate';
 
 export enum WSEventType {
 	OPEN = 'open',
@@ -77,7 +76,6 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		},
 		onMessage: (message) => {
 			setLastMessage(message);
-			vibrate(100);
 			notifyListeners(WSEventType.MESSAGE, message);
 		},
 		shouldReconnect: () => true,
