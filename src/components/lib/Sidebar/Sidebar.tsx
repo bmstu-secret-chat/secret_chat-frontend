@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 'use client';
 
 import { motion } from 'framer-motion';
@@ -9,7 +8,6 @@ import React, {
 	useContext,
 	useRef,
 	useCallback,
-	useEffect,
 } from 'react';
 import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
@@ -84,45 +82,49 @@ export const SidebarLib = ({
 };
 
 export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
-	return <DesktopSidebar {...props} />;
+	return (
+		<>
+			<DesktopSidebar {...props} />
+		</>
+	);
 };
 
 export const DesktopSidebar = ({
+	// eslint-disable-next-line react/prop-types
 	className,
 	children,
 	...props
 }: React.ComponentProps<typeof motion.div>) => {
-	const { isMobileDevice } = useScreenWidth();
+	const { isPcDevice } = useScreenWidth();
 
 	const { open, setOpen } = useSidebar();
-	const touchStartX = useRef(0);
 	const sidebarRef = useRef<HTMLDivElement>(null); // Создаем реф для сайдбара
+	const outsideSidebarRef = useRef<HTMLDivElement>(null); // Создаем реф для сайдбара
+
 	const [currentWidth, setCurrentWidth] = useState(60);
+
+	const touchStartX = useRef(0);
+	const touchStartWidth = useRef(currentWidth);
 
 	const MAX_SIDEBAR_WIDTH = 200;
 	const MIN_SIDEBAR_WIDTH = 60;
 
 	const handleTouchStart = (e: React.TouchEvent) => {
 		touchStartX.current = e.targetTouches[0].clientX;
+		touchStartWidth.current = currentWidth;
 	};
 
 	const handleTouchMove = (e: React.TouchEvent) => {
 		const touchCurrentX = e.targetTouches[0].clientX;
 		const swipeDistance = touchCurrentX - touchStartX.current;
-
-		if (swipeDistance > 0) {
-			const newWidth = Math.min(
-				MIN_SIDEBAR_WIDTH + swipeDistance,
-				MAX_SIDEBAR_WIDTH,
-			);
-			setCurrentWidth(newWidth);
-		} else if (swipeDistance < 0) {
-			const newWidth = Math.max(
-				MAX_SIDEBAR_WIDTH + swipeDistance,
-				MIN_SIDEBAR_WIDTH,
-			);
-			setCurrentWidth(newWidth);
-		}
+		const newWidth = touchStartWidth.current + swipeDistance;
+		setCurrentWidth(() =>
+			newWidth > MAX_SIDEBAR_WIDTH
+				? MAX_SIDEBAR_WIDTH
+				: newWidth < MIN_SIDEBAR_WIDTH
+					? MIN_SIDEBAR_WIDTH
+					: newWidth,
+		);
 	};
 
 	const handleTouchEnd = () => {
@@ -135,58 +137,64 @@ export const DesktopSidebar = ({
 		}
 	};
 
-	// Функция для обработки кликов вне сайдбара
 	const handleClickOutside = useCallback(
-		(event: MouseEvent) => {
-			if (
-				sidebarRef.current &&
-				!sidebarRef.current.contains(event.target as Node)
-			) {
-				setOpen(false);
-				setCurrentWidth(MIN_SIDEBAR_WIDTH);
+		(event: React.TouchEvent | React.MouseEvent) => {
+			if (event instanceof MouseEvent) {
+				event.stopImmediatePropagation();
 			}
+
+			event.preventDefault();
+
+			setOpen(false);
+			setCurrentWidth(MIN_SIDEBAR_WIDTH);
 		},
 		[setOpen],
 	);
 
-	useEffect(() => {
-		document.addEventListener('mousedown', handleClickOutside);
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, [handleClickOutside]);
-
 	return (
-		<motion.div
-			ref={sidebarRef}
-			className={cn(
-				'h-full w-[60px] px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
-				className,
-			)}
-			onTouchStart={handleTouchStart}
-			onTouchMove={handleTouchMove}
-			onTouchEnd={handleTouchEnd}
-			onMouseEnter={() => setOpen(true)}
-			onMouseLeave={() => setOpen(false)}
-			onClick={() => {
-				if (isMobileDevice) {
-					setOpen(false);
-					setCurrentWidth(60);
-				}
-			}}
-			animate={{
-				width:
-					currentWidth !== 60
-						? currentWidth
-						: open
+		<>
+			<div
+				ref={outsideSidebarRef}
+				className={cn('fixed left-0 h-screen z-[-1]')}
+				onClick={handleClickOutside}
+				onTouchEnd={handleClickOutside}
+				style={{
+					width: currentWidth > MIN_SIDEBAR_WIDTH ? '100vw' : 0,
+					backdropFilter: `blur(${(currentWidth / 150) ** 2}px)`,
+					backgroundColor: `rgba(0,0,0,${(currentWidth / 400) ** 1.5})`,
+				}}
+			/>
+
+			<motion.div
+				ref={sidebarRef}
+				className={cn(
+					'h-full w-[60px] px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
+					className,
+				)}
+				onTouchStart={handleTouchStart}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}
+				onMouseEnter={() => setOpen(true)}
+				onMouseLeave={() => setOpen(false)}
+				onClick={() => {
+					if (!isPcDevice) {
+						setOpen(false);
+						setCurrentWidth(60);
+					}
+				}}
+				animate={{
+					width: isPcDevice
+						? open
 							? MAX_SIDEBAR_WIDTH
-							: MIN_SIDEBAR_WIDTH,
-			}}
-			{...props}
-		>
-			<>{children}</>
-		</motion.div>
+							: MIN_SIDEBAR_WIDTH
+						: currentWidth,
+				}}
+				transition={{ duration: isPcDevice ? 0.3 : 0.1 }}
+				{...props}
+			>
+				<>{children}</>
+			</motion.div>
+		</>
 	);
 };
 

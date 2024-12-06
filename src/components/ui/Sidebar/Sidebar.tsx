@@ -55,8 +55,7 @@ export const Sidebar = () => {
 		<div
 			className={cn(
 				'top-0 left-0 rounded-md fixed z-10 h-screen flex flex-col md:flex-row',
-				'bg-gray-100 dark:bg-neutral-500 flex-1 mx-auto border',
-				'border-neutral-200 dark:border-neutral-700 overflow-hidden',
+				'mx-auto border border-neutral-700 overflow-hidden',
 			)}
 		>
 			<SidebarLib

@@ -7,12 +7,16 @@ import { useSelector } from 'react-redux';
 import ChatInput from '@/components/ui/ChatInput/ChatInput';
 import Message from '@/components/ui/Message/Message';
 import { useWebSocketContext } from '@/contexts/WebSocketContext';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
 import { selectMessages } from '@/stores/Messages/MessagesState';
+import vibrate from '@/utils/vibrate';
 
 export default function Chat({ params }: { params: { id: string } }) {
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
 	const [content, setContent] = useState('');
+
+	const { isTabletDevice } = useScreenWidth();
 
 	// const [isLoading, setIsLoading] = useState(true); // состояние загрузки
 	//
@@ -52,6 +56,7 @@ export default function Chat({ params }: { params: { id: string } }) {
 
 	const sendMessage = () => {
 		send(content);
+		if (isTabletDevice) vibrate(10);
 	};
 
 	return (

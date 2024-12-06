@@ -7,6 +7,7 @@ import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { cn } from '@/lib/utils';
 import { WsMessageModel } from '@/types/WsMessages';
 import { formatTime } from '@/utils/formatTime';
+import vibrate from '@/utils/vibrate';
 
 type Props = {
 	msg: WsMessageModel;
@@ -18,12 +19,15 @@ const Message: React.FC<Props> = ({
 	const popoverRef = useRef<HTMLDivElement | null>(null);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const { isMobileDevice } = useScreenWidth();
+	const { isTabletDevice } = useScreenWidth();
 	const { userId: currentUserId } = useUser();
 	const fromMe = currentUserId === userId;
 
 	const handleClick = () => {
-		if (isMobileDevice) setIsMenuOpen(true);
+		if (isTabletDevice) {
+			setIsMenuOpen(true);
+			vibrate(20);
+		}
 	};
 
 	const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
