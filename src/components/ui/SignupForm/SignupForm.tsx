@@ -1,4 +1,5 @@
 'use client';
+
 // import {
 // 	IconBrandGithub,
 // 	IconBrandGoogle,
@@ -8,17 +9,21 @@ import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import type { GetProps } from 'antd';
 import { Input as AntInput } from 'antd';
 import { motion } from 'framer-motion';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/lib/Input/Input';
 import { Label } from '@/components/lib/Label/Label';
+import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
+import Divider from '@/components/ui/Divider/Divider';
+import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputContainer';
 import useQueryParams from '@/hooks/useQueryParams';
 import { cn } from '@/lib/utils';
 import { QueryParams } from '@/types/QueryParams';
 
 type OTPProps = GetProps<typeof Input.OTP>;
 
-export function SignupFormDemo() {
+export function SignupForm() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -65,7 +70,13 @@ export function SignupFormDemo() {
 	return (
 		<>
 			{stylesLoaded && searchParams.get(QueryParams.PAGE) && (
-				<div className='max-w-md w-full mx-auto rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black'>
+				<div
+					className={cn(
+						'relative flex flex-col justify-center items-center',
+						'max-w-md w-full mx-auto rounded-2xl p-4 md:p-8',
+						'shadow-input bg-white dark:bg-black',
+					)}
+				>
 					<h2 className='font-bold text-xl text-neutral-800 dark:text-neutral-200'>
 						Регистрация в SecretChat
 					</h2>
@@ -74,7 +85,7 @@ export function SignupFormDemo() {
 						мессенджером
 					</p>
 					<form
-						className='relative gap-4 my-8 overflow-hidden min-h-[340px]'
+						className='relative  w-full gap-4 my-8 overflow-hidden min-h-[390px]'
 						onSubmit={handleSubmit}
 					>
 						<motion.div
@@ -140,7 +151,6 @@ export function SignupFormDemo() {
 								<BottomGradient />
 							</button>
 						</motion.div>
-
 						<motion.div
 							className={cn('absolute w-full')}
 							initial={{ x: '120%' }}
@@ -207,42 +217,23 @@ export function SignupFormDemo() {
 							</>
 						</motion.div>
 					</form>
+
+					<div className={cn('absolute bottom-8 w-full')}>
+						<Divider />
+						<div
+							className={cn('flex flex-row items-center justify-center gap-2 ')}
+						>
+							Уже есть аккаунт?
+							<Link
+								href='/login'
+								className={cn('text-white font-bold')}
+							>
+								Войти
+							</Link>
+						</div>
+					</div>
 				</div>
 			)}
 		</>
 	);
 }
-
-const BottomGradient = () => {
-	return (
-		<>
-			<span className='group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent' />
-			<span className='group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent' />
-		</>
-	);
-};
-
-const LabelInputContainer = ({
-	children,
-	className,
-}: {
-	children: React.ReactNode;
-	className?: string;
-}) => {
-	return (
-		<div className={cn('flex flex-col space-y-2 w-full', className)}>
-			{children}
-		</div>
-	);
-};
-
-const Divider = () => {
-	return (
-		<div
-			className={cn(
-				'bg-gradient-to-r from-transparent via-neutral-700',
-				'to-transparent my-8 h-[1px] w-full',
-			)}
-		/>
-	);
-};
