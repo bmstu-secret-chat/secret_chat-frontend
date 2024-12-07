@@ -168,7 +168,7 @@ export const DesktopSidebar = ({
 			<motion.div
 				ref={sidebarRef}
 				className={cn(
-					'h-full w-[60px] px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
+					'h-full w-[60px] px-4 py-4 flex flex-col bg-neutral-800 flex-shrink-0',
 					className,
 				)}
 				onTouchStart={handleTouchStart}

@@ -42,7 +42,7 @@ export const Sidebar = () => {
 	const downLinks = [
 		{
 			label: 'Logout',
-			href: '#',
+			href: '/signup',
 			icon: (
 				<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
@@ -72,7 +72,7 @@ export const Sidebar = () => {
 								/>
 							))}
 						</div>
-						<div className='mb-8 flex flex-col gap-2'>
+						<div className='mb-16 flex flex-col gap-2'>
 							{downLinks.map((link, idx) => (
 								<SidebarLink
 									key={idx}

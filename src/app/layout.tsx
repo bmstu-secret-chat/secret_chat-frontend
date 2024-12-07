@@ -35,7 +35,7 @@ export default function RootLayout({
 					>
 						<Ws />
 						<Sidebar />
-						<div className={cn('ml-[60px]')}>{children}</div>
+						<div className={cn('ml-[60px] bg-zinc-950')}>{children}</div>
 					</ConfigProvider>
 				</AppContextProvider>
 			</body>
