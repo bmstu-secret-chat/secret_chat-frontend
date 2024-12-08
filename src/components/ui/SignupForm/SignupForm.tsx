@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { AuthorizationService } from '@/app/api/AuthorizationService';
 import { Input } from '@/components/lib/Input/Input';
 import { Label } from '@/components/lib/Label/Label';
 import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
@@ -20,36 +21,98 @@ import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputC
 import useQueryParams from '@/hooks/useQueryParams';
 import { cn } from '@/lib/utils';
 import { QueryParams } from '@/types/QueryParams';
+import { showToast } from '@/utils/showToast';
+import { validateSignupFields } from '@/utils/validateAuthorizationFields';
 
 type OTPProps = GetProps<typeof Input.OTP>;
 
 export function SignupForm() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-
 	const { page, setQueryParam } = useQueryParams();
+
+	const authorizationService = new AuthorizationService();
 
 	const [stylesLoaded, setStylesLoaded] = useState(false);
 	const [username, setUsername] = useState('');
-
 	const [usernameError, setUsernameError] = useState(false);
+	const [password, setPassword] = useState('');
+	const [passwordError, setPasswordError] = useState(false);
+	const [passwordConfirm, setPasswordConfirm] = useState('');
+	const [passwordConfirmError, setPasswordConfirmError] = useState(false);
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		console.log('Form submitted');
-	};
-
-	const onChange: OTPProps['onChange'] = (text) => {
+	const onChange: OTPProps['onChange'] = (text: any) => {
 		console.log('onChange:', text);
 	};
 
-	const onInput: OTPProps['onInput'] = (value) => {
+	const onInput: OTPProps['onInput'] = (value: any) => {
 		console.log('onInput:', value);
 	};
 
 	const sharedProps: OTPProps = {
 		onChange,
 		onInput,
+	};
+
+	const handleNextButtonClick = () => {
+		const { isValid, message, invalidFields } = validateSignupFields(username);
+
+		if (!isValid) {
+			if (invalidFields.includes('username')) {
+				setUsernameError(true);
+			} else {
+				setUsernameError(false);
+			}
+
+			showToast('error', message, 5);
+			return;
+		}
+
+		setUsernameError(false);
+
+		setQueryParam(QueryParams.PAGE, '2');
+	};
+
+	const handleSignupButtonClick = async () => {
+		const { isValid, message, invalidFields } = validateSignupFields(
+			username,
+			password,
+			passwordConfirm,
+		);
+
+		if (!isValid) {
+			if (invalidFields.includes('username')) {
+				setUsernameError(true);
+			} else {
+				setUsernameError(false);
+			}
+
+			if (invalidFields.includes('password')) {
+				setPasswordError(true);
+			} else {
+				setPasswordError(false);
+			}
+
+			if (invalidFields.includes('passwordConfirm')) {
+				setPasswordConfirmError(true);
+			} else {
+				setPasswordConfirmError(false);
+			}
+
+			showToast('error', message, 5);
+			return;
+		}
+
+		setUsernameError(false);
+		setPasswordError(false);
+		setPasswordConfirmError(false);
+
+		try {
+			const user = await authorizationService.signup({ username, password });
+			console.log(user);
+		} catch (error: any) {
+			showToast('error', error.message);
+		}
 	};
 
 	useEffect(() => {
@@ -73,8 +136,8 @@ export function SignupForm() {
 				<div
 					className={cn(
 						'relative flex flex-col justify-center items-center',
-						'max-w-md w-full mx-auto rounded-2xl p-4 md:p-8',
-						'shadow-input bg-white dark:bg-black',
+						'sm:max-w-md max-w-[20rem] w-full mx-auto rounded-2xl p-4 md:p-8',
+						'shadow-input bg-white dark:bg-black overflow-hidden',
 					)}
 				>
 					<h2 className='font-bold text-xl text-neutral-800 dark:text-neutral-200'>
@@ -84,10 +147,7 @@ export function SignupForm() {
 						Создайте аккаунт, чтобы начать пользоваться самым защищенным
 						мессенджером
 					</p>
-					<form
-						className='relative  w-full gap-4 my-8 overflow-hidden min-h-[390px]'
-						onSubmit={handleSubmit}
-					>
+					<form className='relative  w-full gap-4 my-8 overflow-hidden min-h-[390px]'>
 						<motion.div
 							className={cn('absolute w-full')}
 							initial={{ x: '0' }}
@@ -135,16 +195,7 @@ export function SignupForm() {
 									'from-zinc-900 to-zinc-900 bg-zinc-800 w-full text-white',
 									'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
 								)}
-								// type='submit'
-								onClick={() => {
-									if (username.trim() == '') {
-										setUsernameError(true);
-										return;
-									}
-
-									setUsernameError(false);
-									setQueryParam(QueryParams.PAGE, '2');
-								}}
+								onClick={handleNextButtonClick}
 							>
 								<span>Далее</span>
 								<IconArrowRight className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
@@ -175,14 +226,21 @@ export function SignupForm() {
 										id='password'
 										placeholder='••••••••'
 										type='password'
+										value={password}
+										isError={passwordError}
+										onChange={(e) => setPassword(e.target.value)}
 									/>
+									{passwordError.toString()}
 								</LabelInputContainer>
 								<LabelInputContainer className='my-2 mb-8'>
-									<Label htmlFor='password_repeat'>Повторите пароль</Label>
+									<Label htmlFor='password_confirm'>Повторите пароль</Label>
 									<Input
-										id='password_repeat'
+										id='password_confirm'
 										placeholder='••••••••'
 										type='password'
+										value={passwordConfirm}
+										isError={passwordConfirmError}
+										onChange={(e) => setPasswordConfirm(e.target.value)}
 									/>
 								</LabelInputContainer>
 								<Divider />
@@ -195,7 +253,6 @@ export function SignupForm() {
 											'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
 											'w-full flex-grow',
 										)}
-										// type='submit'
 										onClick={() => setQueryParam(QueryParams.PAGE, '1')}
 									>
 										<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
@@ -210,6 +267,7 @@ export function SignupForm() {
 											'bg-[length:200%_100%] font-medium text-slate-400',
 											'w-full flex-grow h-10',
 										)}
+										onClick={handleSignupButtonClick}
 									>
 										Создать аккаунт
 									</button>
@@ -221,7 +279,9 @@ export function SignupForm() {
 					<div className={cn('absolute bottom-8 w-full')}>
 						<Divider />
 						<div
-							className={cn('flex flex-row items-center justify-center gap-2 ')}
+							className={cn(
+								'flex flex-row items-center justify-center gap-2 text-white',
+							)}
 						>
 							Уже есть аккаунт?
 							<Link
