@@ -47,9 +47,12 @@ export function LoginForm() {
 		setPasswordError(false);
 
 		try {
+			console.log('called');
 			const user = await authorizationService.login({ username, password });
 			console.log(user);
 		} catch (error: any) {
+			setUsernameError(true);
+			setPasswordError(true);
 			showToast('error', error.message);
 		}
 	};
@@ -69,7 +72,7 @@ export function LoginForm() {
 				Войдите в свой аккаунт, чтобы начать пользоваться самым защищенным
 				мессенджером
 			</p>
-			<form className='relative  w-full gap-4 my-8 overflow-hidden min-h-[320px]'>
+			<div className='relative  w-full gap-4 my-8 overflow-hidden min-h-[320px]'>
 				<LabelInputContainer className='my-2'>
 					<Label htmlFor='username'>Имя пользователя</Label>
 					<Input
@@ -109,7 +112,7 @@ export function LoginForm() {
 				>
 					Войти
 				</button>
-			</form>
+			</div>
 
 			<div className={cn('absolute bottom-8 w-full text-white')}>
 				<Divider />

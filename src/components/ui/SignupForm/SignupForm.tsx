@@ -147,7 +147,7 @@ export function SignupForm() {
 						Создайте аккаунт, чтобы начать пользоваться самым защищенным
 						мессенджером
 					</p>
-					<form className='relative  w-full gap-4 my-8 overflow-hidden min-h-[390px]'>
+					<div className='relative  w-full gap-4 my-8 overflow-hidden min-h-[390px]'>
 						<motion.div
 							className={cn('absolute w-full')}
 							initial={{ x: '0' }}
@@ -274,7 +274,7 @@ export function SignupForm() {
 								</div>
 							</>
 						</motion.div>
-					</form>
+					</div>
 
 					<div className={cn('absolute bottom-8 w-full')}>
 						<Divider />

@@ -45,7 +45,11 @@ export abstract class ServiceBase {
 		try {
 			const options: RequestInit = {
 				method,
-				...headers,
+				headers: {
+					'Content-Type':
+						method === RequestMethods.POST ? 'application/json' : '',
+					...headers,
+				},
 				...(body && { body: JSON.stringify(body) }),
 				...(method === RequestMethods.GET && { next: { revalidate: 60 } }),
 			};
@@ -54,14 +58,10 @@ export abstract class ServiceBase {
 
 			if (!response.ok) {
 				const errorData = await response.json();
-				console.error('HTTP Error:', errorData.error);
-				throw new Error(errorData.error || 'HTTP request failed');
+				throw errorData.error || 'HTTP request failed';
 			}
 
 			return response.json();
-		} catch (error: any) {
-			console.error('Error making HTTP request:', error.message);
-			throw error;
 		} finally {
 			// Убираем флаг после завершения запроса
 			delete this.pendingRequests[url];

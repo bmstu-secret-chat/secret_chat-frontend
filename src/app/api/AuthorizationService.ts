@@ -21,20 +21,20 @@ export class AuthorizationService extends ServiceBase {
 		this.config = [
 			{
 				name: 'signup',
-				url: `/api/auth/signup`,
+				url: `/api/register`,
 				method: RequestMethods.POST,
 			},
 			{
 				name: 'login',
-				url: `/api/auth/login `,
+				url: `/api/login`,
 				method: RequestMethods.POST,
 			},
 			{
 				name: 'logout',
-				url: `/api/auth/logout`,
+				url: `/api/logout`,
 				method: RequestMethods.POST,
 			},
-			{ name: 'check', url: `/api/auth/check`, method: RequestMethods.GET },
+			{ name: 'check', url: `/api/check`, method: RequestMethods.GET },
 		];
 	}
 

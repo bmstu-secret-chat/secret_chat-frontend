@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 interface Links {
 	label: string;
 	href: string;
+	action?: () => Promise<void>;
 	icon: React.JSX.Element | React.ReactNode;
 }
 
@@ -215,6 +216,7 @@ export const SidebarLink = ({
 				'flex items-center justify-start gap-2  group/sidebar py-2',
 				className,
 			)}
+			onClick={link.action}
 			{...props}
 		>
 			{link.icon}

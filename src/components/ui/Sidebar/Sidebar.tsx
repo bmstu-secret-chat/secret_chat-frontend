@@ -6,7 +6,8 @@ import {
 	IconSettings,
 	IconUserBolt,
 } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AuthorizationService } from '@/app/api/AuthorizationService';
 import {
 	SidebarLib,
 	SidebarBody,
@@ -15,6 +16,16 @@ import {
 import { cn } from '@/lib/utils';
 
 export const Sidebar = () => {
+	const authorizationService = new AuthorizationService();
+
+	const logout = async () => {
+		try {
+			await authorizationService.logout();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const upperLinks = [
 		{
 			label: 'Chats',
@@ -43,6 +54,7 @@ export const Sidebar = () => {
 		{
 			label: 'Logout',
 			href: '/signup',
+			action: logout,
 			icon: (
 				<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
@@ -50,6 +62,19 @@ export const Sidebar = () => {
 	];
 
 	const [open, setOpen] = useState(false);
+
+	const check = async () => {
+		try {
+			const response = await authorizationService.check();
+			console.log(response);
+		} catch (error: any) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		check();
+	}, []);
 
 	return (
 		<div
