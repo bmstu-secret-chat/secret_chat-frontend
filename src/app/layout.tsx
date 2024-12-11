@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
 import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
+import BeforeRender from '@/components/utils/BeforeRender';
 import { AppContextProvider } from '@/contexts/AppContextProvider';
 import { cn } from '@/lib/utils';
 import Ws from '@/utils/ws';
@@ -33,9 +34,11 @@ export default function RootLayout({
 							},
 						}}
 					>
-						<Ws />
-						<Sidebar />
-						<div className={cn('ml-[60px] bg-zinc-950')}>{children}</div>
+						<BeforeRender>
+							<Ws />
+							<Sidebar />
+							<div className={cn('ml-[60px] bg-zinc-950')}>{children}</div>
+						</BeforeRender>
 					</ConfigProvider>
 				</AppContextProvider>
 			</body>

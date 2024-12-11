@@ -1,24 +1,27 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { AuthorizationService } from '@/app/api/AuthorizationService';
 import { Input } from '@/components/lib/Input/Input';
 import { Label } from '@/components/lib/Label/Label';
 import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
 import Divider from '@/components/ui/Divider/Divider';
 import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputContainer';
+import { showToast } from '@/components/utils/showToast';
+import useAuthorization from '@/hooks/useAuthorization';
 import { cn } from '@/lib/utils';
-import { showToast } from '@/utils/showToast';
 import { validateLoginFields } from '@/utils/validateAuthorizationFields';
 
 export function LoginForm() {
-	const authorizationService = new AuthorizationService();
+	const router = useRouter();
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [usernameError, setUsernameError] = useState(false);
 	const [passwordError, setPasswordError] = useState(false);
+
+	const { login } = useAuthorization();
 
 	const handleLoginButtonClick = async () => {
 		const { isValid, message, invalidFields } = validateLoginFields(
@@ -47,13 +50,11 @@ export function LoginForm() {
 		setPasswordError(false);
 
 		try {
-			console.log('called');
-			const user = await authorizationService.login({ username, password });
-			console.log(user);
-		} catch (error: any) {
+			await login(username, password);
+			router.push('/chats');
+		} catch {
 			setUsernameError(true);
 			setPasswordError(true);
-			showToast('error', error.message);
 		}
 	};
 

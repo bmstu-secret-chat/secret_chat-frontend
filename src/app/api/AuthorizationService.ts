@@ -74,7 +74,7 @@ export class AuthorizationService extends ServiceBase {
 		try {
 			const configItem = this.getConfigItem('logout');
 
-			return await this.makeHttpRequest(configItem.method, configItem.url);
+			await this.makeHttpRequest(configItem.method, configItem.url);
 		} catch (error: any) {
 			throw new Error(error);
 		}

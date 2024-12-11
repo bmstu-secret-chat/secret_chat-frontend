@@ -10,28 +10,27 @@ import type { GetProps } from 'antd';
 import { Input as AntInput } from 'antd';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { AuthorizationService } from '@/app/api/AuthorizationService';
 import { Input } from '@/components/lib/Input/Input';
 import { Label } from '@/components/lib/Label/Label';
 import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
 import Divider from '@/components/ui/Divider/Divider';
 import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputContainer';
+import { showToast } from '@/components/utils/showToast';
+import useAuthorization from '@/hooks/useAuthorization';
 import useQueryParams from '@/hooks/useQueryParams';
 import { cn } from '@/lib/utils';
 import { QueryParams } from '@/types/QueryParams';
-import { showToast } from '@/utils/showToast';
 import { validateSignupFields } from '@/utils/validateAuthorizationFields';
 
 type OTPProps = GetProps<typeof Input.OTP>;
 
 export function SignupForm() {
 	const pathname = usePathname();
+	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { page, setQueryParam } = useQueryParams();
-
-	const authorizationService = new AuthorizationService();
 
 	const [stylesLoaded, setStylesLoaded] = useState(false);
 	const [username, setUsername] = useState('');
@@ -40,6 +39,8 @@ export function SignupForm() {
 	const [passwordError, setPasswordError] = useState(false);
 	const [passwordConfirm, setPasswordConfirm] = useState('');
 	const [passwordConfirmError, setPasswordConfirmError] = useState(false);
+
+	const { signup } = useAuthorization();
 
 	const onChange: OTPProps['onChange'] = (text: any) => {
 		console.log('onChange:', text);
@@ -108,10 +109,10 @@ export function SignupForm() {
 		setPasswordConfirmError(false);
 
 		try {
-			const user = await authorizationService.signup({ username, password });
-			console.log(user);
-		} catch (error: any) {
-			showToast('error', error.message);
+			await signup(username, password);
+			router.push('/chats');
+		} catch {
+			// TODO: handle error
 		}
 	};
 

@@ -50,6 +50,7 @@ export abstract class ServiceBase {
 						method === RequestMethods.POST ? 'application/json' : '',
 					...headers,
 				},
+				credentials: 'include',
 				...(body && { body: JSON.stringify(body) }),
 				...(method === RequestMethods.GET && { next: { revalidate: 60 } }),
 			};
