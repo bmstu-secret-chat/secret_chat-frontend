@@ -9,26 +9,21 @@ const PUBLIC_PAGES_PATHS = ['/', '/login', '/signup'];
 const NON_AUTH_PAGES_PATHS = ['/login', '/signup'];
 
 export function middleware(request: NextRequest) {
-	const { pathname } = request.nextUrl;
+	const { pathname, searchParams } = request.nextUrl;
 
-	// Проверяем, начинается ли путь с '/api'
 	if (pathname.startsWith('/api')) {
 		const newUrl = request.nextUrl.clone();
-		newUrl.host = 'localhost:8000'; // Изменяем порт
+		newUrl.host = 'localhost:8000';
 
 		// Убираем '/api' из начала пути и добавляем слеш в конце, если его нет
-		newUrl.pathname = pathname.replace(/^\/api/, '').replace(/\/?$/, '/');
+		newUrl.pathname = pathname.replace(/^\/api/, '');
 
-		// Переписываем запрос на новый URL
 		return NextResponse.rewrite(newUrl + '/');
 	}
 
-	/* TODO: придумать то, что будет корректно работать
-	 * сейчас при авторизации запрос отправляется без рефреш токена (
-	 * поскольку он еще не успел установиться), поэтому не происходит
-	 * перехода на главную
-	 */
-	const isAuthorized = request.cookies.get('refresh');
+	const isAuthorized = searchParams.get('auth')
+		? searchParams.get('auth') === 'true'
+		: !!request.cookies.get('refresh');
 
 	if (PAGES_PATHS.includes(pathname)) {
 		if (!isAuthorized && !PUBLIC_PAGES_PATHS.includes(pathname)) {

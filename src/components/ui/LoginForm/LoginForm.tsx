@@ -51,7 +51,7 @@ export function LoginForm() {
 
 		try {
 			await login(username, password);
-			router.push('/chats');
+			router.push('/chats?auth=true');
 		} catch {
 			setUsernameError(true);
 			setPasswordError(true);

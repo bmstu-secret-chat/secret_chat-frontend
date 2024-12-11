@@ -1,6 +1,5 @@
 import React from 'react';
 import { SignupForm } from '@/components/ui/SignupForm/SignupForm';
-import { Sparkles } from '@/components/ui/Sparkles/Sparkles';
 import { cn } from '@/lib/utils';
 
 export default function Signup() {

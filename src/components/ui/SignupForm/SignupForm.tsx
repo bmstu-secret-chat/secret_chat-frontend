@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 'use client';
 
 // import {
@@ -6,7 +8,7 @@
 // 	IconBrandOnlyfans,
 // } from '@tabler/icons-react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import type { GetProps } from 'antd';
+// import type { GetProps } from 'antd';
 import { Input as AntInput } from 'antd';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -24,11 +26,10 @@ import { cn } from '@/lib/utils';
 import { QueryParams } from '@/types/QueryParams';
 import { validateSignupFields } from '@/utils/validateAuthorizationFields';
 
-type OTPProps = GetProps<typeof Input.OTP>;
-
 export function SignupForm() {
 	const pathname = usePathname();
 	const router = useRouter();
+
 	const searchParams = useSearchParams();
 	const { page, setQueryParam } = useQueryParams();
 
@@ -42,15 +43,15 @@ export function SignupForm() {
 
 	const { signup } = useAuthorization();
 
-	const onChange: OTPProps['onChange'] = (text: any) => {
+	const onChange = (text: any) => {
 		console.log('onChange:', text);
 	};
 
-	const onInput: OTPProps['onInput'] = (value: any) => {
+	const onInput = (value: any) => {
 		console.log('onInput:', value);
 	};
 
-	const sharedProps: OTPProps = {
+	const sharedProps = {
 		onChange,
 		onInput,
 	};
@@ -110,7 +111,7 @@ export function SignupForm() {
 
 		try {
 			await signup(username, password);
-			router.push('/chats');
+			router.push('/chats?auth=true');
 		} catch {
 			// TODO: handle error
 		}
@@ -231,7 +232,6 @@ export function SignupForm() {
 										isError={passwordError}
 										onChange={(e) => setPassword(e.target.value)}
 									/>
-									{passwordError.toString()}
 								</LabelInputContainer>
 								<LabelInputContainer className='my-2 mb-8'>
 									<Label htmlFor='password_confirm'>Повторите пароль</Label>

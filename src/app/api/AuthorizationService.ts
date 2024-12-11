@@ -21,7 +21,7 @@ export class AuthorizationService extends ServiceBase {
 		this.config = [
 			{
 				name: 'signup',
-				url: `/api/register`,
+				url: `/api/signup`,
 				method: RequestMethods.POST,
 			},
 			{
