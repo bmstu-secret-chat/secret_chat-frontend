@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import ChatsList from '@/app/chats/_chatsList/page';
-import ProtectedRoute from '@/components/utils/ProtectedRoute';
+import AuthRoute from '@/components/utils/AuthRoute';
 import { cn } from '@/lib/utils';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -29,13 +29,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	}, [pathname, router]);
 
 	return (
-		<ProtectedRoute>
+		<AuthRoute>
 			<div className={cn('flex relative flex-col md:w-[30vw] h-screen')}>
 				<div className={cn(showChatsList ? '' : 'md:block hidden')}>
 					<ChatsList />
 				</div>
 				{children}
 			</div>
-		</ProtectedRoute>
+		</AuthRoute>
 	);
 }
