@@ -15,7 +15,11 @@ export class UsersService extends ServiceBase {
 
 		UsersService.instance = this;
 		this.config = [
-			{ name: 'getUserInfo', url: '/api/user', method: RequestMethods.GET },
+			{
+				name: 'getUserInfo',
+				url: '/api/backend/user',
+				method: RequestMethods.GET,
+			},
 		];
 	}
 

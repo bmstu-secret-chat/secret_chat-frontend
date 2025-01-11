@@ -54,6 +54,7 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [lastMessage, setLastMessage] = useState<MessageEvent | null>(null);
 
 	const { apiUrl } = useEnv();
+	const wsUrl = `wss://${apiUrl}/api/realtime/messenger/`;
 	const { userId } = useUser();
 
 	const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		sendMessage,
 		lastMessage: message,
 		readyState: state,
-	} = useWebSocket(apiUrl, {
+	} = useWebSocket(wsUrl, {
 		onOpen: () => {
 			setReadyState(ReadyState.OPEN);
 			notifyListeners(WSEventType.OPEN);

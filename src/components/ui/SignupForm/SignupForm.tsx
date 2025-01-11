@@ -111,7 +111,7 @@ export function SignupForm() {
 
 		try {
 			await signup(username, password);
-			router.push('/chats?auth=true');
+			router.push('/chats');
 		} catch {
 			// TODO: handle error
 		}

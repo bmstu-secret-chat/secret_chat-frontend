@@ -3,15 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import RenderIf from '@/components/utils/RenderIf';
 import useAuthorization from '@/hooks/useAuthorization';
-import useRemoveQueryParam from '@/hooks/useRemoveQueryParam';
 
 type Props = {
 	children: React.ReactNode;
 };
 
 const BeforeRender: React.FC<Props> = ({ children }) => {
-	useRemoveQueryParam();
-
 	const { checkAuthorization } = useAuthorization();
 
 	const [canRender, setCanRender] = useState(false);
