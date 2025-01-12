@@ -33,7 +33,7 @@ export class UsersService extends ServiceBase {
 		try {
 			const response = await this.makeHttpRequest(
 				configItem.method,
-				`${configItem.url}/${id}`,
+				`${configItem.url}${id}/`,
 			);
 
 			return new UserInfo(response.user_id, response.username);

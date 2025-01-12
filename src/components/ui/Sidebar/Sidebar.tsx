@@ -15,10 +15,14 @@ import {
 } from '@/components/lib/Sidebar/Sidebar';
 import useAuthorization from '@/hooks/useAuthorization';
 import { cn } from '@/lib/utils';
-import { selectIsAuthorized } from '@/stores/Users/CurrentUserState';
+import {
+	selectCurrentUser,
+	selectIsAuthorized,
+} from '@/stores/Users/CurrentUserState';
 
 export const Sidebar = () => {
 	const isAuthorized = useSelector(selectIsAuthorized);
+	const currentUser = useSelector(selectCurrentUser);
 
 	const { logout } = useAuthorization();
 
@@ -32,7 +36,7 @@ export const Sidebar = () => {
 		},
 		{
 			label: 'Profile',
-			href: '#',
+			href: currentUser ? `/profile/${currentUser.userId}` : '#',
 			icon: (
 				<IconUserBolt className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
