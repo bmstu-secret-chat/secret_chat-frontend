@@ -1,7 +1,7 @@
 import React from 'react';
 import NonAuthRoute from '@/components/utils/NonAuthRoute';
 
-export default function Layout({
+export default function Signup({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

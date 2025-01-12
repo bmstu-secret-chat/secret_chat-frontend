@@ -17,7 +17,7 @@ export class UsersService extends ServiceBase {
 		this.config = [
 			{
 				name: 'getUserInfo',
-				url: '/api/backend/user',
+				url: '/api/backend/users/user/',
 				method: RequestMethods.GET,
 			},
 		];
