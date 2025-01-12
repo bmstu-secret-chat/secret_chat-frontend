@@ -2,17 +2,17 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
 	return {
-		name: 'Next.js PWA',
-		short_name: 'NextPWA',
-		description: 'A Progressive Web App built with Next.js',
+		name: 'Safe chat',
+		short_name: 'Safe chat',
+		description: 'The most secure messenger',
 		start_url: '/',
 		display: 'standalone',
-		background_color: '#ffffff',
+		background_color: 'rgba(255,255,255,0)',
 		theme_color: '#000000',
 		icons: [
 			{
 				src: '/icon-256x256.png',
-				sizes: '192x192',
+				sizes: '256x256',
 				type: 'any',
 			},
 			{

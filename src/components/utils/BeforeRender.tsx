@@ -15,7 +15,7 @@ const BeforeRender: React.FC<Props> = ({ children }) => {
 
 	const beforeRender = async () => {
 		await checkAuthorization();
-		setCanRender(true);
+		setTimeout(() => setCanRender(true), 100);
 	};
 
 	useEffect(() => {

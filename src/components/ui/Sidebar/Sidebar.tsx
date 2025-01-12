@@ -7,6 +7,7 @@ import {
 	IconUserBolt,
 } from '@tabler/icons-react';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
 	SidebarLib,
 	SidebarBody,
@@ -14,8 +15,11 @@ import {
 } from '@/components/lib/Sidebar/Sidebar';
 import useAuthorization from '@/hooks/useAuthorization';
 import { cn } from '@/lib/utils';
+import { selectIsAuthorized } from '@/stores/Users/CurrentUserState';
 
 export const Sidebar = () => {
+	const isAuthorized = useSelector(selectIsAuthorized);
+
 	const { logout } = useAuthorization();
 
 	const upperLinks = [
@@ -55,7 +59,7 @@ export const Sidebar = () => {
 
 	const [open, setOpen] = useState(false);
 
-	return (
+	return isAuthorized ? (
 		<div
 			className={cn(
 				'top-0 left-0 rounded-md fixed z-10 h-screen flex flex-col md:flex-row',
@@ -88,5 +92,5 @@ export const Sidebar = () => {
 				</SidebarBody>
 			</SidebarLib>
 		</div>
-	);
+	) : null;
 };
