@@ -11,8 +11,7 @@ export const formatTime = (time: string): string => {
 	try {
 		const timeInMs = parseInt(time, 10);
 		return dayjs(timeInMs).format('HH:mm');
-	} catch (e) {
-		console.error(e);
-		return 'aboba';
+	} catch {
+		return 'error';
 	}
 };

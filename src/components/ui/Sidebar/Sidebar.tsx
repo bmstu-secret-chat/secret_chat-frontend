@@ -7,14 +7,21 @@ import {
 	IconUserBolt,
 } from '@tabler/icons-react';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
 	SidebarLib,
 	SidebarBody,
 	SidebarLink,
 } from '@/components/lib/Sidebar/Sidebar';
+import useAuthorization from '@/hooks/useAuthorization';
 import { cn } from '@/lib/utils';
+import { selectIsAuthorized } from '@/stores/Users/CurrentUserState';
 
 export const Sidebar = () => {
+	const isAuthorized = useSelector(selectIsAuthorized);
+
+	const { logout } = useAuthorization();
+
 	const upperLinks = [
 		{
 			label: 'Chats',
@@ -42,7 +49,8 @@ export const Sidebar = () => {
 	const downLinks = [
 		{
 			label: 'Logout',
-			href: '#',
+			href: '/login',
+			action: logout,
 			icon: (
 				<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
@@ -51,7 +59,7 @@ export const Sidebar = () => {
 
 	const [open, setOpen] = useState(false);
 
-	return (
+	return isAuthorized ? (
 		<div
 			className={cn(
 				'top-0 left-0 rounded-md fixed z-10 h-screen flex flex-col md:flex-row',
@@ -72,7 +80,7 @@ export const Sidebar = () => {
 								/>
 							))}
 						</div>
-						<div className='mb-8 flex flex-col gap-2'>
+						<div className='mb-16 flex flex-col gap-2'>
 							{downLinks.map((link, idx) => (
 								<SidebarLink
 									key={idx}
@@ -84,5 +92,5 @@ export const Sidebar = () => {
 				</SidebarBody>
 			</SidebarLib>
 		</div>
-	);
+	) : null;
 };

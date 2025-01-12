@@ -1,0 +1,15 @@
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+const Divider = () => {
+	return (
+		<div
+			className={cn(
+				'bg-gradient-to-r from-transparent via-neutral-700',
+				'to-transparent my-8 h-[1px] w-full',
+			)}
+		/>
+	);
+};
+
+export default Divider;

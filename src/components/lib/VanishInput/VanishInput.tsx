@@ -1,4 +1,3 @@
-// Импортируем необходимые библиотеки
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';

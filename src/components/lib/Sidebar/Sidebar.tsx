@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, {
 	useState,
 	createContext,
@@ -15,6 +16,7 @@ import { cn } from '@/lib/utils';
 interface Links {
 	label: string;
 	href: string;
+	action?: () => Promise<void>;
 	icon: React.JSX.Element | React.ReactNode;
 }
 
@@ -168,7 +170,7 @@ export const DesktopSidebar = ({
 			<motion.div
 				ref={sidebarRef}
 				className={cn(
-					'h-full w-[60px] px-4 py-4 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0',
+					'h-full w-[60px] px-4 py-4 flex flex-col bg-neutral-800 flex-shrink-0',
 					className,
 				)}
 				onTouchStart={handleTouchStart}
@@ -207,14 +209,28 @@ export const SidebarLink = ({
 	className?: string;
 	props?: LinkProps;
 }) => {
+	const router = useRouter();
 	const { open, animate } = useSidebar();
+
+	const handleClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+		event.preventDefault();
+
+		if (link.action) {
+			await link.action();
+		}
+
+		if (link.href) {
+			router.push(link.href);
+		}
+	};
+
 	return (
-		<Link
-			href={link.href}
+		<div
 			className={cn(
-				'flex items-center justify-start gap-2  group/sidebar py-2',
+				'flex items-center justify-start gap-2  group/sidebar py-2 cursor-pointer',
 				className,
 			)}
+			onClick={handleClick}
 			{...props}
 		>
 			{link.icon}
@@ -232,6 +248,6 @@ export const SidebarLink = ({
 			>
 				{link.label}
 			</motion.span>
-		</Link>
+		</div>
 	);
 };

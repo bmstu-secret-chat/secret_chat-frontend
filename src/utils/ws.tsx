@@ -13,6 +13,7 @@ import {
 } from '@/stores/Messages/MessagesState';
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 import { WsMessage, WsMessageResponseApi } from '@/types/WsMessages';
+import vibrate from '@/utils/vibrate';
 
 const WsUtils = () => {
 	const { addListener, removeListener } = useWebSocketContext();
@@ -26,6 +27,7 @@ const WsUtils = () => {
 
 				// Новое сообщение
 				if (wsMessage?.message?.content) {
+					vibrate(20);
 					const message = WsMessage.createMessageFromApi(wsMessage);
 					dispatch(addMessageAction(message.toPlain()));
 				}
