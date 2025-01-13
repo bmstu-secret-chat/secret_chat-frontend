@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 	description: 'The most secure messenger',
 };
 
-type Props = Readonly<{
+export default function RootLayout({
+	children,
+	modal,
+}: {
 	children: React.ReactNode;
-}>;
-
-const RootLayout: React.FC<Props> = ({ children }) => {
+	modal: React.ReactNode;
+}) {
 	return (
 		<html
 			lang='ru'
@@ -38,12 +40,12 @@ const RootLayout: React.FC<Props> = ({ children }) => {
 							<Ws />
 							<Sidebar />
 							<div className={cn('ml-[60px] bg-zinc-950')}>{children}</div>
+
+							{modal}
 						</BeforeRender>
 					</ConfigProvider>
 				</AppContextProvider>
 			</body>
 		</html>
 	);
-};
-
-export default RootLayout;
+}

@@ -5,7 +5,7 @@ import { UsersService } from '@/app/api/UsersService';
 import { showToast } from '@/components/utils/showToast';
 import { UserInfo } from '@/types/User/UserInfo';
 
-export default function Profile({ params }: { params: { id: string } }) {
+export default function ProfileModal({ params }: { params: { id: string } }) {
 	const { id } = params;
 
 	const [userInfo, setUserInfo] = useState<UserInfo | null>(null);

@@ -9,11 +9,11 @@ const CreateDialogButton: React.FC = () => {
 	const buttonRef = useRef<HTMLDivElement>(null);
 	const [open, setOpen] = useState<boolean>(false);
 
-	const handleChatClick = () => {
+	const handleGroupClick = () => {
 		setOpen(false);
 	};
 
-	const handleSecretChatClick = () => {
+	const handleSecretGroupClick = () => {
 		setOpen(false);
 	};
 
@@ -46,11 +46,11 @@ const CreateDialogButton: React.FC = () => {
 			>
 				<FloatButton
 					icon={<LockOutlined />}
-					onClick={handleSecretChatClick}
+					onClick={handleSecretGroupClick}
 				/>
 				<FloatButton
 					icon={<CommentOutlined />}
-					onClick={handleChatClick}
+					onClick={handleGroupClick}
 				/>
 			</FloatButton.Group>
 		</div>
