@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
-
 import {
 	createUserWithPwApi,
 	UserInfo,
@@ -39,59 +36,43 @@ export class AuthorizationService extends ServiceBase {
 	}
 
 	async signup(user: UserWithPwModel): Promise<UserInfo> {
-		try {
-			const configItem = this.getConfigItem('signup');
+		const configItem = this.getConfigItem('signup');
 
-			const response = await this.makeHttpRequest(
-				configItem.method,
-				configItem.url,
-				createUserWithPwApi(user),
-			);
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			configItem.url,
+			createUserWithPwApi(user),
+		);
 
-			return new UserInfo(response.user_id, response.username);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		return new UserInfo(response.user_id, response.username);
 	}
 
 	async login(user: UserWithPwModel): Promise<UserInfo> {
-		try {
-			const configItem = this.getConfigItem('login');
+		const configItem = this.getConfigItem('login');
 
-			const response = await this.makeHttpRequest(
-				configItem.method,
-				configItem.url,
-				createUserWithPwApi(user),
-			);
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			configItem.url,
+			createUserWithPwApi(user),
+		);
 
-			return new UserInfo(response.user_id, response.username);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		return new UserInfo(response.user_id, response.username);
 	}
 
 	async logout(): Promise<void> {
-		try {
-			const configItem = this.getConfigItem('logout');
+		const configItem = this.getConfigItem('logout');
 
-			await this.makeHttpRequest(configItem.method, configItem.url);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await this.makeHttpRequest(configItem.method, configItem.url);
 	}
 
 	async check(): Promise<UserInfo> {
-		try {
-			const configItem = this.getConfigItem('check');
+		const configItem = this.getConfigItem('check');
 
-			const response = await this.makeHttpRequest(
-				configItem.method,
-				configItem.url,
-			);
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			configItem.url,
+		);
 
-			return new UserInfo(response.user_id, response.username);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		return new UserInfo(response.user_id, response.username);
 	}
 }

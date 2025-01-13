@@ -1,7 +1,6 @@
 'use client';
 
-import { notFound } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { UsersService } from '@/app/api/UsersService';
 import { showToast } from '@/components/utils/showToast';
 import { UserInfo } from '@/types/User/UserInfo';
@@ -11,16 +10,19 @@ export default function Chat({ params }: { params: { id: string } }) {
 
 	const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
-	const usersService = new UsersService();
-
-	const loadUserInfo = async (userId: string) => {
+	const loadUserInfo = useCallback(async (id: string) => {
 		try {
-			const user = await usersService.getUserInfo(userId);
+			const usersService = new UsersService();
+			const user = await usersService.getUserInfo(id);
 			setUserInfo(user);
 		} catch (error: any) {
+			if (error.message.includes('EREQUESTPENDING')) {
+				return;
+			}
+
 			showToast('error', error.message);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		// if (isNaN(Number(id))) {

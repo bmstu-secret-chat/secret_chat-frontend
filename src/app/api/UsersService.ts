@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
-
 import { UserInfo } from '@/types/User/UserInfo';
 import { RequestMethods, ServiceBase } from './ServiceBase';
 
@@ -30,16 +27,11 @@ export class UsersService extends ServiceBase {
 	async getUserInfo(id: string): Promise<UserInfo> {
 		const configItem = this.getConfigItem('getUserInfo');
 
-		try {
-			const response = await this.makeHttpRequest(
-				configItem.method,
-				`${configItem.url}${id}/`,
-			);
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}${id}/`,
+		);
 
-			return new UserInfo(response.user_id, response.username);
-		} catch (error: any) {
-			console.error('Error fetching user info:', error.message);
-			throw new Error(`Failed to fetch user info: ${error.message}`);
-		}
+		return new UserInfo(response.user_id, response.username);
 	}
 }

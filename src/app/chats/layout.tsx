@@ -3,17 +3,17 @@
 import { useRouter, usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import ChatsList from '@/app/chats/_chatsList/page';
+import CreateDialogButton from '@/components/ui/CreateDialogButton/CreateDialogButton';
 import AuthRoute from '@/components/utils/AuthRoute';
 import { cn } from '@/lib/utils';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const [showChatsList, setShowChatsList] = useState(false);
+	const [isChatPage, setIsChatPage] = useState(false);
 
 	useEffect(() => {
-		const isChatPage = pathname.includes('/chats/');
-		setShowChatsList(!isChatPage);
+		setIsChatPage(!pathname.includes('/chats/'));
 
 		const handleEscape = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
@@ -31,9 +31,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<AuthRoute>
 			<div className={cn('flex relative flex-col md:w-[30vw] h-screen')}>
-				<div className={cn(showChatsList ? '' : 'md:block hidden')}>
+				<div className={cn(isChatPage ? '' : 'md:block hidden')}>
 					<ChatsList />
 				</div>
+				<CreateDialogButton />
 				{children}
 			</div>
 		</AuthRoute>

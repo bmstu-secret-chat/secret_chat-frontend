@@ -1,9 +1,9 @@
-'use client';
+// 'use client';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 export enum RequestMethods {
 	GET = 'GET',
@@ -22,7 +22,7 @@ const REFRESH_URL = '/api/auth/refresh/';
 const URLS_WITHOUT_TOKEN = ['/api/auth/login/', '/api/auth/signup/'];
 
 export abstract class ServiceBase {
-	private router = useRouter();
+	// private router = useRouter();
 
 	protected pendingRequests: { [key: string]: boolean } = {};
 	protected config: ConfigType[] = [];
@@ -63,7 +63,7 @@ export abstract class ServiceBase {
 
 		if (!response.ok) {
 			const errorData = await response.json();
-			this.router.push('/login');
+			// this.router.push('/login');
 			throw errorData.error || 'Не удалось обновить токен';
 		}
 	}
@@ -118,7 +118,7 @@ export abstract class ServiceBase {
 
 			if (!response.ok) {
 				const errorData = await response.json();
-				throw errorData.error || 'HTTP request failed';
+				throw new Error(errorData.error || 'HTTP request failed');
 			}
 
 			return response.json();
