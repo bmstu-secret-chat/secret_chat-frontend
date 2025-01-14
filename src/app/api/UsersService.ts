@@ -32,6 +32,6 @@ export class UsersService extends ServiceBase {
 			`${configItem.url}${id}/`,
 		);
 
-		return new UserInfo(response.user_id, response.username);
+		return new UserInfo(response.id, response.username);
 	}
 }

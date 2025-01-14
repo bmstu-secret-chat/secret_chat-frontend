@@ -40,7 +40,6 @@ export default function RootLayout({
 							<Ws />
 							<Sidebar />
 							<div className={cn('ml-[60px] bg-zinc-950')}>{children}</div>
-
 							{modal}
 						</BeforeRender>
 					</ConfigProvider>

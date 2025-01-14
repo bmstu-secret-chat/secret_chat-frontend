@@ -49,6 +49,10 @@ body {
   background-color: rgb(39 39 42);
 }
 
+.ant-float-btn-icon {
+  width: 100% !important;
+}
+
 /* Убираем стрелки для всех браузеров */
 input[type="number"] {
   -moz-appearance: textfield; /* Для Firefox */

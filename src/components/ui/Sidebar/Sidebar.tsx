@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	IconArrowLeft,
-	IconBrandTabler,
-	IconSettings,
-	IconUserBolt,
-} from '@tabler/icons-react';
+import { IconArrowLeft, IconUserCog, IconMessages } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -31,21 +26,14 @@ export const Sidebar = () => {
 			label: 'Chats',
 			href: '/chats',
 			icon: (
-				<IconBrandTabler className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+				<IconMessages className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
 		},
 		{
 			label: 'Profile',
 			href: currentUser ? `/profile/${currentUser.userId}` : '#',
 			icon: (
-				<IconUserBolt className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
-			),
-		},
-		{
-			label: 'Settings',
-			href: '#',
-			icon: (
-				<IconSettings className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+				<IconUserCog className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
 		},
 	];

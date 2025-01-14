@@ -2,11 +2,6 @@
 /* eslint-disable no-console */
 'use client';
 
-// import {
-// 	IconBrandGithub,
-// 	IconBrandGoogle,
-// 	IconBrandOnlyfans,
-// } from '@tabler/icons-react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 // import type { GetProps } from 'antd';
 import { Input as AntInput } from 'antd';
@@ -26,11 +21,13 @@ import { cn } from '@/lib/utils';
 import { QueryParams } from '@/types/QueryParams';
 import { validateSignupFields } from '@/utils/validateAuthorizationFields';
 
+const SIGNUP_URL = '/signup';
+
 export function SignupForm() {
 	const pathname = usePathname();
 	const router = useRouter();
-
 	const searchParams = useSearchParams();
+
 	const { page, setQueryParam } = useQueryParams();
 
 	const [stylesLoaded, setStylesLoaded] = useState(false);
@@ -124,7 +121,7 @@ export function SignupForm() {
 
 	useEffect(() => {
 		if (
-			pathname === '/signup' &&
+			pathname === SIGNUP_URL &&
 			searchParams.get(QueryParams.PAGE) !== '1' &&
 			username === ''
 		) {
@@ -149,7 +146,7 @@ export function SignupForm() {
 						Создайте аккаунт, чтобы начать пользоваться самым защищенным
 						мессенджером
 					</p>
-					<div className='relative  w-full gap-4 my-8 overflow-hidden min-h-[390px]'>
+					<div className='relative w-full gap-4 my-8 overflow-hidden min-h-[390px]'>
 						<motion.div
 							className={cn('absolute w-full')}
 							initial={{ x: '0' }}

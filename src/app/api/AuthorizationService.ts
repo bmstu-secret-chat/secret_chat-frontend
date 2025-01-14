@@ -73,6 +73,6 @@ export class AuthorizationService extends ServiceBase {
 			configItem.url,
 		);
 
-		return new UserInfo(response.user_id, response.username);
+		return new UserInfo(response.id, response.username);
 	}
 }
