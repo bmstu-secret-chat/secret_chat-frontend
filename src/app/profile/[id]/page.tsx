@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import React, { useCallback, useEffect, useState } from 'react';
 import { UsersService } from '@/app/api/UsersService';
 import { BackgroundGradient } from '@/components/lib/BackgroundGradient/BackgroundGradient';
+import UserProfileEdit from '@/components/ui/UserProfileEdit/UserProfileEdit';
 import UserProfileInfo from '@/components/ui/UserProfileInfo/UserProfileInfo';
 import { showToast } from '@/components/utils/showToast';
 import { cn } from '@/lib/utils';
@@ -36,39 +37,32 @@ export default function Profile({ params }: { params: { id: string } }) {
 	}, [id, loadUserInfo]);
 
 	return userInfo ? (
-		<div
-			className={cn(
-				'relative flex flex-col items-center justify-center ',
-				'w-full h-screen',
-			)}
-		>
+		<div className={cn('flex items-center justify-center', 'w-full h-screen')}>
 			<BackgroundGradient
 				className={cn(
-					'flex',
-					'rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900',
+					'w-[70vw] sm:w-[40vw] min-h-[450px]',
+					'rounded-[22px] bg-white dark:bg-zinc-900',
 					'overflow-hidden',
 				)}
 			>
 				<motion.div
+					className={cn('absolute flex p-4 sm:p-10 ', 'w-full')}
 					initial={{ x: '0' }}
-					animate={{ x: !isEditMode ? '0' : '-150%' }}
+					animate={{ x: !isEditMode ? '0' : '-120%' }}
 					transition={{ duration: 0.5 }}
-					layout
 				>
 					<IconEdit onClick={() => setIsEditMode(true)} />
 					<UserProfileInfo userInfo={userInfo} />
 				</motion.div>
 				<motion.div
-					initial={{ x: '100%' }}
-					animate={{ x: isEditMode ? '-200%' : '100%' }}
+					className={cn('absolute p-4 sm:p-10 ', 'w-full')}
+					initial={{ x: '120%' }}
+					animate={{ x: isEditMode ? '0%' : '120%' }}
 					transition={{ duration: 0.5 }}
-					layout
 				>
 					<IconX onClick={() => setIsEditMode(false)} />
 					<IconDeviceFloppy onClick={() => setIsEditMode(false)} />
-					Редактирование Редактирование Редактирование Редактирование
-					Редактирование Редактирование Редактирование Редактирование
-					Редактирование Редактирование Редактирование Редактирование
+					<UserProfileEdit userInfo={userInfo} />
 				</motion.div>
 			</BackgroundGradient>
 		</div>

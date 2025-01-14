@@ -54,7 +54,7 @@ export const Sidebar = () => {
 	return isAuthorized ? (
 		<div
 			className={cn(
-				'top-0 left-0 rounded-md fixed z-10 h-screen flex flex-col md:flex-row',
+				'top-0 left-0 rounded-md fixed z-[100] h-screen flex flex-col md:flex-row',
 				'mx-auto border border-neutral-700 overflow-hidden',
 			)}
 		>
