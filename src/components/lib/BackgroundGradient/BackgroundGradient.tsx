@@ -8,12 +8,14 @@ export const BackgroundGradient = ({
 	containerClassName,
 	animate = true,
 	style,
+	ref,
 }: {
 	children?: React.ReactNode;
 	className?: string;
 	containerClassName?: string;
 	animate?: boolean;
 	style?: React.CSSProperties;
+	ref?: React.RefObject<HTMLDivElement>;
 }) => {
 	const variants = {
 		initial: {
@@ -27,6 +29,7 @@ export const BackgroundGradient = ({
 		<div
 			className={cn('relative p-[4px] group', containerClassName)}
 			style={style}
+			ref={ref}
 		>
 			<motion.div
 				variants={animate ? variants : undefined}

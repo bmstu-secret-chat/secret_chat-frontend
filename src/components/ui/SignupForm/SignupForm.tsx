@@ -5,10 +5,11 @@
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 // import type { GetProps } from 'antd';
 import { Input as AntInput } from 'antd';
+import { OTPProps } from 'antd/es/input/OTP';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Input } from '@/components/lib/Input/Input';
 import { Label } from '@/components/lib/Label/Label';
 import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
@@ -33,6 +34,8 @@ export function SignupForm() {
 	const [stylesLoaded, setStylesLoaded] = useState(false);
 	const [username, setUsername] = useState('');
 	const [usernameError, setUsernameError] = useState(false);
+	const [phone, setPhone] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [passwordError, setPasswordError] = useState(false);
 	const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -40,17 +43,16 @@ export function SignupForm() {
 
 	const { signup } = useAuthorization();
 
-	const onChange = (text: any) => {
-		console.log('onChange:', text);
-	};
+	const handlePhoneChange = useCallback(
+		(value: string) => {
+			setPhone(value);
+		},
+		[setPhone],
+	);
 
-	const onInput = (value: any) => {
-		console.log('onInput:', value);
-	};
-
-	const sharedProps = {
-		onChange,
-		onInput,
+	const sharedProps: OTPProps = {
+		onChange: handlePhoneChange,
+		value: phone,
 	};
 
 	const handleNextButtonClick = () => {
@@ -107,7 +109,7 @@ export function SignupForm() {
 		setPasswordConfirmError(false);
 
 		try {
-			await signup(username, password);
+			await signup(username, phone, email, password);
 			router.push('/chats');
 		} catch {
 			// TODO: handle error
@@ -172,11 +174,14 @@ export function SignupForm() {
 									id='email'
 									placeholder='projectmayhem@fc.com'
 									type='email'
+									value={email}
+									// isError={emailError}
+									onChange={(e) => setEmail(e.target.value)}
 								/>
 							</LabelInputContainer>
 
 							<LabelInputContainer className='my-2'>
-								<Label htmlFor='phone'>Номер телефона</Label>
+								<Label htmlFor='phone'>Номер телефона (8‑123‑456‑78‑90)</Label>
 								<AntInput.OTP
 									length={11}
 									variant='filled'

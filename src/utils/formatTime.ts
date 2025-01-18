@@ -15,3 +15,9 @@ export const formatTime = (time: string): string => {
 		return 'error';
 	}
 };
+
+export const formatDateDDMMYYYY = (
+	date: Date | dayjs.Dayjs | string,
+): string => {
+	return dayjs(date).format('DD.MM.YYYY');
+};

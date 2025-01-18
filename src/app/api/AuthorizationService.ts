@@ -1,8 +1,5 @@
-import {
-	createUserWithPwApi,
-	UserInfo,
-	UserWithPwModel,
-} from '@/types/User/UserInfo';
+import { UserInfo } from '@/types/User/UserInfo';
+import { UserWithPwModel } from '@/types/User/UserWithPW';
 import { RequestMethods, ServiceBase } from './ServiceBase';
 
 export class AuthorizationService extends ServiceBase {
@@ -41,10 +38,10 @@ export class AuthorizationService extends ServiceBase {
 		const response = await this.makeHttpRequest(
 			configItem.method,
 			configItem.url,
-			createUserWithPwApi(user),
+			user,
 		);
 
-		return new UserInfo(response.user_id, response.username);
+		return UserInfo.createFromApi(response);
 	}
 
 	async login(user: UserWithPwModel): Promise<UserInfo> {
@@ -53,10 +50,10 @@ export class AuthorizationService extends ServiceBase {
 		const response = await this.makeHttpRequest(
 			configItem.method,
 			configItem.url,
-			createUserWithPwApi(user),
+			user,
 		);
 
-		return new UserInfo(response.user_id, response.username);
+		return UserInfo.createFromApi(response);
 	}
 
 	async logout(): Promise<void> {
@@ -73,6 +70,6 @@ export class AuthorizationService extends ServiceBase {
 			configItem.url,
 		);
 
-		return new UserInfo(response.id, response.username);
+		return UserInfo.createFromApi(response);
 	}
 }

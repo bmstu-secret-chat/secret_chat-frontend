@@ -17,6 +17,16 @@ export class UsersService extends ServiceBase {
 				url: '/api/backend/users/user/',
 				method: RequestMethods.GET,
 			},
+			{
+				name: 'updateUserInfo',
+				url: '/api/backend/users/user/',
+				method: RequestMethods.PUT,
+			},
+			{
+				name: 'deleteUserAccount',
+				url: '/api/backend/users/user/',
+				method: RequestMethods.DELETE,
+			},
 		];
 	}
 
@@ -32,6 +42,36 @@ export class UsersService extends ServiceBase {
 			`${configItem.url}${id}/`,
 		);
 
-		return new UserInfo(response.id, response.username);
+		return UserInfo.createFromApi(response);
+	}
+
+	/**
+	 * Изменение информации о пользователе
+	 * @param user - Данные пользователя
+	 */
+	async updateUserInfo(user: UserInfo): Promise<void> {
+		const configItem = this.getConfigItem('updateUserInfo');
+
+		return await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}${user.id}/`,
+			user.toApi(),
+			{
+				'Content-Type': 'application/json',
+			},
+		);
+	}
+
+	/**
+	 * Удаление аккаунта пользователя
+	 * @param id - Идентификатор пользователя
+	 */
+	async deleteUserAccount(id: string): Promise<void> {
+		const configItem = this.getConfigItem('deleteUserAccount');
+
+		return await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}${id}/`,
+		);
 	}
 }

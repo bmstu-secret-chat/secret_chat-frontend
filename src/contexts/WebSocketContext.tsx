@@ -55,6 +55,7 @@ const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const { apiUrl } = useEnv();
 	const wsUrl = `wss://${apiUrl}/api/realtime/messenger/`;
+	// TODO переделать на id из базы
 	const { userId } = useUser();
 
 	const dispatch = useDispatch();
