@@ -1,5 +1,7 @@
+import { BackgroundLinesLanding } from '@/components/ui/BackgroundLines/BackgroundLines';
+
 const Landing = () => {
-	return <div>landing</div>;
+	return <BackgroundLinesLanding />;
 };
 
 export default Landing;

@@ -1,8 +1,11 @@
 'use client';
 
 import { IconArrowLeft, IconUserCog, IconMessages } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import safeChat from '@/assets/images/safe-chat.png';
 import {
 	SidebarLib,
 	SidebarBody,
@@ -20,6 +23,12 @@ export const Sidebar = () => {
 	const currentUser = useSelector(selectCurrentUser);
 
 	const { logout } = useAuthorization();
+
+	const logoLink = {
+		label: 'Safe chat',
+		href: '/',
+		icon: <LogoImage />,
+	};
 
 	const upperLinks = [
 		{
@@ -64,7 +73,10 @@ export const Sidebar = () => {
 			>
 				<SidebarBody className='justify-between gap-10'>
 					<div className='flex flex-col flex-1 justify-between overflow-hidden'>
-						<div className='mt-8 flex flex-col gap-2'>
+						<div className='mt-2 flex flex-col gap-2'>
+							<div className={'mb-8'}>
+								<SidebarLink link={logoLink} />
+							</div>
 							{upperLinks.map((link, idx) => (
 								<SidebarLink
 									key={idx}
@@ -85,4 +97,14 @@ export const Sidebar = () => {
 			</SidebarLib>
 		</div>
 	) : null;
+};
+
+const LogoImage = () => {
+	return (
+		<img
+			src={safeChat.src}
+			alt={'safe chat'}
+			className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0'
+		/>
+	);
 };
