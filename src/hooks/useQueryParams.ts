@@ -7,6 +7,7 @@ const useQueryParams = () => {
 	const router = useRouter();
 
 	const page = searchParams.get(QueryParams.PAGE);
+	const edit = searchParams.get(QueryParams.EDIT);
 
 	const setQueryParam = (key: QueryParams, value: string | string[]) => {
 		const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -33,6 +34,7 @@ const useQueryParams = () => {
 
 	return {
 		page,
+		edit,
 		setQueryParam,
 	};
 };

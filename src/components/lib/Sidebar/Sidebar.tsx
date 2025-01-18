@@ -212,7 +212,7 @@ export const SidebarLink = ({
 	const router = useRouter();
 	const { open, animate } = useSidebar();
 
-	const handleClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+	const handleClick = async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
 
 		if (link.action) {
@@ -225,7 +225,7 @@ export const SidebarLink = ({
 	};
 
 	return (
-		<div
+		<a
 			className={cn(
 				'flex items-center justify-start gap-2  group/sidebar py-2 cursor-pointer',
 				className,
@@ -248,6 +248,6 @@ export const SidebarLink = ({
 			>
 				{link.label}
 			</motion.span>
-		</div>
+		</a>
 	);
 };

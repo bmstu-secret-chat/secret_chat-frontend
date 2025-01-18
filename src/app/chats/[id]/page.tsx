@@ -1,4 +1,3 @@
-// app/chat/page.tsx
 'use client';
 
 import { notFound } from 'next/navigation';

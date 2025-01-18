@@ -4,12 +4,17 @@ export type ValidationResponse = {
 	invalidFields: string[];
 };
 
-const isUsernameCorrect = (username: string): boolean => {
+export const isUsernameCorrect = (username: string): boolean => {
 	return (
 		username.trim() !== '' &&
 		username.length >= 4 &&
 		/^[a-zA-Z0-9]+$/.test(username)
 	);
+};
+
+export const isEmailCorrect = (email: string): boolean => {
+	const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	return emailPattern.test(email);
 };
 
 const isPasswordCorrect = (password: string): boolean => {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDispatch } from 'react-redux';
 import { AuthorizationService } from '@/app/api/AuthorizationService';
+import { UsersService } from '@/app/api/UsersService';
 import { showToast } from '@/components/utils/showToast';
 import {
 	deleteCurrentUserAction,
@@ -10,11 +11,22 @@ import {
 const useAuthorization = () => {
 	const dispatch = useDispatch();
 
+	const usersService = new UsersService();
 	const authorizationService = new AuthorizationService();
 
-	const signup = async (username: string, password: string) => {
+	const signup = async (
+		username: string,
+		phone: string,
+		email: string,
+		password: string,
+	) => {
 		try {
-			const user = await authorizationService.signup({ username, password });
+			const user = await authorizationService.signup({
+				username,
+				phone,
+				email,
+				password,
+			});
 			dispatch(setCurrentUserAction(user));
 		} catch (error: any) {
 			showToast('error', error.message);
@@ -52,11 +64,21 @@ const useAuthorization = () => {
 		}
 	};
 
+	const deleteUserAccount = async (userId: string) => {
+		try {
+			await usersService.deleteUserAccount(userId);
+			dispatch(deleteCurrentUserAction());
+		} catch (error: any) {
+			showToast('error', error.message);
+		}
+	};
+
 	return {
 		signup,
 		login,
 		logout,
 		checkAuthorization,
+		deleteUserAccount,
 	};
 };
 

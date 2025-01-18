@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	IconArrowLeft,
-	IconBrandTabler,
-	IconSettings,
-	IconUserBolt,
-} from '@tabler/icons-react';
+import { IconArrowLeft, IconUserCog, IconMessages } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -15,10 +10,14 @@ import {
 } from '@/components/lib/Sidebar/Sidebar';
 import useAuthorization from '@/hooks/useAuthorization';
 import { cn } from '@/lib/utils';
-import { selectIsAuthorized } from '@/stores/Users/CurrentUserState';
+import {
+	selectCurrentUser,
+	selectIsAuthorized,
+} from '@/stores/Users/CurrentUserState';
 
 export const Sidebar = () => {
 	const isAuthorized = useSelector(selectIsAuthorized);
+	const currentUser = useSelector(selectCurrentUser);
 
 	const { logout } = useAuthorization();
 
@@ -27,21 +26,14 @@ export const Sidebar = () => {
 			label: 'Chats',
 			href: '/chats',
 			icon: (
-				<IconBrandTabler className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+				<IconMessages className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
 		},
 		{
 			label: 'Profile',
-			href: '#',
+			href: currentUser ? `/profile/${currentUser.id}` : '#',
 			icon: (
-				<IconUserBolt className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
-			),
-		},
-		{
-			label: 'Settings',
-			href: '#',
-			icon: (
-				<IconSettings className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+				<IconUserCog className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 			),
 		},
 	];
@@ -62,7 +54,7 @@ export const Sidebar = () => {
 	return isAuthorized ? (
 		<div
 			className={cn(
-				'top-0 left-0 rounded-md fixed z-10 h-screen flex flex-col md:flex-row',
+				'top-0 left-0 rounded-md fixed z-[100] h-screen flex flex-col md:flex-row',
 				'mx-auto border border-neutral-700 overflow-hidden',
 			)}
 		>

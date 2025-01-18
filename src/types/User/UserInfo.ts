@@ -1,42 +1,62 @@
 export type UserInfoApi = {
-	user_id: string;
+	id: string;
 	username: string;
+	phone: string;
+	email: string;
+	avatar: string | null;
+	about_me: string | null;
+	birthday: string | null;
 };
 
-export type UserWithPwModel = {
-	username?: string;
-	password?: string;
-};
-
-export type UserWithPwApi = {
+export type UserInfoModel = {
+	id: string;
 	username: string;
-	password: string;
-};
-
-export const createUserWithPwApi = (from: UserWithPwModel): UserWithPwApi => {
-	if (!from.username || !from.password) {
-		throw new Error('Все поля должны быть заполнены');
-	}
-
-	return {
-		username: from.username,
-		password: from.password,
-	};
+	phone: string;
+	email: string;
+	avatar: string | null;
+	aboutMe: string | null;
+	birthday: string | null;
 };
 
 export class UserInfo {
-	userId: string;
+	id: string;
 	username: string;
+	phone: string;
+	email: string;
+	avatar: string | null;
+	aboutMe: string | null;
+	birthday: string | null;
 
-	constructor(userId: string, userName: string) {
-		this.userId = userId;
-		this.username = userName;
+	constructor({
+		id,
+		username,
+		phone,
+		email,
+		avatar,
+		aboutMe,
+		birthday,
+	}: UserInfoModel) {
+		this.id = id;
+		this.username = username;
+		this.phone = phone;
+		this.email = email;
+		this.avatar = avatar;
+		this.aboutMe = aboutMe;
+		this.birthday = birthday;
 	}
 
-	toApi(): UserInfoApi {
+	static createFromApi(user: UserInfoApi) {
+		return new UserInfo({ aboutMe: user.about_me, ...user });
+	}
+
+	toApi() {
 		return {
-			user_id: this.userId,
 			username: this.username,
+			phone: this.phone,
+			email: this.email,
+			avatar: this.avatar,
+			about_me: this.aboutMe,
+			birthday: this.birthday,
 		};
 	}
 }

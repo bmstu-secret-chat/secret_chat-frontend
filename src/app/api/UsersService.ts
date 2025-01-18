@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
-
 import { UserInfo } from '@/types/User/UserInfo';
 import { RequestMethods, ServiceBase } from './ServiceBase';
 
@@ -20,6 +17,16 @@ export class UsersService extends ServiceBase {
 				url: '/api/backend/users/user/',
 				method: RequestMethods.GET,
 			},
+			{
+				name: 'updateUserInfo',
+				url: '/api/backend/users/user/',
+				method: RequestMethods.PUT,
+			},
+			{
+				name: 'deleteUserAccount',
+				url: '/api/backend/users/user/',
+				method: RequestMethods.DELETE,
+			},
 		];
 	}
 
@@ -30,16 +37,41 @@ export class UsersService extends ServiceBase {
 	async getUserInfo(id: string): Promise<UserInfo> {
 		const configItem = this.getConfigItem('getUserInfo');
 
-		try {
-			const response = await this.makeHttpRequest(
-				configItem.method,
-				`${configItem.url}/${id}`,
-			);
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}${id}/`,
+		);
 
-			return new UserInfo(response.user_id, response.username);
-		} catch (error: any) {
-			console.error('Error fetching user info:', error.message);
-			throw new Error(`Failed to fetch user info: ${error.message}`);
-		}
+		return UserInfo.createFromApi(response);
+	}
+
+	/**
+	 * Изменение информации о пользователе
+	 * @param user - Данные пользователя
+	 */
+	async updateUserInfo(user: UserInfo): Promise<void> {
+		const configItem = this.getConfigItem('updateUserInfo');
+
+		return await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}${user.id}/`,
+			user.toApi(),
+			{
+				'Content-Type': 'application/json',
+			},
+		);
+	}
+
+	/**
+	 * Удаление аккаунта пользователя
+	 * @param id - Идентификатор пользователя
+	 */
+	async deleteUserAccount(id: string): Promise<void> {
+		const configItem = this.getConfigItem('deleteUserAccount');
+
+		return await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}${id}/`,
+		);
 	}
 }

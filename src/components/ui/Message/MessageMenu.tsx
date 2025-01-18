@@ -1,4 +1,4 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { IconCopy, IconEdit, IconTrash } from '@tabler/icons-react';
 import { Button } from 'antd';
 
 const MessageMenu = () => {
@@ -6,19 +6,19 @@ const MessageMenu = () => {
 		<div className={'flex flex-col'}>
 			<Button type={'text'}>
 				<div className={'flex gap-4 w-full'}>
-					<CopyOutlined />
+					<IconCopy />
 					<span>Копировать текст</span>
 				</div>
 			</Button>
 			<Button type={'text'}>
 				<div className={'flex gap-4 w-full'}>
-					<EditOutlined />
+					<IconEdit />
 					<span>Редактировать</span>
 				</div>
 			</Button>
 			<Button type={'text'}>
 				<div className={'flex gap-4 w-full'}>
-					<DeleteOutlined />
+					<IconTrash />
 					<span>Удалить</span>
 				</div>
 			</Button>
