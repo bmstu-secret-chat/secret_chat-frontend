@@ -1,8 +1,6 @@
 'use client';
 
 import { IconArrowLeft, IconUserCog, IconMessages } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import safeChat from '@/assets/images/safe-chat.png';
