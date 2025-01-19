@@ -2,8 +2,6 @@ import { Modal } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { UsersService } from '@/app/api/UsersService';
-import { showToast } from '@/components/utils/showToast';
 import useAuthorization from '@/hooks/useAuthorization';
 import { selectCurrentUser } from '@/stores/Users/CurrentUserState';
 import eventEmitter, { EmitterEvents } from '@/utils/eventEmitter';

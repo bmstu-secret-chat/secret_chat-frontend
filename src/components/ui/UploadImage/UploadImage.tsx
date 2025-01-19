@@ -4,12 +4,10 @@ import { UploadChangeParam } from 'antd/lib/upload';
 import React, { useCallback, useState } from 'react';
 import { UtilsService } from '@/app/api/UtilsService';
 import { showToast } from '@/components/utils/showToast';
-import { UserInfo } from '@/types/User/UserInfo';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 type Props = {
-	fuckingUser: UserInfo;
 	initialFile: string | null;
 	setLink: (link: string) => void;
 	removeLink: () => void;
@@ -17,7 +15,6 @@ type Props = {
 };
 
 const UploadImage: React.FC<Props> = ({
-	fuckingUser,
 	initialFile,
 	setLink,
 	removeLink,
@@ -90,7 +87,7 @@ const UploadImage: React.FC<Props> = ({
 					setLink(response);
 
 					newFileList[0].status = 'done';
-				} catch (error: any) {
+				} catch {
 					newFileList[0].status = 'error';
 					showToast('error', `${newFileList[0].name} не удалось загрузить`);
 				}

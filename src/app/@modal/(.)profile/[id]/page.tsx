@@ -6,14 +6,12 @@ import {
 	IconDeviceFloppy,
 	IconTrash,
 } from '@tabler/icons-react';
-import { Image } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UsersService } from '@/app/api/UsersService';
 import { BackgroundGradient } from '@/components/lib/BackgroundGradient/BackgroundGradient';
-import UploadImage from '@/components/ui/UploadImage/UploadImage';
 import UserProfileDeleteModal from '@/components/ui/UserProfileDelete/UserProfileDelete';
 import UserProfileEdit from '@/components/ui/UserProfileEdit/UserProfileEdit';
 import UserProfileInfo from '@/components/ui/UserProfileInfo/UserProfileInfo';

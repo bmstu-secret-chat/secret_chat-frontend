@@ -3,12 +3,9 @@ import ruRu from 'antd/locale/ru_RU';
 import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
-import { useSelector } from 'react-redux';
 import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
 import BeforeRender from '@/components/utils/BeforeRender';
 import { AppContextProvider } from '@/contexts/AppContextProvider';
-import { cn } from '@/lib/utils';
-import { selectCurrentUser } from '@/stores/Users/CurrentUserState';
 import Ws from '@/utils/ws';
 
 type Locale = ConfigProviderProps['locale'];
