@@ -1,5 +1,5 @@
 import { Image } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import userDefaultAvatar from '@/assets/images/user-default-avatar.png';
 import LabelValue from '@/components/ui/LabelValue/LabelValue';
@@ -59,7 +59,6 @@ const UserProfileInfo: React.FC<Props> = ({
 				<div className={'w-1/4'}>
 					{isCurrentUser ? (
 						<UploadImage
-							fuckingUser={userInfo}
 							initialFile={userInfo.avatar}
 							setLink={setUserAvatar}
 							removeLink={deleteUserAvatar}
