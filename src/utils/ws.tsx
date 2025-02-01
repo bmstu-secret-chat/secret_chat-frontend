@@ -2,18 +2,18 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { vibrate } from '@/shared/lib';
 import {
 	useWebSocketContext,
 	WSEventType,
 	WSListenerCallback,
-} from '@/contexts/WebSocketContext';
+} from '@/shared/model/providers/webSocketContext';
 import {
 	addMessageAction,
 	updateMessageAction,
 } from '@/stores/Messages/MessagesState';
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 import { WsMessage, WsMessageResponseApi } from '@/types/WsMessages';
-import vibrate from '@/utils/vibrate';
 
 const WsUtils = () => {
 	const { addListener, removeListener } = useWebSocketContext();

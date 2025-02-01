@@ -3,10 +3,10 @@ import ruRu from 'antd/locale/ru_RU';
 import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
-import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
-import BeforeRender from '@/components/utils/BeforeRender';
-import { AppContextProvider } from '@/contexts/AppContextProvider';
+import { AppContextProvider } from '@/shared/model';
+import { BeforeRender } from '@/shared/utils';
 import Ws from '@/utils/ws';
+import { Sidebar } from '@/widgets';
 
 type Locale = ConfigProviderProps['locale'];
 

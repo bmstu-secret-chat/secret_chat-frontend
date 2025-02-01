@@ -1,4 +1,4 @@
-import { BackgroundLinesLanding } from '@/components/ui/BackgroundLines/BackgroundLines';
+import { BackgroundLinesLanding } from '@/features/landing/ui';
 
 const Landing = () => {
 	return <BackgroundLinesLanding />;

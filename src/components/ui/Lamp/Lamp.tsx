@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import React from 'react';
-import { LampContainer } from '@/components/lib/Lamp/Lamp';
+import { LampContainer } from '@/components/lib/lamp/lamp';
 
 export function Lamp() {
 	return (

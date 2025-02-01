@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@/stores/store';
+import { RootState } from '@/shared/model/stores';
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 import { WsMessageModel, WsMessageResponseApi } from '@/types/WsMessages';
 

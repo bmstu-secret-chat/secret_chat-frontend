@@ -3,7 +3,7 @@ import { IconMessagePlus, IconLockPlus, IconPlus } from '@tabler/icons-react';
 import { FloatButton } from 'antd';
 import { usePathname } from 'next/navigation';
 import React, { memo, useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib';
 
 const CHATS_URL = '/chats';
 

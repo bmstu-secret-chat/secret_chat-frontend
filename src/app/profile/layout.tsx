@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthRoute from '@/components/utils/AuthRoute';
+import AuthRoute from '@/shared/utils/authRoute/AuthRoute';
 
 export default function Profile({
 	children,

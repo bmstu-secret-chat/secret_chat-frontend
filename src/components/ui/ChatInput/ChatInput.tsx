@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { VanishInput } from '@/components/lib/VanishInput/VanishInput';
-import { useScreenWidth } from '@/hooks/useScreenWidth';
-import { cn } from '@/lib/utils';
+import { useScreenWidth } from '@/shared/hooks/useScreenWidth';
+import { cn } from '@/shared/lib';
+import { VanishInput } from '@/components/lib/vanishInput/vanishInput';
 
 type Props = {
 	value: string;

@@ -4,8 +4,8 @@ import { useRouter, usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import ChatsList from '@/app/chats/_chatsList/page';
 import CreateDialogButton from '@/components/ui/CreateDialogButton/CreateDialogButton';
-import AuthRoute from '@/components/utils/AuthRoute';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib';
+import AuthRoute from '@/shared/utils/authRoute/AuthRoute';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	const router = useRouter();

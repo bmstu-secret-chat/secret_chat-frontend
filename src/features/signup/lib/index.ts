@@ -1,0 +1,1 @@
+export { validateSignupFields } from './validateFields';

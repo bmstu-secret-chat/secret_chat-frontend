@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lamp } from '@/components/ui/Lamp/Lamp';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib';
 
 const ChatPage = () => {
 	return (

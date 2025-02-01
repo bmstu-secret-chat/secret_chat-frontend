@@ -1,13 +1,13 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
-import Popover from '@/components/lib/Popover/Popover';
+import { useSelector } from 'react-redux';
 import MessageMenu from '@/components/ui/Message/MessageMenu';
 import MessageStatus from '@/components/ui/Message/MessageStatus';
-import { useUser } from '@/contexts/UserContext';
-import { useScreenWidth } from '@/hooks/useScreenWidth';
-import { cn } from '@/lib/utils';
+import { selectCurrentUser } from '@/entities/user/model';
+import { useScreenWidth } from '@/shared/hooks/useScreenWidth';
+import { cn, vibrate } from '@/shared/lib';
+import { Popover } from '@/shared/ui';
 import { WsMessageModel } from '@/types/WsMessages';
 import { formatTime } from '@/utils/formatTime';
-import vibrate from '@/utils/vibrate';
 
 type Props = {
 	msg: WsMessageModel;
@@ -16,12 +16,13 @@ type Props = {
 const Message: React.FC<Props> = ({
 	msg: { userId, status, content, time },
 }) => {
+	const currentUser = useSelector(selectCurrentUser);
+
 	const popoverRef = useRef<HTMLDivElement | null>(null);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const { isTabletDevice } = useScreenWidth();
-	const { userId: currentUserId } = useUser();
-	const fromMe = currentUserId === userId;
+	const fromMe = currentUser?.id === userId;
 
 	const handleClick = () => {
 		if (isTabletDevice) {
