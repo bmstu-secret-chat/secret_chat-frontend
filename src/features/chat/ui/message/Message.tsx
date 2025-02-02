@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
+import { TWsMessageModel } from '@/entities/message/model';
 import { useMessage } from '@/features/chat/model';
 import { MessageMenu, MessageStatus } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
 import { formatTime } from '@/shared/lib/formatTime';
 import { Popover } from '@/shared/ui';
-import { WsMessageModel } from '@/types/WsMessages';
 
 type Props = {
-	msg: WsMessageModel;
+	msg: TWsMessageModel;
 };
 
 export const Message: React.FC<Props> = memo(

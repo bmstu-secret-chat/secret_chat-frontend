@@ -1,15 +1,15 @@
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { QueryParams } from '@/types/QueryParams';
+import { EQueryParams } from '@/shared/model';
 
 export const useQueryParams = () => {
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
 	const router = useRouter();
 
-	const page = searchParams.get(QueryParams.PAGE);
-	const edit = searchParams.get(QueryParams.EDIT);
+	const page = searchParams.get(EQueryParams.PAGE);
+	const edit = searchParams.get(EQueryParams.EDIT);
 
-	const setQueryParam = (key: QueryParams, value: string | string[]) => {
+	const setQueryParam = (key: EQueryParams, value: string | string[]) => {
 		const newSearchParams = new URLSearchParams(searchParams.toString());
 
 		if (Array.isArray(value)) {

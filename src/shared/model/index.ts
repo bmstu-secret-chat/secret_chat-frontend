@@ -1,5 +1,4 @@
 export {
-	WSEventEnum,
 	useWebSocketContext,
 	WebSocketProvider,
 } from '@/shared/model/contexts/webSocketContext';

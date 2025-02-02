@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { userReducer } from '@/entities/user/model/userSlice';
-import { messagesReducer } from '@/stores/Messages/MessagesState';
+import { messageReducer } from '@/entities/message/model';
+import { userReducer } from '@/entities/user/model';
 
 export const store = configureStore({
 	reducer: {
-		messages: messagesReducer,
+		message: messageReducer,
 		user: userReducer,
 	},
 });

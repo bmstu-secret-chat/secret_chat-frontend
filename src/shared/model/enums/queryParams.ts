@@ -1,4 +1,4 @@
-export enum QueryParams {
+export enum EQueryParams {
 	PAGE = 'page',
 	EDIT = 'edit',
 }

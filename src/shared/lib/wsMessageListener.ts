@@ -2,18 +2,18 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { vibrate } from '@/shared/lib/index';
-import {
-	useWebSocketContext,
-	WSEventEnum,
-	TWSListenerCallback,
-} from '@/shared/model/contexts/webSocketContext';
 import {
 	addMessageAction,
 	updateMessageAction,
-} from '@/stores/Messages/MessagesState';
-import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
-import { WsMessage, WsMessageResponseApi } from '@/types/WsMessages';
+	WsMessage,
+	TWsMessageResponseApi,
+} from '@/entities/message/model';
+import { vibrate } from '@/shared/lib/index';
+import {
+	useWebSocketContext,
+	TWSListenerCallback,
+} from '@/shared/model/contexts/webSocketContext';
+import { EWsEvent, EWsMessageStatus } from '@/shared/model/enums';
 
 export const WsMessageListener = () => {
 	const { addListener, removeListener } = useWebSocketContext();
@@ -22,7 +22,7 @@ export const WsMessageListener = () => {
 
 	useEffect(() => {
 		const messageListener: TWSListenerCallback = (event, data) => {
-			if (event === WSEventEnum.MESSAGE && data instanceof MessageEvent) {
+			if (event === EWsEvent.MESSAGE && data instanceof MessageEvent) {
 				const wsMessage = JSON.parse(data.data);
 
 				// Новое сообщение
@@ -33,11 +33,11 @@ export const WsMessageListener = () => {
 				}
 				// Обновление сообщения
 				else {
-					const message: WsMessageResponseApi = {
+					const message: TWsMessageResponseApi = {
 						status:
 							wsMessage.status === 'ok'
-								? WsMessageStatusEnum.RECEIVED
-								: WsMessageStatusEnum.ERROR,
+								? EWsMessageStatus.RECEIVED
+								: EWsMessageStatus.ERROR,
 						time: wsMessage.time,
 					};
 					dispatch(updateMessageAction(message));

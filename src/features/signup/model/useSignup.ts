@@ -10,7 +10,7 @@ import { validateSignupFields } from '@/features/signup/lib';
 import { AuthorizationService } from '@/shared/api/AuthorizationService';
 import { useQueryParams } from '@/shared/hooks';
 import { showToast } from '@/shared/lib';
-import { QueryParams } from '@/types/QueryParams';
+import { EQueryParams } from '@/shared/model';
 
 export const useSignup = () => {
 	const dispatch = useDispatch();
@@ -89,7 +89,7 @@ export const useSignup = () => {
 
 		setUsernameError(false);
 
-		setQueryParam(QueryParams.PAGE, '2');
+		setQueryParam(EQueryParams.PAGE, '2');
 	};
 
 	const handleSignupButtonClick = async () => {
@@ -142,10 +142,10 @@ export const useSignup = () => {
 	useEffect(() => {
 		if (
 			pathname === SIGNUP_URL &&
-			searchParams.get(QueryParams.PAGE) !== '1' &&
+			searchParams.get(EQueryParams.PAGE) !== '1' &&
 			username === ''
 		) {
-			setQueryParam(QueryParams.PAGE, '1');
+			setQueryParam(EQueryParams.PAGE, '1');
 		}
 	}, [setQueryParam, pathname, searchParams, username]);
 

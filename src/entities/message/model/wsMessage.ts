@@ -1,30 +1,28 @@
-import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
+import { EWsMessageStatus } from '@/shared/model';
 
-export type WsMessageMessageApi = {
-	type: 'message' | 'create-chatList';
+export type TWsMessageMessageApi = {
 	user_id: string;
 	message: {
 		content: string;
 		time: string;
-		channel_id: string;
 	};
 };
 
-export type WsMessageResponseApi = {
-	status: WsMessageStatusEnum;
+export type TWsMessageResponseApi = {
+	status: EWsMessageStatus;
 	time: string;
 };
 
-export type WsMessageModel = {
+export type TWsMessageModel = {
 	userId: string;
-	status: WsMessageStatusEnum;
+	status: EWsMessageStatus;
 	content: string;
 	time: string;
 };
 
 export class WsMessage {
 	userId: string;
-	status: WsMessageStatusEnum;
+	status: EWsMessageStatus;
 	message: {
 		content: string;
 		time: string;
@@ -32,7 +30,7 @@ export class WsMessage {
 
 	constructor(
 		userId: string,
-		status: WsMessageStatusEnum,
+		status: EWsMessageStatus,
 		message: { content: string; time: string },
 	) {
 		this.userId = userId;
@@ -43,7 +41,7 @@ export class WsMessage {
 	/**
 	 * Создает экземпляр модели с текущем временем
 	 */
-	static create(userId: string, status: WsMessageStatusEnum, content: string) {
+	static create(userId: string, status: EWsMessageStatus, content: string) {
 		return new WsMessage(userId, status, {
 			content,
 			time: new Date().getTime().toString(),
@@ -53,8 +51,8 @@ export class WsMessage {
 	/**
 	 * Полученное сообщение из API-объекта
 	 */
-	static createMessageFromApi(from: WsMessageMessageApi): WsMessage {
-		return new WsMessage(from.user_id, WsMessageStatusEnum.RECEIVED, {
+	static createMessageFromApi(from: TWsMessageMessageApi): WsMessage {
+		return new WsMessage(from.user_id, EWsMessageStatus.RECEIVED, {
 			...from.message,
 		});
 	}
@@ -62,7 +60,7 @@ export class WsMessage {
 	/**
 	 * Конвертирует экземпляр модели в API-формат
 	 */
-	toApi(): WsMessageMessageApi {
+	toApi(): TWsMessageMessageApi {
 		return {
 			user_id: this.userId,
 			message: { ...this.message },
@@ -72,7 +70,7 @@ export class WsMessage {
 	/**
 	 * Преобразует в простой объект
 	 */
-	toPlain(): WsMessageModel {
+	toPlain(): TWsMessageModel {
 		return {
 			userId: this.userId,
 			status: this.status,

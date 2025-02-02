@@ -7,6 +7,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useSignup } from '@/features/signup/model';
 import { cn } from '@/shared/lib';
+import { EQueryParams } from '@/shared/model';
 import {
 	BottomGradient,
 	Divider,
@@ -14,7 +15,6 @@ import {
 	Label,
 	LabelInputContainer,
 } from '@/shared/ui';
-import { QueryParams } from '@/types/QueryParams';
 
 export function SignupForm() {
 	const {
@@ -40,7 +40,7 @@ export function SignupForm() {
 
 	return (
 		<>
-			{stylesLoaded && searchParams.get(QueryParams.PAGE) && (
+			{stylesLoaded && searchParams.get(EQueryParams.PAGE) && (
 				<div
 					className={cn(
 						'relative flex flex-col justify-center items-center',
@@ -163,7 +163,7 @@ export function SignupForm() {
 											'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
 											'w-full flex-grow',
 										)}
-										onClick={() => setQueryParam(QueryParams.PAGE, '1')}
+										onClick={() => setQueryParam(EQueryParams.PAGE, '1')}
 									>
 										<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
 										Назад

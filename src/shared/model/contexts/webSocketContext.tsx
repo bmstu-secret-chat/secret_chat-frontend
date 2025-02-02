@@ -3,24 +3,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { selectCurrentUser } from '@/entities/user/model';
-import { useEnv } from '@/shared/model/contexts/envContext';
 import {
 	addMessageAction,
 	updateMessageAction,
-} from '@/stores/Messages/MessagesState';
-import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
-import { WsMessage } from '@/types/WsMessages';
-
-export enum WSEventEnum {
-	OPEN = 'open',
-	CLOSE = 'close',
-	ERROR = 'error',
-	MESSAGE = 'message',
-}
+	WsMessage,
+} from '@/entities/message/model';
+import { selectCurrentUser } from '@/entities/user/model';
+import { EWsEvent, EWsMessageStatus } from '@/shared/model';
+import { useEnv } from '@/shared/model/contexts';
 
 export type TWSListenerCallback = (
-	event: WSEventEnum,
+	event: EWsEvent,
 	data?: MessageEvent | CloseEvent | Event,
 ) => void;
 
@@ -68,24 +61,24 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		// Подключаемся только если есть пользователь
 		onOpen: () => {
 			setReadyState(ReadyState.OPEN);
-			notifyListeners(WSEventEnum.OPEN);
+			notifyListeners(EWsEvent.OPEN);
 		},
 		onClose: (event) => {
 			setReadyState(ReadyState.CLOSED);
-			notifyListeners(WSEventEnum.CLOSE, event);
+			notifyListeners(EWsEvent.CLOSE, event);
 		},
 		onError: (event) => {
-			notifyListeners(WSEventEnum.ERROR, event);
+			notifyListeners(EWsEvent.ERROR, event);
 		},
 		onMessage: (message) => {
 			setLastMessage(message);
-			notifyListeners(WSEventEnum.MESSAGE, message);
+			notifyListeners(EWsEvent.MESSAGE, message);
 		},
 		shouldReconnect: () => !!user,
 	});
 
 	const notifyListeners = (
-		event: WSEventEnum,
+		event: EWsEvent,
 		data?: MessageEvent | CloseEvent | Event,
 	) => {
 		listeners.forEach((callback) => callback(event, data));
@@ -109,7 +102,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
 		const message = WsMessage.create(
 			user.id,
-			WsMessageStatusEnum.SENT,
+			EWsMessageStatus.SENT,
 			messageContent,
 		);
 
@@ -121,7 +114,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		setTimeout(() => {
 			dispatch(
 				updateMessageAction({
-					status: WsMessageStatusEnum.ERROR,
+					status: EWsMessageStatus.ERROR,
 					time: message.message.time,
 				}),
 			);

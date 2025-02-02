@@ -2,6 +2,7 @@ import { Image } from 'antd';
 import React from 'react';
 import { userDefaultAvatar } from '@/assets';
 import { UserInfo } from '@/entities/user/model';
+import { useProfileInfo } from '@/features/profile/model';
 import { cn } from '@/shared/lib';
 import { LabelValue, UploadImage } from '@/shared/ui';
 
@@ -18,33 +19,10 @@ export const ProfileInfo: React.FC<Props> = ({
 	setUserAvatar,
 	deleteUserAvatar,
 }) => {
-	const isCurrentUser = userInfo.id === currentUser?.id;
-
-	const upperFields = [
-		{
-			label: 'Имя пользователя',
-			value: userInfo.username,
-		},
-	].filter((item) => item.value);
-
-	const downFields = [
-		{
-			label: 'Телефон',
-			value: userInfo.phone,
-		},
-		{
-			label: 'Почта',
-			value: userInfo.email,
-		},
-		{
-			label: 'О себе',
-			value: userInfo.aboutMe,
-		},
-		{
-			label: 'Дата рождения',
-			value: userInfo.birthday,
-		},
-	].filter((item) => item.value);
+	const { isCurrentUser, upperFields, downFields } = useProfileInfo(
+		userInfo,
+		currentUser,
+	);
 
 	return (
 		<div
