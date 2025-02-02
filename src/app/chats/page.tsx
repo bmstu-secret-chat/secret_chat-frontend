@@ -1,20 +1,8 @@
 import React from 'react';
-import { Lamp } from '@/components/ui/Lamp/Lamp';
-import { cn } from '@/shared/lib';
+import { ChatListPage } from '@/features/chatList/ui';
 
-const ChatPage = () => {
-	return (
-		<div
-			className={cn(
-				'flex absolute flex-col justify-center items-center',
-				'ml-[30vw] w-[calc(70vw-60px)] h-full',
-				'md:flex hidden',
-				'overflow-hidden ',
-			)}
-		>
-			<Lamp />
-		</div>
-	);
+const Chats = () => {
+	return <ChatListPage />;
 };
 
-export default ChatPage;
+export default Chats;

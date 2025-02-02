@@ -1,5 +1,5 @@
 import React from 'react';
-import NonAuthRoute from '@/shared/utils/nonAuthRoute/NonAuthRoute';
+import { NonAuthRoute } from '@/shared/utils';
 
 export default function Login({
 	children,

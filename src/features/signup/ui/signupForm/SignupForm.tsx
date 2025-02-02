@@ -1,14 +1,19 @@
+'use client';
+
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { Input as AntInput } from 'antd';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import React from 'react';
-import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
-import Divider from '@/components/ui/Divider/Divider';
-import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputContainer';
 import { useSignup } from '@/features/signup/model';
 import { cn } from '@/shared/lib';
-import { Input, Label } from '@/shared/ui';
+import {
+	BottomGradient,
+	Divider,
+	Input,
+	Label,
+	LabelInputContainer,
+} from '@/shared/ui';
 import { QueryParams } from '@/types/QueryParams';
 
 export function SignupForm() {

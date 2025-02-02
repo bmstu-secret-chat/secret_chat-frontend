@@ -1,5 +1,6 @@
 import { UserInfo } from '@/entities/user/model/userInfo';
-import { RequestMethods, ServiceBase } from '../../../shared/api/ServiceBase';
+import { ServiceBase } from '@/shared/api';
+import { ERequestMethods } from '@/shared/model';
 
 export class UsersService extends ServiceBase {
 	private static instance: UsersService;
@@ -15,17 +16,17 @@ export class UsersService extends ServiceBase {
 			{
 				name: 'getUserInfo',
 				url: '/api/backend/users/user/',
-				method: RequestMethods.GET,
+				method: ERequestMethods.GET,
 			},
 			{
 				name: 'updateUserInfo',
 				url: '/api/backend/users/user/',
-				method: RequestMethods.PUT,
+				method: ERequestMethods.PUT,
 			},
 			{
 				name: 'deleteUserAccount',
 				url: '/api/backend/users/user/',
-				method: RequestMethods.DELETE,
+				method: ERequestMethods.DELETE,
 			},
 		];
 	}

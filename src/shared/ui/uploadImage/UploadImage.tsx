@@ -1,3 +1,5 @@
+'use client';
+
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, UploadFile, UploadProps, GetProp, Image, Upload } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';

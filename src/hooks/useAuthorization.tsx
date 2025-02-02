@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDispatch } from 'react-redux';
 import { UsersService } from '@/entities/user/api/usersService';
+import { deleteUserAction, setUserAction } from '@/entities/user/model';
 import { AuthorizationService } from '@/shared/api/AuthorizationService';
 import { showToast } from '@/shared/lib/showToast';
 
@@ -13,7 +14,7 @@ const useAuthorization = () => {
 	const checkAuthorization = async () => {
 		try {
 			const user = await authorizationService.check();
-			dispatch(setCurrentUserAction(user));
+			dispatch(setUserAction(user));
 		} catch {
 			// TODO
 		}
@@ -22,14 +23,13 @@ const useAuthorization = () => {
 	const deleteUserAccount = async (userId: string) => {
 		try {
 			await usersService.deleteUserAccount(userId);
-			dispatch(deleteCurrentUserAction());
+			dispatch(deleteUserAction());
 		} catch (error: any) {
 			showToast('error', error.message);
 		}
 	};
 
 	return {
-		logout,
 		checkAuthorization,
 		deleteUserAccount,
 	};

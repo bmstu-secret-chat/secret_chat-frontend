@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import { cn } from '@/shared/lib';
 import { SidebarLib, SidebarBody, SidebarLink } from '@/shared/ui';
 import { RenderIf } from '@/shared/utils';
-import { useSidebar } from '@/widgets/sidebar/model';
+import { useSidebar } from '@/widgets/sidebar/model/useSidebar';
 
 export const Sidebar = () => {
 	const { isAuthorized, logoLink, upperLinks, downLinks, open, setOpen } =

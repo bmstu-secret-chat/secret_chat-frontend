@@ -1,10 +1,9 @@
 import { Image } from 'antd';
 import React from 'react';
-import userDefaultAvatar from '@/assets/images/user-default-avatar.png';
-import LabelValue from '@/components/ui/LabelValue/LabelValue';
-import { UserInfo } from '@/entities/user/model/userInfo';
+import { userDefaultAvatar } from '@/assets';
+import { UserInfo } from '@/entities/user/model';
 import { cn } from '@/shared/lib';
-import { UploadImage } from '@/shared/ui';
+import { LabelValue, UploadImage } from '@/shared/ui';
 
 type Props = {
 	userInfo: UserInfo;

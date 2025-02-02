@@ -2,9 +2,9 @@ export {
 	WSEventEnum,
 	useWebSocketContext,
 	WebSocketProvider,
-} from './providers/webSocketContext';
-export type { TWSListenerCallback } from './providers/webSocketContext';
-export { EnvProvider, useEnv } from './providers/envContext';
-export { AppContextProvider } from './providers/appContextProvider';
+} from '@/shared/model/contexts/webSocketContext';
+export type { TWSListenerCallback } from '@/shared/model/contexts/webSocketContext';
+export { EnvProvider, useEnv } from '@/shared/model/contexts/envContext';
+export { AppContextProvider } from '@/shared/model/contexts/appContextProvider';
 export * from './enums';
 export * from './types';

@@ -1,7 +1,7 @@
 import { WsMessageStatusEnum } from '@/types/WsMessageStatus.enum';
 
 export type WsMessageMessageApi = {
-	type: 'message' | 'create-chat';
+	type: 'message' | 'create-chatList';
 	user_id: string;
 	message: {
 		content: string;

@@ -1,11 +1,16 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
-import BottomGradient from '@/components/ui/BottomGradient/BottomGradient';
-import Divider from '@/components/ui/Divider/Divider';
-import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputContainer';
 import { useLogin } from '@/features/login/model';
 import { cn } from '@/shared/lib';
-import { Input, Label } from '@/shared/ui';
+import {
+	BottomGradient,
+	Divider,
+	Input,
+	Label,
+	LabelInputContainer,
+} from '@/shared/ui';
 
 export function LoginForm() {
 	const {

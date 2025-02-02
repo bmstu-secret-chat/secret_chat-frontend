@@ -2,13 +2,12 @@ import { Input as AntInput } from 'antd';
 import { OTPProps } from 'antd/es/input/OTP';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
-import BirthdayDatePicker from '@/components/ui/DatePicker/DatePicker';
-import LabelInputContainer from '@/components/ui/LabelInputContainer/LabelInputContainer';
 import { UserInfo, TUserInfoModel } from '@/entities/user/model';
 import { ErrorFiled } from '@/features/profile/model';
 import { cn, eventEmitter, EmitterEvents } from '@/shared/lib';
-import { Input, Label, TextArea } from '@/shared/ui';
-import { formatDateDDMMYYYY } from '@/utils/formatTime';
+import { formatDateDDMMYYYY } from '@/shared/lib/formatTime';
+import { Input, Label, LabelInputContainer, TextArea } from '@/shared/ui';
+import { DatePicker } from '@/shared/ui/datePicker/DatePicker';
 
 type Props = {
 	userInfo: TUserInfoModel;
@@ -170,7 +169,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
 			<LabelInputContainer className='my-2'>
 				<Label htmlFor='date_of_birth'>Дата рождения</Label>
-				<BirthdayDatePicker
+				<DatePicker
 					defaultValue={birthday}
 					onChange={handleBirthdayChange}
 				/>

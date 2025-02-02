@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '@/entities/user/model';
 import useAuthorization from '@/hooks/useAuthorization';
-import RenderIf from '@/shared/utils/renderIf/RenderIf';
+import { RenderIf } from '@/shared/utils';
 
 type Props = {
 	children: React.ReactNode;

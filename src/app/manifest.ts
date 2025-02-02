@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 export default function manifest(): MetadataRoute.Manifest {
 	return {
 		name: 'Safe chat',
-		short_name: 'Safe chat',
+		short_name: 'Safe chatList',
 		description: 'The most secure messenger',
 		start_url: '/',
 		display: 'standalone',
