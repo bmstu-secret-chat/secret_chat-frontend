@@ -14,7 +14,7 @@ export const validateLoginFields = (
 		return {
 			isValid: false,
 			message:
-				'Имя должно быть не короче 4 символов и содержать только литиницу и цифры',
+				'Имя должно быть не короче 4 символов и содержать только латиницу и цифры',
 			invalidFields: ['username'],
 		};
 	}
@@ -23,7 +23,7 @@ export const validateLoginFields = (
 		return {
 			isValid: false,
 			message:
-				'Пароль должен быть не короче 4 символов и содержать только литиницу и цифры',
+				'Пароль должен быть не короче 4 символов и содержать только латиницу и цифры',
 			invalidFields: ['password'],
 		};
 	}

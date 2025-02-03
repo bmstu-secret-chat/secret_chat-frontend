@@ -14,8 +14,9 @@ export const Sidebar = () => {
 		<RenderIf condition={isAuthorized}>
 			<div
 				className={cn(
-					'top-0 left-0 rounded-md fixed z-[100] h-screen flex flex-col md:flex-row',
+					'top-0 left-0 fixed z-[100] h-screen flex flex-col md:flex-row',
 					'mx-auto border border-neutral-700 overflow-hidden',
+					'rounded-tr-md rounded-br-md',
 				)}
 			>
 				<SidebarLib
@@ -35,7 +36,7 @@ export const Sidebar = () => {
 									/>
 								))}
 							</div>
-							<div className='mb-16 flex flex-col gap-2'>
+							<div className='mb-2 flex flex-col gap-2'>
 								{downLinks.map((link, idx) => (
 									<SidebarLink
 										key={idx}

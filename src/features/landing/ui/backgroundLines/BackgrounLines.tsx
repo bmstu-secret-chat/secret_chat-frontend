@@ -29,7 +29,7 @@ export function BackgroundLinesLanding() {
 					'font-sans relative z-20 font-bold tracking-tight',
 				)}
 			>
-				Safe chat
+				Safechat
 			</h2>
 			<p
 				className={cn(

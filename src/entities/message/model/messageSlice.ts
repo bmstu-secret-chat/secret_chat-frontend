@@ -3,7 +3,7 @@ import {
 	TWsMessageModel,
 	TWsMessageResponseApi,
 } from '@/entities/message/model';
-import { EWsMessageStatus } from '@/shared/model/enums/wsMessageStatus';
+import { EWsMessageStatus } from '@/shared/model/enums';
 import { RootState } from '@/shared/model/stores';
 
 type MessageSlice = {

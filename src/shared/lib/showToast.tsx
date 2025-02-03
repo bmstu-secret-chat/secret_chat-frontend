@@ -58,5 +58,8 @@ export const showToast = (
 			'NotificationProvider is not initialized. Wrap your app in <NotificationProvider>.',
 		);
 	}
+
+	if (message.includes('EREQUESTPENDING')) return;
+
 	openToast(type, message, duration, description, placement);
 };

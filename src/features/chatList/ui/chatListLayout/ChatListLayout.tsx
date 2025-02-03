@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useChatList } from '@/features/chatList/model';
 import { ChatList, CreateDialogButton } from '@/features/chatList/ui';

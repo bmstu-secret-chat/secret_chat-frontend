@@ -1,3 +1,5 @@
+'use client';
+
 import { OTPProps } from 'antd/es/input/OTP';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';

@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UsersService } from '@/entities/user/api';

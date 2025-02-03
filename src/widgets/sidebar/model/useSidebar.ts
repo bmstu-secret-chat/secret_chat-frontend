@@ -7,7 +7,7 @@ import {
 	selectCurrentUser,
 	selectIsAuthorized,
 } from '@/entities/user/model';
-import { AuthorizationService } from '@/shared/api/AuthorizationService';
+import { AuthorizationService } from '@/shared/api';
 import { showToast } from '@/shared/lib';
 import {
 	chats,

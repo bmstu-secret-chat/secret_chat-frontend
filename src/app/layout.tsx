@@ -4,7 +4,7 @@ import './globals.css';
 import { RootLayoutComponent } from '@/features/app/ui';
 
 export const metadata: Metadata = {
-	title: 'Safe chatList',
+	title: 'Safechat',
 	description: 'The most secure messenger',
 };
 

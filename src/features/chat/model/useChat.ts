@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { selectMessages } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
 import { vibrate } from '@/shared/lib';
 import { useWebSocketContext } from '@/shared/model';
-import { selectMessages } from '@/stores/Messages/MessagesState';
 
 export const useChat = () => {
 	const messages = useSelector(selectMessages);

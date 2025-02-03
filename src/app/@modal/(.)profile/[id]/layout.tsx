@@ -1,7 +1,5 @@
-'use client';
-
 import React, { ReactNode } from 'react';
-import AuthRoute from '@/shared/utils/authRoute/AuthRoute';
+import { AuthRoute } from '@/shared/utils';
 
 export default function ProfileModalLayout({
 	children,

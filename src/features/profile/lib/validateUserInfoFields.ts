@@ -2,7 +2,7 @@ import {
 	isEmailCorrect,
 	isUsernameCorrect,
 	ValidationResponse,
-} from '@/features/login/lib/validateFields';
+} from '@/shared/lib';
 
 const isPhoneNumberCorrect = (phoneNumber: string): boolean => {
 	return /^8\d{10}$/.test(phoneNumber);
@@ -20,7 +20,7 @@ export const validateUserInfoFields = (
 		return {
 			isValid: false,
 			message:
-				'Имя должно быть не короче 4 символов и содержать только литиницу и цифры',
+				'Имя должно быть не короче 4 символов и содержать только латиницу и цифры',
 			invalidFields: ['username'],
 		};
 	}

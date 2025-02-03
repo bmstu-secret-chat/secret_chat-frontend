@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	IconX,
 	IconEdit,
@@ -32,7 +34,11 @@ export const ProfilePage = ({ userId }: { userId: string }) => {
 	return (
 		<RenderIf condition={!!userInfo}>
 			<div
-				className={cn('flex items-center justify-center', 'w-full h-screen')}
+				className={cn(
+					'profile-page flex items-center justify-center',
+					'w-full h-screen',
+					'absolute top-0 left-0',
+				)}
 			>
 				<BackgroundGradient
 					className={cn(

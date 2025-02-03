@@ -1,7 +1,9 @@
-'use client';
-
-import { ProfilePage } from '@/features/profile/ui';
+import { ProfileModal, ProfilePage } from '@/features/profile/ui';
 
 export default function Profile({ params }: { params: { id: string } }) {
-	return <ProfilePage userId={params.id} />;
+	return (
+		<ProfileModal>
+			<ProfilePage userId={params.id} />
+		</ProfileModal>
+	);
 }
