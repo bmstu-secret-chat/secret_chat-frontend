@@ -1,0 +1,1 @@
+export { validateUserInfoFields } from './validateUserInfoFields';

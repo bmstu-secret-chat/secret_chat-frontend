@@ -1,11 +1,6 @@
 import React from 'react';
-import { LoginForm } from '@/components/ui/LoginForm/LoginForm';
-import { cn } from '@/lib/utils';
+import { LoginPage } from '@/features/login/ui';
 
 export default function Login() {
-	return (
-		<div className={cn('flex flex-col items-center justify-center h-screen')}>
-			<LoginForm />
-		</div>
-	);
+	return <LoginPage />;
 }
