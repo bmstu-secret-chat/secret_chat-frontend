@@ -18,6 +18,16 @@ export type TUserInfoModel = {
 	birthday: string | null;
 };
 
+export type TUserShortInfoModel = {
+	id: string;
+	username: string;
+	phone: string;
+	email: string;
+	avatar: string | null;
+	aboutMe: string | null;
+	birthday: string | null;
+};
+
 export class UserInfo {
 	id: string;
 	username: string;

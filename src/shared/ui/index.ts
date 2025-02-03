@@ -16,6 +16,7 @@ export {
 	SidebarBody,
 	SidebarLink,
 } from './sidebar/Sidebar';
+export { Skeleton } from './skeleton/Skeleton';
 export { TextArea } from './textArea/TextArea';
 export { UploadImage } from './uploadImage/UploadImage';
 export { VanishInput } from './vanishInput/VanishInput';
