@@ -52,7 +52,7 @@ export const ProfilePage = ({ userId }: { userId: string }) => {
 							key={1}
 							className={cn(
 								'absolute flex p-4 md:p-10 gap-2 sm:gap-4 md:gap-8',
-								'w-full',
+								'w-full ',
 							)}
 							initial={{ x: '0' }}
 							animate={{ x: !isEditMode ? '0' : '-120%' }}

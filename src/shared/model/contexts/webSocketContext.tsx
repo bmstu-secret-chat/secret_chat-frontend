@@ -46,9 +46,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [readyState, setReadyState] = useState<ReadyState>(ReadyState.CLOSED);
 	const [lastMessage, setLastMessage] = useState<MessageEvent | null>(null);
 
-	const { apiUrl } = useEnv();
-	const wsUrl = `wss://${apiUrl}/api/realtime/messenger/`;
 	const user = useSelector(selectCurrentUser);
+
+	const { apiUrl } = useEnv();
+	const wsUrl = `wss://${apiUrl}/api/realtime/${user?.id}`;
 
 	const dispatch = useDispatch();
 

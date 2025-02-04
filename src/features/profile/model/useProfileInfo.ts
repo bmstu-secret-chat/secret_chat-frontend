@@ -1,4 +1,5 @@
 import { UserInfo } from '@/entities/user/model';
+import { formatTimeDDMMYYHHmm } from '@/shared/lib';
 
 export const useProfileInfo = (
 	userInfo: UserInfo,
@@ -8,7 +9,9 @@ export const useProfileInfo = (
 
 	const upperFields = [
 		{
-			label: 'Имя пользователя',
+			label: userInfo.isOnline
+				? 'В сети'
+				: `Заходил(а) \n ${formatTimeDDMMYYHHmm(userInfo.lastOnline)}`,
 			value: userInfo.username,
 		},
 	].filter((item) => item.value);

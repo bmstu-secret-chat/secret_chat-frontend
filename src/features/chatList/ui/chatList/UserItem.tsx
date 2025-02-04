@@ -19,11 +19,9 @@ export const UserItem: React.FC<Props> = memo(({ user }: Props) => {
 			)}
 		>
 			<img
-				className={'rounded-md bg-gray-300'}
+				className={'rounded-md bg-gray-300 w-[50px] h-[50px] object-cover'}
 				src={user.avatar || userDefaultAvatar.src}
 				alt={user.username}
-				height={50}
-				width={50}
 			/>
 			{user.username}
 		</Link>

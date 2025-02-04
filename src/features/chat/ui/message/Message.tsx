@@ -2,8 +2,7 @@ import React, { memo } from 'react';
 import { TWsMessageModel } from '@/entities/message/model';
 import { useMessage } from '@/features/chat/model';
 import { MessageMenu, MessageStatus } from '@/features/chat/ui';
-import { cn } from '@/shared/lib';
-import { formatTime } from '@/shared/lib/formatTime';
+import { cn, formatTimeHHmm } from '@/shared/lib';
 import { Popover } from '@/shared/ui';
 
 type Props = {
@@ -39,7 +38,7 @@ export const Message: React.FC<Props> = memo(
 							{content}
 						</span>
 						<div className={cn('flex justify-end mt-2 gap-2 text-white')}>
-							<span>{formatTime(time)}</span>
+							<span>{formatTimeHHmm(time)}</span>
 							<MessageStatus status={status} />
 						</div>
 					</div>

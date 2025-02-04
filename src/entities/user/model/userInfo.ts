@@ -3,6 +3,8 @@ export type TUserInfoApi = {
 	username: string;
 	phone: string;
 	email: string;
+	is_online: boolean;
+	last_online: string;
 	avatar: string | null;
 	about_me: string | null;
 	birthday: string | null;
@@ -13,16 +15,8 @@ export type TUserInfoModel = {
 	username: string;
 	phone: string;
 	email: string;
-	avatar: string | null;
-	aboutMe: string | null;
-	birthday: string | null;
-};
-
-export type TUserShortInfoModel = {
-	id: string;
-	username: string;
-	phone: string;
-	email: string;
+	isOnline: boolean;
+	lastOnline: string;
 	avatar: string | null;
 	aboutMe: string | null;
 	birthday: string | null;
@@ -33,6 +27,8 @@ export class UserInfo {
 	username: string;
 	phone: string;
 	email: string;
+	isOnline: boolean;
+	lastOnline: string;
 	avatar: string | null;
 	aboutMe: string | null;
 	birthday: string | null;
@@ -42,6 +38,8 @@ export class UserInfo {
 		username,
 		phone,
 		email,
+		isOnline,
+		lastOnline,
 		avatar,
 		aboutMe,
 		birthday,
@@ -50,13 +48,20 @@ export class UserInfo {
 		this.username = username;
 		this.phone = phone;
 		this.email = email;
+		this.isOnline = isOnline;
+		this.lastOnline = lastOnline;
 		this.avatar = avatar;
 		this.aboutMe = aboutMe;
 		this.birthday = birthday;
 	}
 
 	static createFromApi(user: TUserInfoApi) {
-		return new UserInfo({ aboutMe: user.about_me, ...user });
+		return new UserInfo({
+			isOnline: user.is_online,
+			lastOnline: user.last_online,
+			aboutMe: user.about_me,
+			...user,
+		});
 	}
 
 	toApi() {

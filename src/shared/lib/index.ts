@@ -9,4 +9,8 @@ export {
 	isPasswordCorrect,
 } from './validateFields';
 export { WsMessageListener } from './wsMessageListener';
-export { formatTime, formatDateDDMMYYYY } from './formatTime';
+export {
+	formatTimeHHmm,
+	formatDateDDMMYYYY,
+	formatTimeDDMMYYHHmm,
+} from './formatTime';
