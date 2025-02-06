@@ -1,7 +1,10 @@
 'use client';
+
+import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { useMotionTemplate, useMotionValue, motion } from 'framer-motion';
 import * as React from 'react';
 import { cn } from '@/shared/lib';
+import { RenderIf } from '@/shared/utils';
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 	isError?: boolean;
@@ -9,20 +12,25 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	// eslint-disable-next-line react/prop-types
-	({ className, type, isError, ...props }, ref) => {
-		const radius = 100; // change this to increase the rdaius of the hover effect
+	({ className, type: rawType, isError, ...props }, ref) => {
+		const radius = 100; // change this to increase the radius of the hover effect
 		const [visible, setVisible] = React.useState(false);
+		const [type, setType] = React.useState(rawType);
 
 		const mouseX = useMotionValue(0);
 		const mouseY = useMotionValue(0);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		function handleMouseMove({ currentTarget, clientX, clientY }: any) {
 			const { left, top } = currentTarget.getBoundingClientRect();
 
 			mouseX.set(clientX - left);
 			mouseY.set(clientY - top);
 		}
+
+		const handleEyeClick = () => {
+			setType(type === 'password' ? 'text' : 'password');
+		};
+
 		return (
 			<motion.div
 				style={{
@@ -37,7 +45,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 				onMouseMove={handleMouseMove}
 				onMouseEnter={() => setVisible(true)}
 				onMouseLeave={() => setVisible(false)}
-				className='p-[2px] rounded-lg transition duration-300 group/input'
+				className={cn(
+					'relative p-[2px] rounded-lg transition duration-300 group/input',
+					className,
+				)}
 			>
 				<input
 					type={type}
@@ -54,10 +65,28 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					ref={ref}
 					{...props}
 				/>
+				<RenderIf
+					condition={
+						// eslint-disable-next-line react/prop-types
+						rawType === 'password' && (props.value as string).length > 0
+					}
+				>
+					<button
+						type='button'
+						onClick={handleEyeClick}
+						className={cn(
+							'absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2',
+							'text-gray-500 hover:text-gray-700',
+						)}
+					>
+						{type === 'text' ? <IconEyeOff size={20} /> : <IconEye size={20} />}
+					</button>
+				</RenderIf>
 			</motion.div>
 		);
 	},
 );
+
 Input.displayName = 'Input';
 
 export { Input };

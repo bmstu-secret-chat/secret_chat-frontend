@@ -1,9 +1,11 @@
-import Link from 'next/link';
-import { useChatList } from '@/features/chatList/model';
+import React from 'react';
+import { useChatList, useSearch } from '@/features/chatList/model';
+import { ChatLink, Search, UserItem } from '@/features/chatList/ui';
 import { cn } from '@/shared/lib';
 
 export const ChatList = () => {
 	const { chats } = useChatList();
+	const { foundedUsers } = useSearch();
 
 	return (
 		<div
@@ -13,22 +15,21 @@ export const ChatList = () => {
 				'border-r border-neutral-700',
 			)}
 		>
-			{chats.map((chat) => (
-				<Link
-					key={chat.id}
-					href={chat.link}
-				>
-					<span
-						className={cn(
-							'flex justify-start items-center h-[100px] p-8',
-							'border-b border-neutral-700 overflow-hidden pc:hover:bg-black',
-							'text-white',
-						)}
-					>
-						Чат {chat.id}
-					</span>
-				</Link>
-			))}
+			<Search />
+			{foundedUsers.length > 0
+				? foundedUsers.map((user) => (
+						<UserItem
+							key={user.id}
+							user={user}
+						/>
+					))
+				: chats.map((chat) => (
+						<ChatLink
+							key={chat.id}
+							id={chat.id}
+							link={chat.link}
+						/>
+					))}
 		</div>
 	);
 };

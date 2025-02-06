@@ -1,3 +1,4 @@
+import { UserShortInfo } from '@/entities/user/model';
 import { UserInfo } from '@/entities/user/model/userInfo';
 import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
@@ -27,6 +28,11 @@ export class UsersService extends ServiceBase {
 				name: 'deleteUserAccount',
 				url: '/api/backend/users/user/',
 				method: ERequestMethods.DELETE,
+			},
+			{
+				name: 'findUsersByUsername',
+				url: '/api/backend/search',
+				method: ERequestMethods.GET,
 			},
 		];
 	}
@@ -74,5 +80,20 @@ export class UsersService extends ServiceBase {
 			configItem.method,
 			`${configItem.url}${id}/`,
 		);
+	}
+
+	/**
+	 * Получение информации о пользователе
+	 * @param username - Имя пользователя
+	 */
+	async findUsersByUsername(username: string): Promise<UserShortInfo[]> {
+		const configItem = this.getConfigItem('findUsersByUsername');
+
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url}?username=${username}`,
+		);
+
+		return response.map(UserShortInfo.createFromApi);
 	}
 }

@@ -32,7 +32,7 @@ export const ProfileInfo: React.FC<Props> = ({
 			)}
 		>
 			<div className={cn('flex items-center gap-4')}>
-				<div className={'w-1/4'}>
+				<div className={'w-1/4 min-w-[80px]'}>
 					{isCurrentUser ? (
 						<UploadImage
 							initialFile={userInfo.avatar}
