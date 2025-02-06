@@ -1,14 +1,9 @@
-import { notFound } from 'next/navigation';
 import React from 'react';
 import { useChat } from '@/features/chat/model';
 import { Message, MessageInput } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
 
 export const ChatPage = ({ chatId }: { chatId: string }) => {
-	if (isNaN(Number(chatId))) {
-		notFound();
-	}
-
 	const { messagesContainerRef, messages, content, setContent, sendMessage } =
 		useChat();
 

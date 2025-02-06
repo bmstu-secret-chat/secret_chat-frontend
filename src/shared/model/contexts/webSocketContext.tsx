@@ -49,7 +49,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const user = useSelector(selectCurrentUser);
 
 	const { apiUrl } = useEnv();
-	const wsUrl = `wss://${apiUrl}/api/realtime/${user?.id}`;
+	const wsUrl = `wss://${apiUrl}/api/realtime/${user?.id}/`;
 
 	const dispatch = useDispatch();
 

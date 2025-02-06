@@ -1,10 +1,11 @@
-import { Image } from 'antd';
+import { Button, Image } from 'antd';
 import React from 'react';
 import { userDefaultAvatar } from '@/assets';
 import { UserInfo } from '@/entities/user/model';
-import { useProfileInfo } from '@/features/profile/model';
+import { useCreateSecretChat, useProfileInfo } from '@/features/profile/model';
 import { cn } from '@/shared/lib';
 import { LabelValue, UploadImage } from '@/shared/ui';
+import { RenderIf } from '@/shared/utils';
 
 type Props = {
 	userInfo: UserInfo;
@@ -23,6 +24,8 @@ export const ProfileInfo: React.FC<Props> = ({
 		userInfo,
 		currentUser,
 	);
+
+	const { isFetching, createSecretChat } = useCreateSecretChat();
 
 	return (
 		<div
@@ -53,6 +56,17 @@ export const ProfileInfo: React.FC<Props> = ({
 					))}
 				</div>
 			</div>
+
+			<RenderIf condition={!isCurrentUser}>
+				<Button
+					className={'py-2 px-4'}
+					size={'large'}
+					loading={isFetching}
+					onClick={() => createSecretChat(userInfo.id)}
+				>
+					Создать секретный чат
+				</Button>
+			</RenderIf>
 
 			{downFields.map((item, index) => (
 				<LabelValue

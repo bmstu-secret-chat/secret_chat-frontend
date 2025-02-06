@@ -9,9 +9,10 @@ export const useProfileInfo = (
 
 	const upperFields = [
 		{
-			label: userInfo.isOnline
-				? 'В сети'
-				: `Заходил(а) \n ${formatTimeDDMMYYHHmm(userInfo.lastOnline)}`,
+			label:
+				isCurrentUser || userInfo.isOnline
+					? 'В сети'
+					: `Заходил(а) \n ${formatTimeDDMMYYHHmm(userInfo.lastOnline)}`,
 			value: userInfo.username,
 		},
 	].filter((item) => item.value);
