@@ -4,7 +4,7 @@ import { OTPProps } from 'antd/es/input/OTP';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { TUserInfoModel, UserInfo } from '@/entities/user/model';
-import { ErrorFiled } from '@/features/profile/model/useProfile';
+import { ErrorFiled } from '@/features/profile/model';
 import { EmitterEvents, eventEmitter, formatDateDDMMYYYY } from '@/shared/lib';
 
 export const useProfileEdit = (
