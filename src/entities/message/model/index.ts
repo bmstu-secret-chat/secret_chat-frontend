@@ -2,8 +2,8 @@ export type {
 	TWsMessageMessageApi,
 	TWsMessageResponseApi,
 	TWsMessageModel,
-} from './wsMessage';
-export { WsMessage } from './wsMessage';
+} from './wsMessageBase';
+export { WsMessageBase } from './wsMessageBase';
 export {
 	messageSlice,
 	messageReducer,

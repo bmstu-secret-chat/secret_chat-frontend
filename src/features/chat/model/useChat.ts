@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 import { selectMessages } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
 import { vibrate } from '@/shared/lib';
-import { useWebSocketContext } from '@/shared/model';
+import { useSendMessage } from '@/shared/lib/ws/initiators/useSendMessage';
 
-export const useChat = () => {
+export const useChat = (chatId: string) => {
 	const messages = useSelector(selectMessages);
 
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -16,20 +16,7 @@ export const useChat = () => {
 
 	const { isTabletDevice } = useScreenWidth();
 
-	// const [isLoading, setIsLoading] = useState(true); // состояние загрузки
-	//
-	// const loadMessages = async () => {
-	// 	await new Promise((resolve) => {
-	// 		setTimeout(resolve, 5 * 1000);
-	// 	});
-	// 	setIsLoading(false);
-	// };
-	//
-	// useEffect(() => {
-	// 	loadMessages();
-	// }, []);
-
-	const { send } = useWebSocketContext();
+	const { sendMessage } = useSendMessage();
 
 	useEffect(() => {
 		messagesContainerRef.current?.scrollTo({
@@ -44,8 +31,8 @@ export const useChat = () => {
 		});
 	}, [messages.length]);
 
-	const sendMessage = () => {
-		send(content);
+	const onSubmit = () => {
+		sendMessage(chatId, content);
 		if (isTabletDevice) vibrate(10);
 	};
 
@@ -54,6 +41,6 @@ export const useChat = () => {
 		messages,
 		content,
 		setContent,
-		sendMessage,
+		onSubmit,
 	};
 };

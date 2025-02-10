@@ -9,6 +9,7 @@ import {
 } from '@/entities/user/model';
 import { AuthorizationService } from '@/shared/api';
 import { showToast } from '@/shared/lib';
+import { TLink } from '@/widgets/sidebar/model';
 import {
 	chats,
 	logo,
@@ -30,14 +31,18 @@ export const useSidebar = () => {
 		try {
 			await authorizationService.logout();
 			dispatch(deleteUserAction());
-		} catch (error: any) {
-			showToast('error', error.message);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				showToast('error', error.message);
+			} else {
+				showToast('error', 'Ошибка при выполнеии действия');
+			}
 		}
 	};
 
-	const logoLink = logo;
-	const upperLinks = [chats, profile(currentUser)];
-	const downLinks = [logoutLink(logout)];
+	const logoLink: TLink = logo;
+	const upperLinks: TLink[] = [chats, profile(currentUser)];
+	const downLinks: TLink[] = [logoutLink(logout)];
 
 	return {
 		isAuthorized,

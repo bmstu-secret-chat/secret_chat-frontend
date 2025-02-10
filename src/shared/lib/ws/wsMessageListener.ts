@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux';
 import {
 	addMessageAction,
 	updateMessageAction,
-	WsMessage,
+	WsMessageBase,
 	TWsMessageResponseApi,
 } from '@/entities/message/model';
-import { vibrate } from '@/shared/lib/index';
+import { vibrate } from '@/shared/lib';
 import {
 	useWebSocketContext,
 	TWSListenerCallback,
@@ -28,8 +28,8 @@ export const WsMessageListener = () => {
 				// Новое сообщение
 				if (wsMessage?.message?.content) {
 					vibrate(20);
-					const message = WsMessage.createMessageFromApi(wsMessage);
-					dispatch(addMessageAction(message.toPlain()));
+					const message = WsMessageBase.createFromApi(wsMessage);
+					dispatch(addMessageAction(message));
 				}
 				// Обновление сообщения
 				else {

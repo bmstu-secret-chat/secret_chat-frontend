@@ -4,8 +4,8 @@ import { Message, MessageInput } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
 
 export const ChatPage = ({ chatId }: { chatId: string }) => {
-	const { messagesContainerRef, messages, content, setContent, sendMessage } =
-		useChat();
+	const { messagesContainerRef, messages, content, setContent, onSubmit } =
+		useChat(chatId);
 
 	return (
 		<div
@@ -47,7 +47,7 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 			<MessageInput
 				value={content}
 				setValue={setContent}
-				onSubmit={sendMessage}
+				onSubmit={onSubmit}
 			/>
 		</div>
 	);

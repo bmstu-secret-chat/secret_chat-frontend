@@ -12,13 +12,7 @@ import React, {
 } from 'react';
 import { useScreenWidth } from '@/shared/hooks/useScreenWidth';
 import { cn } from '@/shared/lib';
-
-interface Links {
-	label: string;
-	href: string;
-	action?: () => Promise<void>;
-	icon: React.JSX.Element | React.ReactNode;
-}
+import { TLink } from '@/widgets/sidebar/model';
 
 interface SidebarContextProps {
 	open: boolean;
@@ -204,7 +198,7 @@ export const SidebarLink = ({
 	className,
 	...props
 }: {
-	link: Links;
+	link: TLink;
 	className?: string;
 	props?: LinkProps;
 }) => {
@@ -226,7 +220,7 @@ export const SidebarLink = ({
 	return (
 		<a
 			className={cn(
-				'flex items-center justify-start gap-2  group/index.ts py-2 cursor-pointer',
+				'flex items-center justify-start gap-3 group/sidebar py-2 cursor-pointer',
 				className,
 			)}
 			onClick={handleClick}

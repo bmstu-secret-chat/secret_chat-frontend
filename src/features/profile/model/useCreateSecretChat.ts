@@ -18,15 +18,19 @@ export const useCreateSecretChat = () => {
 
 			try {
 				const chatService = new ChatService();
-				const chat = await chatService.createChat(withUserId);
+				await chatService.createSecretChat(withUserId);
 
 				if (isProfileModalOpen) {
 					router.back();
 				}
 
-				setTimeout(() => router.push(`/chats/${chat.id}`), 100);
-			} catch (error: any) {
-				showToast('error', error.message);
+				// setTimeout(() => router.push(`/chats/${chat.id}`), 100);
+			} catch (error: unknown) {
+				if (error instanceof Error) {
+					showToast('error', error.message);
+				} else {
+					showToast('error', 'Ошибка при выполнеии действия');
+				}
 			} finally {
 				setIsFetching(false);
 			}

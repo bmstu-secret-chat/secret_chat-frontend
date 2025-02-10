@@ -1,7 +1,8 @@
 import { IconMessages } from '@tabler/icons-react';
 import React from 'react';
+import { TLink } from '@/widgets/sidebar/model';
 
-export const chats = {
+export const chats: TLink = {
 	label: 'Чаты',
 	href: '/chats',
 	icon: (
