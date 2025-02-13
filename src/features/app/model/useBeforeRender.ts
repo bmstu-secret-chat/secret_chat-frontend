@@ -25,6 +25,7 @@ export const useBeforeRender = () => {
 
 	const beforeRender = async () => {
 		await checkAuthorization();
+		// Даем всем настройкам установиться, затем пропускаем дальше
 		setTimeout(() => setCanRender(true), 500);
 	};
 

@@ -8,11 +8,6 @@ export type TWsMessageMessageApi = {
 		time: string;
 	};
 };
-//
-// export type TWsMessageResponseApi = {
-// 	status: EWsMessageStatus;
-// 	time: string;
-// };
 
 export type TWsSendMessageModel = {
 	userId: string;

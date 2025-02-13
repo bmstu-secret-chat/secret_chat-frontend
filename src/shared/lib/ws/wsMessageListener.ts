@@ -2,45 +2,40 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { WsMessageBase, EWsMessageType } from '@/entities/message/model';
 import {
-	addMessageAction,
-	updateMessageAction,
-	WsMessageBase,
-	TWsMessageResponseApi,
-} from '@/entities/message/model';
-import { vibrate } from '@/shared/lib';
+	useSendMessageResponseHandler,
+	useSendMessageHandler,
+} from '@/shared/lib/ws/handlers';
 import {
 	useWebSocketContext,
 	TWSListenerCallback,
 } from '@/shared/model/contexts/webSocketContext';
-import { EWsEvent, EWsMessageStatus } from '@/shared/model/enums';
+import { EWsEvent } from '@/shared/model/enums';
 
 export const WsMessageListener = () => {
 	const { addListener, removeListener } = useWebSocketContext();
 
 	const dispatch = useDispatch();
 
+	const { sendMessageHandler } = useSendMessageHandler();
+	const { sendMessageResponseHandler } = useSendMessageResponseHandler();
+
 	useEffect(() => {
 		const messageListener: TWSListenerCallback = (event, data) => {
 			if (event === EWsEvent.MESSAGE && data instanceof MessageEvent) {
-				const wsMessage = JSON.parse(data.data);
+				const wsMessage = WsMessageBase.createFromApi(JSON.parse(data.data));
 
-				// Новое сообщение
-				if (wsMessage?.message?.content) {
-					vibrate(20);
-					const message = WsMessageBase.createFromApi(wsMessage);
-					dispatch(addMessageAction(message));
-				}
-				// Обновление сообщения
-				else {
-					const message: TWsMessageResponseApi = {
-						status:
-							wsMessage.status === 'ok'
-								? EWsMessageStatus.RECEIVED
-								: EWsMessageStatus.ERROR,
-						time: wsMessage.time,
-					};
-					dispatch(updateMessageAction(message));
+				switch (wsMessage.type) {
+					case EWsMessageType.SEND_MESSAGE:
+						sendMessageHandler(wsMessage);
+						break;
+
+					case EWsMessageType.SEND_MESSAGE_RESPONSE:
+						sendMessageResponseHandler(wsMessage);
+						break;
+					default:
+						break;
 				}
 			}
 		};

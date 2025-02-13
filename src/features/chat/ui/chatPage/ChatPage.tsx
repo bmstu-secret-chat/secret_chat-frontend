@@ -37,9 +37,9 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 				{/*		paragraph={{ rows: 5 }}*/}
 				{/*	/>*/}
 				{/*)}*/}
-				{messages.map((msg, index) => (
+				{messages.map((msg) => (
 					<Message
-						key={index}
+						key={msg.id}
 						msg={msg}
 					/>
 				))}

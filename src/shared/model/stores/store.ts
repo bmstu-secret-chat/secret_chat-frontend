@@ -4,8 +4,8 @@ import { userReducer } from '@/entities/user/model';
 
 export const store = configureStore({
 	reducer: {
-		user: userReducer,
 		message: messageReducer,
+		user: userReducer,
 	},
 });
 

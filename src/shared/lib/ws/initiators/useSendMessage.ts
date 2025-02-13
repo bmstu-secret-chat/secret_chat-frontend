@@ -4,10 +4,14 @@ import {
 	addMessageAction,
 	updateMessageAction,
 	WsMessageBase,
+	EWsMessageType,
 } from '@/entities/message/model';
-import { EWsMessageType } from '@/entities/message/model/wsMessageBase';
 import { selectCurrentUser } from '@/entities/user/model';
-import { EWsMessageStatus, useWebSocketContext } from '@/shared/model';
+import {
+	EWsMessageResponseStatus,
+	EWsMessageStatus,
+	useWebSocketContext,
+} from '@/shared/model';
 
 export const useSendMessage = () => {
 	const dispatch = useDispatch();
@@ -35,13 +39,17 @@ export const useSendMessage = () => {
 		sendWsMessage(JSON.stringify(message.toApi()));
 
 		// Если сервер не отвечает в течение 5 секунд, ставим ошибку
+		const messageWithError = new WsMessageBase(
+			message.id,
+			EWsMessageType.SEND_MESSAGE_RESPONSE,
+			{
+				chatId,
+				status: EWsMessageResponseStatus.ERROR,
+			},
+		);
+
 		setTimeout(() => {
-			dispatch(
-				updateMessageAction({
-					status: EWsMessageStatus.ERROR,
-					time: message.payload.time,
-				}),
-			);
+			dispatch(updateMessageAction(messageWithError));
 		}, 5 * 1000);
 	};
 
