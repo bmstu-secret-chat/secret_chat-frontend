@@ -1,7 +1,7 @@
 import { TUserShortInfoApi, UserShortInfo } from '@/entities/user/model';
 import { EChatType } from '@/shared/model';
 
-export type TChatApi = {
+type TChatApi = {
 	id: string;
 	type: EChatType;
 	users: TUserShortInfoApi[];

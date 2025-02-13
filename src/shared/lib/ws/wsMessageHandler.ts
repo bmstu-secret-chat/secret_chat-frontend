@@ -7,19 +7,21 @@ import {
 	useSendMessageResponseHandler,
 	useSendMessageHandler,
 } from '@/shared/lib/ws/handlers';
+import { useCreateChatHandler } from '@/shared/lib/ws/handlers/useCreateChatHandler';
 import {
 	useWebSocketContext,
 	TWSListenerCallback,
 } from '@/shared/model/contexts/webSocketContext';
 import { EWsEvent } from '@/shared/model/enums';
 
-export const WsMessageListener = () => {
+export const WsMessageHandler = () => {
 	const { addListener, removeListener } = useWebSocketContext();
 
 	const dispatch = useDispatch();
 
 	const { sendMessageHandler } = useSendMessageHandler();
 	const { sendMessageResponseHandler } = useSendMessageResponseHandler();
+	const { createChatHandler } = useCreateChatHandler();
 
 	useEffect(() => {
 		const messageListener: TWSListenerCallback = (event, data) => {
@@ -30,9 +32,11 @@ export const WsMessageListener = () => {
 					case EWsMessageType.SEND_MESSAGE:
 						sendMessageHandler(wsMessage);
 						break;
-
 					case EWsMessageType.SEND_MESSAGE_RESPONSE:
 						sendMessageResponseHandler(wsMessage);
+						break;
+					case EWsMessageType.CREATE_CHAT:
+						createChatHandler(wsMessage);
 						break;
 					default:
 						break;

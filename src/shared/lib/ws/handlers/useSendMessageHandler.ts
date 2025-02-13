@@ -1,5 +1,3 @@
-'use client';
-
 import { useDispatch } from 'react-redux';
 import { addMessageAction, WsMessageBase } from '@/entities/message/model';
 import { vibrate } from '@/shared/lib';

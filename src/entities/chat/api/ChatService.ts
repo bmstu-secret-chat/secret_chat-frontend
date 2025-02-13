@@ -14,7 +14,7 @@ export class ChatService extends ServiceBase {
 		this.config = [
 			{
 				name: 'createSecretChat',
-				url: `/api/backend/chats/secret-chat/create`,
+				url: `/api/backend/chats/secret-chat/create/`,
 				method: ERequestMethods.POST,
 			},
 		];

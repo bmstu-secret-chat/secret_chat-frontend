@@ -23,8 +23,6 @@ export const useCreateSecretChat = () => {
 				if (isProfileModalOpen) {
 					router.back();
 				}
-
-				// setTimeout(() => router.push(`/chats/${chat.id}`), 100);
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					showToast('error', error.message);

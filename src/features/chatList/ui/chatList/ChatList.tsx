@@ -1,6 +1,6 @@
 import React from 'react';
 import { useChatList, useSearch } from '@/features/chatList/model';
-import { ChatLink, Search, UserItem } from '@/features/chatList/ui';
+import { ChatItem, Search, UserItem } from '@/features/chatList/ui';
 import { cn } from '@/shared/lib';
 
 export const ChatList = () => {
@@ -24,10 +24,9 @@ export const ChatList = () => {
 						/>
 					))
 				: chats.map((chat) => (
-						<ChatLink
+						<ChatItem
 							key={chat.id}
-							id={chat.id}
-							link={chat.link}
+							chat={chat}
 						/>
 					))}
 		</div>

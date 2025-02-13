@@ -8,7 +8,7 @@ export {
 	isEmailCorrect,
 	isPasswordCorrect,
 } from './validateFields';
-export { WsMessageListener } from './ws/wsMessageListener';
+export { WsMessageHandler } from './ws/wsMessageHandler';
 export {
 	formatTimeHHmm,
 	formatDateDDMMYYYY,

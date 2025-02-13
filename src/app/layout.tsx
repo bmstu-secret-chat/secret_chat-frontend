@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
 import { BeforeRender } from '@/features/app/ui';
-import { WsMessageListener } from '@/shared/lib';
+import { WsMessageHandler } from '@/shared/lib';
 import { AppContextProvider } from '@/shared/model';
 import { Sidebar } from '@/widgets';
 
@@ -42,7 +42,7 @@ export default function RootLayout({
 						}}
 					>
 						<BeforeRender>
-							<WsMessageListener />
+							<WsMessageHandler />
 							<Sidebar />
 							{children}
 							{modal}

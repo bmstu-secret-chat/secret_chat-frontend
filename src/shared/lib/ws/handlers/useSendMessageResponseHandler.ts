@@ -1,5 +1,3 @@
-'use client';
-
 import { useDispatch } from 'react-redux';
 import { updateMessageAction, WsMessageBase } from '@/entities/message/model';
 

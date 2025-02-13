@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import React, { memo } from 'react';
+import { TChatModel } from '@/entities/chat/model/chat';
 import { cn } from '@/shared/lib';
 
 type Props = {
-	id: number;
-	link: string;
+	chat: TChatModel;
 };
 
-export const ChatLink: React.FC<Props> = memo(({ id, link }: Props) => {
+export const ChatItem: React.FC<Props> = memo(({ chat }: Props) => {
 	return (
-		<Link href={link}>
+		<Link href={`/chats/${chat.id}`}>
 			<span
 				className={cn(
 					'flex justify-start items-center h-[100px] p-8',
@@ -17,10 +17,10 @@ export const ChatLink: React.FC<Props> = memo(({ id, link }: Props) => {
 					'text-white',
 				)}
 			>
-				Чат {id}
+				Чат {chat.id}
 			</span>
 		</Link>
 	);
 });
 
-ChatLink.displayName = 'ChatLink';
+ChatItem.displayName = 'ChatItem';
