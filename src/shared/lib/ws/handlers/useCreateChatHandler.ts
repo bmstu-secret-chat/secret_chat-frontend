@@ -2,10 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { addChatAction, TChatModel } from '@/entities/chat/model';
-import { TWsCreateChatModel } from '@/entities/chat/model/wsCreateChat';
-import { WsMessageBase } from '@/entities/message/model';
+import {
+	addChatAction,
+	TChatModel,
+	TWsCreateChatModel,
+} from '@/entities/chat/model';
 import { vibrate } from '@/shared/lib';
+import { WsMessageBase } from '@/shared/model';
 
 export const useCreateChatHandler = () => {
 	const dispatch = useDispatch();

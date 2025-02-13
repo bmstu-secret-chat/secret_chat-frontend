@@ -1,11 +1,9 @@
 import React, { memo } from 'react';
-import {
-	TWsMessageBaseModel,
-	TWsSendMessageModel,
-} from '@/entities/message/model';
+import { TWsSendMessageModel } from '@/entities/message/model';
 import { useMessage } from '@/features/chat/model';
 import { MessageMenu, MessageStatus } from '@/features/chat/ui';
 import { cn, formatTimeHHmm } from '@/shared/lib';
+import { TWsMessageBaseModel } from '@/shared/model';
 import { Popover } from '@/shared/ui';
 
 type Props = {

@@ -3,14 +3,14 @@ import { v4 as uuidv4 } from 'uuid'; // Импортируем v4 для ген�
 import {
 	addMessageAction,
 	updateMessageAction,
-	WsMessageBase,
-	EWsMessageType,
 } from '@/entities/message/model';
 import { selectCurrentUser } from '@/entities/user/model';
 import {
 	EWsMessageResponseStatus,
 	EWsMessageStatus,
+	EWsMessageType,
 	useWebSocketContext,
+	WsMessageBase,
 } from '@/shared/model';
 
 export const useSendMessage = () => {

@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { addMessageAction, WsMessageBase } from '@/entities/message/model';
+import { addMessageAction } from '@/entities/message/model';
 import { vibrate } from '@/shared/lib';
+import { WsMessageBase } from '@/shared/model';
 
 export const useSendMessageHandler = () => {
 	const dispatch = useDispatch();

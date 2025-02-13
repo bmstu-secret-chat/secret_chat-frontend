@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-	TWsMessageBaseModel,
 	TWsSendMessageModel,
 	TWsMessageResponseModel,
 } from '@/entities/message/model';
+import { TWsMessageBaseModel } from '@/shared/model';
 import {
 	EWsMessageResponseStatus,
 	EWsMessageStatus,

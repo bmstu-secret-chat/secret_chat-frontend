@@ -1,8 +1,11 @@
 import {
 	TWsCreateChatApi,
 	TWsCreateChatModel,
+	TWsDeleteChatApi,
+	TWsDeleteChatModel,
 	WsCreateChat,
-} from '@/entities/chat/model/wsCreateChat';
+	WsDeleteChat,
+} from '@/entities/chat/model';
 import {
 	TWsMessageMessageApi,
 	TWsSendMessageModel,
@@ -22,24 +25,36 @@ export enum EWsMessageType {
 export type TWsMessageBaseModel = {
 	id: string;
 	type: EWsMessageType;
-	payload: TWsSendMessageModel | TWsMessageResponseModel | TWsCreateChatModel;
+	payload:
+		| TWsSendMessageModel
+		| TWsMessageResponseModel
+		| TWsCreateChatModel
+		| TWsDeleteChatModel;
 };
 
 type TWsMessageBaseApi = {
 	id: string;
 	type: EWsMessageType;
-	payload: TWsMessageResponseApi | TWsMessageMessageApi | TWsCreateChatApi;
+	payload:
+		| TWsMessageResponseApi
+		| TWsMessageMessageApi
+		| TWsCreateChatApi
+		| TWsDeleteChatApi;
 };
 
 export class WsMessageBase {
 	id: string;
 	type: EWsMessageType;
-	payload: WsSendMessage | WsSendMessageResponse | WsCreateChat;
+	payload: WsSendMessage | WsSendMessageResponse | WsCreateChat | WsDeleteChat;
 
 	constructor(
 		id: string,
 		type: EWsMessageType,
-		payload: TWsSendMessageModel | TWsMessageResponseModel | TWsCreateChatModel,
+		payload:
+			| TWsSendMessageModel
+			| TWsMessageResponseModel
+			| TWsCreateChatModel
+			| TWsDeleteChatModel,
 	) {
 		this.id = id;
 		this.type = type;
@@ -56,6 +71,9 @@ export class WsMessageBase {
 			case EWsMessageType.CREATE_CHAT:
 				this.payload = new WsCreateChat(payload as TWsCreateChatModel);
 				break;
+			case EWsMessageType.DELETE_CHAT:
+				this.payload = new WsDeleteChat(payload as TWsDeleteChatModel);
+				break;
 			default:
 				throw new Error(`Неизвестный тип сообщения: ${type}`);
 		}
@@ -68,7 +86,8 @@ export class WsMessageBase {
 		let payload:
 			| TWsSendMessageModel
 			| TWsMessageResponseModel
-			| TWsCreateChatModel;
+			| TWsCreateChatModel
+			| TWsDeleteChatModel;
 
 		switch (from.type) {
 			case EWsMessageType.SEND_MESSAGE:
@@ -83,6 +102,9 @@ export class WsMessageBase {
 				break;
 			case EWsMessageType.CREATE_CHAT:
 				payload = WsCreateChat.createFromApi(from.payload as TWsCreateChatApi);
+				break;
+			case EWsMessageType.DELETE_CHAT:
+				payload = WsDeleteChat.createFromApi(from.payload as TWsDeleteChatApi);
 				break;
 			default:
 				throw new Error(`Неизвестный тип сообщения: ${from.type}`);

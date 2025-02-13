@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { WsMessageBase, EWsMessageType } from '@/entities/message/model';
 import {
 	useSendMessageResponseHandler,
 	useSendMessageHandler,
 } from '@/shared/lib/ws/handlers';
 import { useCreateChatHandler } from '@/shared/lib/ws/handlers/useCreateChatHandler';
+import { useDeleteChatHandler } from '@/shared/lib/ws/handlers/useDeleteChatHandler';
+import { EWsMessageType, WsMessageBase } from '@/shared/model';
 import {
 	useWebSocketContext,
 	TWSListenerCallback,
@@ -22,6 +23,7 @@ export const WsMessageHandler = () => {
 	const { sendMessageHandler } = useSendMessageHandler();
 	const { sendMessageResponseHandler } = useSendMessageResponseHandler();
 	const { createChatHandler } = useCreateChatHandler();
+	const { deleteChatHandler } = useDeleteChatHandler();
 
 	useEffect(() => {
 		const messageListener: TWSListenerCallback = (event, data) => {
@@ -37,6 +39,9 @@ export const WsMessageHandler = () => {
 						break;
 					case EWsMessageType.CREATE_CHAT:
 						createChatHandler(wsMessage);
+						break;
+					case EWsMessageType.DELETE_CHAT:
+						deleteChatHandler(wsMessage);
 						break;
 					default:
 						break;
