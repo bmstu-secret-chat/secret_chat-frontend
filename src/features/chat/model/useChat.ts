@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectMessages } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
 import { vibrate } from '@/shared/lib';
-import { useSendMessage } from '@/shared/lib/ws/initiators/useSendMessage';
+import { useSendMessage } from '@/shared/lib/ws/initiators';
 
 export const useChat = (chatId: string) => {
 	const router = useRouter();

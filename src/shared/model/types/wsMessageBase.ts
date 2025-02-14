@@ -117,11 +117,14 @@ export class WsMessageBase {
 	 * Конвертирует экземпляр модели в API-формат
 	 */
 	toApi(): TWsMessageBaseApi {
-		let payload: TWsMessageMessageApi | TWsMessageResponseApi;
+		let payload: TWsMessageMessageApi | TWsDeleteChatApi;
 
 		switch (this.type) {
 			case EWsMessageType.SEND_MESSAGE:
 				payload = (this.payload as WsSendMessage).toApi();
+				break;
+			case EWsMessageType.DELETE_CHAT:
+				payload = (this.payload as WsDeleteChat).toApi();
 				break;
 			default:
 				throw new Error(`Неизвестный тип сообщения: ${this.type}`);

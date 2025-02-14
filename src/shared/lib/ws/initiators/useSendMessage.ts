@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid'; // Импортируем v4 для генерации UUID
+import { v4 as uuidv4 } from 'uuid';
 import {
 	addMessageAction,
 	updateMessageAction,

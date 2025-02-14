@@ -7,13 +7,13 @@ import { cn } from '@/shared/lib';
 import { AuthRoute } from '@/shared/utils';
 
 export function ChatListLayout({ children }: { children: React.ReactNode }) {
-	const { isChatPage } = useChatList();
+	const { isChatListPage } = useChatList();
 
 	return (
 		<AuthRoute>
 			<ChatListProvider>
 				<div className={cn('flex relative flex-col md:w-[30vw] h-screen')}>
-					<div className={cn(isChatPage ? '' : 'md:block hidden')}>
+					<div className={cn(isChatListPage ? '' : 'md:block hidden')}>
 						<ChatList />
 					</div>
 					<CreateDialogButton />
