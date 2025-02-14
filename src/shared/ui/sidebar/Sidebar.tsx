@@ -210,9 +210,7 @@ export const SidebarLink = ({
 
 		if (link.action) {
 			await link.action();
-		}
-
-		if (link.href) {
+		} else {
 			router.push(link.href);
 		}
 	};

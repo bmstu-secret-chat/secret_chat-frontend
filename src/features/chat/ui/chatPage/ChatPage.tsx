@@ -2,10 +2,17 @@ import React from 'react';
 import { useChat } from '@/features/chat/model';
 import { Message, MessageInput } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
+import { DeleteSecretChatModal } from '@/widgets/modals/deleteSecretChat';
 
 export const ChatPage = ({ chatId }: { chatId: string }) => {
-	const { messagesContainerRef, messages, content, setContent, onSubmit } =
-		useChat(chatId);
+	const {
+		activeChat,
+		messagesContainerRef,
+		messages,
+		content,
+		setContent,
+		onSubmit,
+	} = useChat(chatId);
 
 	return (
 		<div
@@ -49,6 +56,8 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 				setValue={setContent}
 				onSubmit={onSubmit}
 			/>
+
+			<DeleteSecretChatModal chatId={activeChat?.id || null} />
 		</div>
 	);
 };

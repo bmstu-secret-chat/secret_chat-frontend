@@ -4,10 +4,12 @@ import { RootState } from '@/shared/model/stores';
 
 type ChatSlice = {
 	chatList: TChatModel[];
+	activeChat: TChatModel | null;
 };
 
 const initialState: ChatSlice = {
 	chatList: [],
+	activeChat: null,
 };
 
 export const chatSlice = createSlice({
@@ -28,6 +30,10 @@ export const chatSlice = createSlice({
 		deleteChats: (state) => {
 			state.chatList = [];
 		},
+		setActiveChat: (state, action: PayloadAction<string | null>) => {
+			state.activeChat =
+				state.chatList.find((chat) => chat.id === action.payload) || null;
+		},
 	},
 });
 
@@ -36,9 +42,13 @@ export const {
 	addChat: addChatAction,
 	deleteChat: deleteChatAction,
 	deleteChats: deleteChatsAction,
+	setActiveChat: setActiveChatAction,
 } = chatSlice.actions;
 
 export const selectChatList = (state: RootState): ChatSlice['chatList'] =>
 	(state.chat as ChatSlice).chatList;
+
+export const selectActiveChat = (state: RootState): ChatSlice['activeChat'] =>
+	(state.chat as ChatSlice).activeChat;
 
 export const chatReducer = chatSlice.reducer;

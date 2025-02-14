@@ -2,17 +2,23 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	selectActiveChat,
+	setActiveChatAction,
+} from '@/entities/chat/model/chatSlice';
 import { selectMessages } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { vibrate } from '@/shared/lib';
+import { EmitterEvents, eventEmitter, vibrate } from '@/shared/lib';
 import { useSendMessage } from '@/shared/lib/ws/initiators';
 
 export const useChat = (chatId: string) => {
 	const router = useRouter();
 	const pathname = usePathname();
+	const dispatch = useDispatch();
 
 	const messages = useSelector(selectMessages);
+	const activeChat = useSelector(selectActiveChat);
 
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +44,7 @@ export const useChat = (chatId: string) => {
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
 			if (event.key === 'Escape' && pathname.includes('/chats/')) {
-				router.push('/chats');
+				eventEmitter.emit(EmitterEvents.MODAL_OPEN_SECRET_CHAT_DELETE);
 			}
 		};
 
@@ -49,6 +55,14 @@ export const useChat = (chatId: string) => {
 		};
 	}, [pathname, router]);
 
+	useEffect(() => {
+		dispatch(setActiveChatAction(chatId));
+
+		return () => {
+			dispatch(setActiveChatAction(null));
+		};
+	}, [dispatch, chatId]);
+
 	const onSubmit = () => {
 		sendMessage(chatId, content);
 		if (isTabletDevice) vibrate(10);
@@ -58,6 +72,7 @@ export const useChat = (chatId: string) => {
 		messagesContainerRef,
 		messages,
 		content,
+		activeChat,
 		setContent,
 		onSubmit,
 	};
