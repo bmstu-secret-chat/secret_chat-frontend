@@ -5,6 +5,7 @@ export {
 	addChatAction,
 	deleteChatAction,
 	deleteChatsAction,
+	clearActiveChatAction,
 	chatReducer,
 	selectChatList,
 } from './chatSlice';

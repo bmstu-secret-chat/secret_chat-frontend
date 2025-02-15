@@ -1,19 +1,24 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { EmitterEvents, eventEmitter } from '@/shared/lib';
 import { useDeleteChat } from '@/shared/lib/ws/initiators';
 
-export const useDeleteSecretChatModal = (chatId: string | null) => {
+export const useDeleteSecretChatModal = (chatId?: string) => {
+	const router = useRouter();
+
 	const { deleteChat } = useDeleteChat();
 
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOk = useCallback(async () => {
-		if (!chatId) return;
-
-		deleteChat(chatId);
-	}, [deleteChat, chatId]);
+		if (chatId) {
+			deleteChat(chatId);
+		} else {
+			router.push('/chats');
+		}
+	}, [router, deleteChat, chatId]);
 
 	const handleCancel = useCallback(() => {
 		setIsOpen(false);

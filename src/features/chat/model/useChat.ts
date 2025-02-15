@@ -4,12 +4,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+	clearActiveChatAction,
 	selectActiveChat,
 	setActiveChatAction,
 } from '@/entities/chat/model/chatSlice';
 import { selectMessages } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { EmitterEvents, eventEmitter, vibrate } from '@/shared/lib';
+import { vibrate } from '@/shared/lib';
 import { useSendMessage } from '@/shared/lib/ws/initiators';
 
 export const useChat = (chatId: string) => {
@@ -23,6 +24,7 @@ export const useChat = (chatId: string) => {
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
 
 	const [content, setContent] = useState('');
+	const [canRender, setCanRender] = useState(false);
 
 	const { isTabletDevice } = useScreenWidth();
 
@@ -42,9 +44,22 @@ export const useChat = (chatId: string) => {
 	}, [messages.length]);
 
 	useEffect(() => {
+		dispatch(setActiveChatAction(chatId));
+
+		return () => {
+			dispatch(clearActiveChatAction());
+		};
+	}, [dispatch, chatId]);
+
+	useEffect(() => {
+		setCanRender(!!activeChat?.id);
+	}, [activeChat]);
+
+	// Escape
+	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
 			if (event.key === 'Escape' && pathname.includes('/chats/')) {
-				eventEmitter.emit(EmitterEvents.MODAL_OPEN_SECRET_CHAT_DELETE);
+				router.push('/chats');
 			}
 		};
 
@@ -54,14 +69,6 @@ export const useChat = (chatId: string) => {
 			window.removeEventListener('keydown', handleEscape);
 		};
 	}, [pathname, router]);
-
-	useEffect(() => {
-		dispatch(setActiveChatAction(chatId));
-
-		return () => {
-			dispatch(setActiveChatAction(null));
-		};
-	}, [dispatch, chatId]);
 
 	const onSubmit = () => {
 		sendMessage(chatId, content);
@@ -73,6 +80,7 @@ export const useChat = (chatId: string) => {
 		messages,
 		content,
 		activeChat,
+		canRender,
 		setContent,
 		onSubmit,
 	};

@@ -3,7 +3,7 @@ import React from 'react';
 import { useDeleteSecretChatModal } from '@/widgets/modals/deleteSecretChat/model';
 
 type Props = {
-	chatId: string | null;
+	chatId?: string;
 };
 
 export const DeleteSecretChatModal: React.FC<Props> = ({ chatId }) => {

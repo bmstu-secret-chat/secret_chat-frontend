@@ -21,6 +21,7 @@ export const useDeleteChat = () => {
 
 		sendWsMessage(JSON.stringify(message.toApi()));
 
+		// TODO: remove
 		dispatch(deleteChatAction((message.payload as TWsDeleteChatModel).chatId));
 		router.push('/chats');
 	};

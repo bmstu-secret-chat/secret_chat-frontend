@@ -26,13 +26,20 @@ export const chatSlice = createSlice({
 			state.chatList = state.chatList.filter(
 				(chat) => chat.id !== action.payload,
 			);
+
+			if (state.activeChat?.id === action.payload) {
+				state.activeChat = null;
+			}
 		},
 		deleteChats: (state) => {
 			state.chatList = [];
 		},
-		setActiveChat: (state, action: PayloadAction<string | null>) => {
+		setActiveChat: (state, action: PayloadAction<string>) => {
 			state.activeChat =
 				state.chatList.find((chat) => chat.id === action.payload) || null;
+		},
+		clearActiveChat: (state) => {
+			state.activeChat = null;
 		},
 	},
 });
@@ -43,6 +50,7 @@ export const {
 	deleteChat: deleteChatAction,
 	deleteChats: deleteChatsAction,
 	setActiveChat: setActiveChatAction,
+	clearActiveChat: clearActiveChatAction,
 } = chatSlice.actions;
 
 export const selectChatList = (state: RootState): ChatSlice['chatList'] =>

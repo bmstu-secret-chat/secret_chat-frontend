@@ -7,7 +7,7 @@ import {
 	TChatModel,
 	TWsCreateChatModel,
 } from '@/entities/chat/model';
-import { vibrate } from '@/shared/lib';
+import { showToast, vibrate } from '@/shared/lib';
 import { WsMessageBase } from '@/shared/model';
 
 export const useCreateChatHandler = () => {
@@ -24,7 +24,11 @@ export const useCreateChatHandler = () => {
 		vibrate(20);
 		dispatch(addChatAction(newChat));
 
-		setTimeout(() => router.push(`/chats/${newChat.id}`), 500);
+		setTimeout(() => {
+			router.push(`/chats/${newChat.id}`);
+
+			showToast('info', 'С вами начали секретный чат');
+		}, 500);
 	};
 
 	return { createChatHandler };
