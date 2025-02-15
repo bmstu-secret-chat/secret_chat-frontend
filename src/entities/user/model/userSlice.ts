@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserInfo } from '@/entities/user/model/userInfo';
-import { RootState } from '@/shared/model/stores';
+import { RootState } from '@/shared/model';
 
 type UserSlice = {
 	isAuthorized: boolean;

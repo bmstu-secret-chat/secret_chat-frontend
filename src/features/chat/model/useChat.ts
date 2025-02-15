@@ -7,11 +7,10 @@ import {
 	clearActiveChatAction,
 	selectActiveChat,
 	setActiveChatAction,
-} from '@/entities/chat/model/chatSlice';
+} from '@/entities/chat/model';
 import { selectMessages } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { vibrate } from '@/shared/lib';
-import { useSendMessage } from '@/shared/lib/ws/initiators';
+import { useSendMessage, vibrate } from '@/shared/lib';
 
 export const useChat = (chatId: string) => {
 	const router = useRouter();

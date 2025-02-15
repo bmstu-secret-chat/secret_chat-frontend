@@ -5,14 +5,15 @@ import { useDispatch } from 'react-redux';
 import {
 	useSendMessageResponseHandler,
 	useSendMessageHandler,
-} from '@/shared/lib/ws/handlers';
+} from '@/shared/lib/ws';
 import { useCreateChatHandler } from '@/shared/lib/ws/handlers/useCreateChatHandler';
 import { useDeleteChatHandler } from '@/shared/lib/ws/handlers/useDeleteChatHandler';
-import { EWsMessageType, WsMessageBase } from '@/shared/model';
 import {
-	useWebSocketContext,
+	EWsMessageType,
 	TWSListenerCallback,
-} from '@/shared/model/contexts/webSocketContext';
+	WsMessageBase,
+	useWebSocketContext,
+} from '@/shared/model';
 import { EWsEvent } from '@/shared/model/enums';
 
 export const WsMessageHandler = () => {

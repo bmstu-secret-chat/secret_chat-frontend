@@ -3,12 +3,11 @@ import {
 	TWsSendMessageModel,
 	TWsMessageResponseModel,
 } from '@/entities/message/model';
-import { TWsMessageBaseModel } from '@/shared/model';
+import { RootState, TWsMessageBaseModel } from '@/shared/model';
 import {
 	EWsMessageResponseStatus,
 	EWsMessageStatus,
 } from '@/shared/model/enums';
-import { RootState } from '@/shared/model/stores';
 
 type MessageSlice = {
 	messages: TWsMessageBaseModel[];

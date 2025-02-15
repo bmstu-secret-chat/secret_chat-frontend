@@ -5,9 +5,11 @@ export {
 	addChatAction,
 	deleteChatAction,
 	deleteChatsAction,
+	setActiveChatAction,
 	clearActiveChatAction,
 	chatReducer,
 	selectChatList,
+	selectActiveChat,
 } from './chatSlice';
 export type { TChatModel } from './chat';
 export type { TWsCreateChatApi, TWsCreateChatModel } from './wsCreateChat';

@@ -1,11 +1,13 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { deleteChatAction, TWsDeleteChatModel } from '@/entities/chat/model';
 import {
 	EWsMessageType,
-	useWebSocketContext,
 	WsMessageBase,
+	useWebSocketContext,
 } from '@/shared/model';
 
 export const useDeleteChat = () => {

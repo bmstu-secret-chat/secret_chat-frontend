@@ -3,8 +3,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ToastProvider } from '@/shared/lib';
-import { WebSocketProvider, EnvProvider } from '@/shared/model';
-import { store } from '@/shared/model/stores';
+import { WebSocketProvider, EnvProvider, store } from '@/shared/model';
 
 export const AppContextProvider = ({
 	children,

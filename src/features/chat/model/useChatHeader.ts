@@ -1,9 +1,13 @@
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { selectActiveChat } from '@/entities/chat/model';
 import { EmitterEvents, eventEmitter } from '@/shared/lib';
 
 export const useChatHeader = () => {
 	const router = useRouter();
+
+	const activeChat = useSelector(selectActiveChat);
 
 	const handleBackButtonClick = useCallback(
 		() => router.push('/chats'),
@@ -15,5 +19,5 @@ export const useChatHeader = () => {
 		[],
 	);
 
-	return { handleBackButtonClick, handleSecretChatExit };
+	return { handleBackButtonClick, handleSecretChatExit, activeChat };
 };

@@ -25,7 +25,7 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 					'h-full overflow-y-auto bg-neutral-800',
 				)}
 			>
-				<ChatHeader chatId={activeChat?.id} />
+				<ChatHeader />
 				<div
 					ref={messagesContainerRef}
 					className={cn(

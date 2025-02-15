@@ -9,8 +9,8 @@ import {
 	EWsMessageResponseStatus,
 	EWsMessageStatus,
 	EWsMessageType,
-	useWebSocketContext,
 	WsMessageBase,
+	useWebSocketContext,
 } from '@/shared/model';
 
 export const useSendMessage = () => {

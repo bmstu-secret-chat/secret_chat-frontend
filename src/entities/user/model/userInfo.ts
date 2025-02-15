@@ -1,3 +1,5 @@
+import { UserShortInfo } from '@/entities/user/model';
+
 export type TUserInfoApi = {
 	id: string;
 	username: string;
@@ -73,5 +75,13 @@ export class UserInfo {
 			about_me: this.aboutMe,
 			birthday: this.birthday,
 		};
+	}
+
+	toShortInfo(): UserShortInfo {
+		return new UserShortInfo({
+			id: this.id,
+			username: this.username,
+			avatar: this.avatar,
+		});
 	}
 }

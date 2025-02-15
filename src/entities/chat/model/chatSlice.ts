@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TChatModel } from '@/entities/chat/model/chat';
-import { RootState } from '@/shared/model/stores';
+import { RootState } from '@/shared/model';
 
 type ChatSlice = {
 	chatList: TChatModel[];
