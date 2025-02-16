@@ -20,3 +20,4 @@ export { Skeleton } from './skeleton/Skeleton';
 export { TextArea } from './textArea/TextArea';
 export { UploadImage } from './uploadImage/UploadImage';
 export { VanishInput } from './vanishInput/VanishInput';
+export * from './globe/Globe';

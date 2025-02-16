@@ -1,14 +1,14 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	clearActiveChatAction,
 	selectActiveChat,
 	setActiveChatAction,
 } from '@/entities/chat/model';
-import { selectMessages } from '@/entities/message/model';
+import { selectMessages, TWsSendMessageModel } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
 import { useSendMessage, vibrate } from '@/shared/lib';
 
@@ -28,6 +28,15 @@ export const useChat = (chatId: string) => {
 	const { isTabletDevice } = useScreenWidth();
 
 	const { sendMessage } = useSendMessage();
+
+	const messagesFromActiveChat = useMemo(
+		() =>
+			messages.filter(
+				(message) =>
+					(message.payload as TWsSendMessageModel).chatId === activeChat?.id,
+			),
+		[messages, activeChat],
+	);
 
 	useEffect(() => {
 		messagesContainerRef.current?.scrollTo({
@@ -76,7 +85,7 @@ export const useChat = (chatId: string) => {
 
 	return {
 		messagesContainerRef,
-		messages,
+		messagesFromActiveChat,
 		content,
 		activeChat,
 		canRender,

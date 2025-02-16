@@ -3,7 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { deleteChatAction, TWsDeleteChatModel } from '@/entities/chat/model';
+import { deleteChatAction } from '@/entities/chat/model';
+import { deleteMessagesFromChatAction } from '@/entities/message/model';
 import {
 	EWsMessageType,
 	WsMessageBase,
@@ -24,7 +25,9 @@ export const useDeleteChat = () => {
 		sendWsMessage(JSON.stringify(message.toApi()));
 
 		// TODO: remove
-		dispatch(deleteChatAction((message.payload as TWsDeleteChatModel).chatId));
+		dispatch(deleteChatAction(chatId));
+		dispatch(deleteMessagesFromChatAction(chatId));
+
 		router.push('/chats');
 	};
 

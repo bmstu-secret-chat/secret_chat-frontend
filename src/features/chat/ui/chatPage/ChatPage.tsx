@@ -9,7 +9,7 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 	const {
 		activeChat,
 		messagesContainerRef,
-		messages,
+		messagesFromActiveChat: messages,
 		content,
 		canRender,
 		setContent,

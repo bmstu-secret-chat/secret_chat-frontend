@@ -51,6 +51,12 @@ export const messageSlice = createSlice({
 				return message;
 			});
 		},
+		deleteMessagesFromChat: (state, action: PayloadAction<string>) => {
+			state.messages = state.messages.filter(
+				(message) =>
+					(message.payload as TWsSendMessageModel).chatId !== action.payload,
+			);
+		},
 		deleteMessages: (state) => {
 			state.messages = [];
 		},
@@ -61,6 +67,7 @@ export const {
 	setMessages: setMessagesAction,
 	addMessage: addMessageAction,
 	updateMessage: updateMessageAction,
+	deleteMessagesFromChat: deleteMessagesFromChatAction,
 	deleteMessages: deleteMessagesAction,
 } = messageSlice.actions;
 

@@ -2,6 +2,7 @@ export {
 	setMessagesAction,
 	addMessageAction,
 	updateMessageAction,
+	deleteMessagesFromChatAction,
 	deleteMessagesAction,
 	messageReducer,
 	selectMessages,
