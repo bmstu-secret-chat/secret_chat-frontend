@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import React, { memo } from 'react';
 import { cn } from '@/shared/lib';
 
-const World = dynamic(() => import('@/shared/ui/').then((m) => m.World), {
+const World = dynamic(() => import('@/shared/ui').then((m) => m.World), {
 	ssr: false,
 });
 
@@ -397,7 +397,7 @@ export const Globe = memo(() => {
 	];
 
 	return (
-		<div className='flex flex-row items-center justify-center pt-10 h-[calc(100vh-77px)] bg-black relative w-full'>
+		<div className='flex flex-row items-center justify-center pt-10 h-screen bg-black relative w-full'>
 			<div className='max-w-7xl mx-auto w-full relative overflow-hidden h-full '>
 				<motion.div
 					initial={{

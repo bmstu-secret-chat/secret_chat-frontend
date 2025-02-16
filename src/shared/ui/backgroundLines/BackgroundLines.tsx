@@ -2,16 +2,13 @@
 
 import { motion } from 'framer-motion';
 import React from 'react';
-import { UserInfo } from '@/entities/user/model/userInfo';
 import { cn } from '@/shared/lib';
 
 export const BackgroundLines = ({
-	user,
 	children,
 	className,
 	svgOptions,
 }: {
-	user: UserInfo | null;
 	children: React.ReactNode;
 	className?: string;
 	svgOptions?: {
@@ -19,11 +16,8 @@ export const BackgroundLines = ({
 	};
 }) => {
 	return (
-		<div className={cn('h-screen w-full bg-black', className)}>
-			<SVG
-				svgOptions={svgOptions}
-				user={user}
-			/>
+		<div className={cn('h-[calc(100vh-77px)] w-full bg-black', className)}>
+			<SVG svgOptions={svgOptions} />
 			{children}
 		</div>
 	);
@@ -39,10 +33,8 @@ const pathVariants = {
 };
 
 const SVG = ({
-	user,
 	svgOptions,
 }: {
-	user: UserInfo | null;
 	svgOptions?: {
 		duration?: number;
 	};
@@ -102,7 +94,7 @@ const SVG = ({
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			transition={{ duration: 1 }}
-			className={cn('absolute inset-0 w-full h-full', user && 'pl-[60px]')}
+			className={cn('absolute top-[77px] w-full h-[calc(100vh-77px)]')}
 		>
 			{paths.map((path, idx) => (
 				<motion.path

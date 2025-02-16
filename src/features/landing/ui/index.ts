@@ -1,2 +1,2 @@
-export { BackgroundLinesLanding } from './backgroundLines/BackgrounLines';
+export { Globe } from './globe/Globe';
 export { LandingPage } from './landingPage/LandingPage';
