@@ -24,5 +24,10 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H 194.58.114.226 >> ~/.ssh/known_hosts
 
+      - name: Install pnpm
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          export PATH=$HOME/.local/share/pnpm:$PATH
+
       - name: Deploy to server
         run: ssh root@194.58.114.226 "cd safe_chat/secret_chat-frontend && git pull && pnpm install && pnpm build && pm2 restart frontend"
