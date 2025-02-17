@@ -187,7 +187,7 @@ const Sidebar = ({
 				transition={{ duration: isPcDevice ? 0.3 : 0.1 }}
 				{...props}
 			>
-				<>{children}</>
+				{children}
 			</motion.div>
 		</>
 	);

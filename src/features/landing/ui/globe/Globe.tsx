@@ -432,7 +432,7 @@ export const Globe = memo(() => {
 								'max-w-md mt-4 mx-auto whitespace-pre-line',
 							)}
 						>
-							{'Передавайте защенные сообщения \n из любой точки мира'}
+							{'Передавайте защищенные сообщения \n из любой точки мира'}
 						</p>
 						<button
 							className={cn(
