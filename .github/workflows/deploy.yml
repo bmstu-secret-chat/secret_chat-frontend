@@ -27,6 +27,7 @@ jobs:
       - name: Install pnpm on server
         run: |
           ssh root@194.58.114.226 "curl -fsSL https://get.pnpm.io/install.sh | sh -"
+          ssh root@194.58.114.226 "echo 'export PATH=$PATH:/root/.local/share/pnpm' >> ~/.bashrc && source ~/.bashrc"
 
       - name: Deploy to server
         run: |
