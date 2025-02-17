@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/secret-chat
 
 jobs:
   deploy:
