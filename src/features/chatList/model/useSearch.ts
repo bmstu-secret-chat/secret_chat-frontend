@@ -13,12 +13,7 @@ export const useSearch = () => {
 
 	const handleChange = (value: string) => {
 		setSearchValue(value);
-
-		if (value.trim().length > 2) {
-			updateSearchValue(value);
-		} else {
-			setFoundedUsers([]);
-		}
+		updateSearchValue(value.trim());
 	};
 
 	const searchUsers = useCallback(
@@ -34,7 +29,11 @@ export const useSearch = () => {
 		() =>
 			debounce(async (value: string) => {
 				try {
-					await searchUsers(value);
+					if (value.length > 2) {
+						await searchUsers(value);
+					} else {
+						setFoundedUsers([]);
+					}
 				} catch (error: unknown) {
 					if (error instanceof Error) {
 						showToast('error', error.message);
@@ -43,7 +42,7 @@ export const useSearch = () => {
 					}
 				}
 			}, 500),
-		[searchUsers],
+		[searchUsers, setFoundedUsers],
 	);
 
 	return { searchValue, foundedUsers, handleChange };

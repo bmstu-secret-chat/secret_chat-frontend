@@ -63,6 +63,22 @@ interface WorldProps {
 
 let numbersOfRings = [0];
 
+const initialProps = {
+	pointSize: 1,
+	atmosphereColor: '#ffffff',
+	showAtmosphere: true,
+	atmosphereAltitude: 0.1,
+	polygonColor: 'rgba(255,255,255,0.7)',
+	globeColor: '#1d072e',
+	emissive: '#000000',
+	emissiveIntensity: 0.1,
+	shininess: 0.9,
+	arcTime: 2000,
+	arcLength: 0.9,
+	rings: 1,
+	maxRings: 3,
+};
+
 export const Globe = memo(({ globeConfig, data }: WorldProps) => {
 	const [globeData, setGlobeData] = useState<
 		| {
@@ -77,22 +93,7 @@ export const Globe = memo(({ globeConfig, data }: WorldProps) => {
 
 	const globeRef = useRef<ThreeGlobe | null>(null);
 
-	const defaultProps = {
-		pointSize: 1,
-		atmosphereColor: '#ffffff',
-		showAtmosphere: true,
-		atmosphereAltitude: 0.1,
-		polygonColor: 'rgba(255,255,255,0.7)',
-		globeColor: '#1d072e',
-		emissive: '#000000',
-		emissiveIntensity: 0.1,
-		shininess: 0.9,
-		arcTime: 2000,
-		arcLength: 0.9,
-		rings: 1,
-		maxRings: 3,
-		...globeConfig,
-	};
+	const defaultProps = { ...initialProps, ...globeConfig };
 
 	useEffect(() => {
 		if (globeRef.current) {
