@@ -14,6 +14,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug Secrets
+        run: |
+          if [ -z "${SSH_LAPTOP_PRIVATE_KEY}" ]; then
+            echo "❌ SSH_LAPTOP_PRIVATE_KEY is empty!"
+            exit 1
+          else
+            echo "✅ SSH_PRIVATE_KEY is set!"
+            echo "Secret length: ${#SSH_LAPTOP_PRIVATE_KEY}"
+          fi
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_LAPTOP_PRIVATE_KEY }}
+
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
