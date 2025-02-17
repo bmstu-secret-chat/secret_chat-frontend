@@ -25,4 +25,4 @@ jobs:
           ssh-keyscan -H 194.58.114.226 >> ~/.ssh/known_hosts
 
       - name: Deploy to server
-        run: ssh root@194.58.114.226 "cd /safe_chat/secret_chat-frontend && git pull && pnpm install && pnpm build && pm2 restart frontend"
+        run: ssh root@194.58.114.226 "cd safe_chat/secret_chat-frontend && git pull && pnpm install && pnpm build && pm2 restart frontend"
