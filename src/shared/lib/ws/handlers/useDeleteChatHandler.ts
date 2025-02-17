@@ -13,6 +13,7 @@ export const useDeleteChatHandler = () => {
 
 	const deleteChatHandler = (wsMessage: WsMessageBase) => {
 		const chatId = (wsMessage.payload as TWsDeleteChatModel).chatId;
+
 		dispatch(deleteChatAction(chatId));
 		dispatch(deleteMessagesFromChatAction(chatId));
 		router.push('/chats');

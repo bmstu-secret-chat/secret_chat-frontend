@@ -6,7 +6,7 @@ export {
 	deleteChatAction,
 	deleteChatsAction,
 	setActiveChatAction,
-	clearActiveChatAction,
+	deleteActiveChatAction,
 	chatReducer,
 	selectChatList,
 	selectActiveChat,

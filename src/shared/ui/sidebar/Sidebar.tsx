@@ -9,6 +9,7 @@ import React, {
 	useContext,
 	useRef,
 	useCallback,
+	ComponentProps,
 } from 'react';
 import { useScreenWidth } from '@/shared/hooks/useScreenWidth';
 import { cn } from '@/shared/lib';
@@ -89,7 +90,7 @@ const Sidebar = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof motion.div>) => {
+}: ComponentProps<typeof motion.div>) => {
 	const { isPcDevice } = useScreenWidth();
 
 	const { open, setOpen } = useSidebar();

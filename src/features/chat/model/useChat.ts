@@ -4,8 +4,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	clearActiveChatAction,
 	selectActiveChat,
+	deleteActiveChatAction,
 	setActiveChatAction,
 } from '@/entities/chat/model';
 import { selectMessages, TWsSendMessageModel } from '@/entities/message/model';
@@ -55,7 +55,7 @@ export const useChat = (chatId: string) => {
 		dispatch(setActiveChatAction(chatId));
 
 		return () => {
-			dispatch(clearActiveChatAction());
+			dispatch(deleteActiveChatAction());
 		};
 	}, [dispatch, chatId]);
 

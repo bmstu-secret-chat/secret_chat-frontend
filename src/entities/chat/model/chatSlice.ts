@@ -38,7 +38,7 @@ export const chatSlice = createSlice({
 			state.activeChat =
 				state.chatList.find((chat) => chat.id === action.payload) || null;
 		},
-		clearActiveChat: (state) => {
+		deleteActiveChat: (state) => {
 			state.activeChat = null;
 		},
 	},
@@ -50,7 +50,7 @@ export const {
 	deleteChat: deleteChatAction,
 	deleteChats: deleteChatsAction,
 	setActiveChat: setActiveChatAction,
-	clearActiveChat: clearActiveChatAction,
+	deleteActiveChat: deleteActiveChatAction,
 } = chatSlice.actions;
 
 export const selectChatList = (state: RootState): ChatSlice['chatList'] =>
