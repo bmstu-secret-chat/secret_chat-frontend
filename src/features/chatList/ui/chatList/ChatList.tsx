@@ -1,6 +1,11 @@
 import React from 'react';
 import { useChatList, useSearch } from '@/features/chatList/model';
-import { ChatLink, Search, UserItem } from '@/features/chatList/ui';
+import {
+	ChatItem,
+	EmptyContent,
+	Search,
+	UserItem,
+} from '@/features/chatList/ui';
 import { cn } from '@/shared/lib';
 
 export const ChatList = () => {
@@ -16,20 +21,26 @@ export const ChatList = () => {
 			)}
 		>
 			<Search />
-			{foundedUsers.length > 0
-				? foundedUsers.map((user) => (
-						<UserItem
-							key={user.id}
-							user={user}
-						/>
-					))
-				: chats.map((chat) => (
-						<ChatLink
-							key={chat.id}
-							id={chat.id}
-							link={chat.link}
-						/>
-					))}
+			{/* Сначала пользователи из поиска*/}
+			{foundedUsers.length > 0 ? (
+				foundedUsers.map((user) => (
+					<UserItem
+						key={user.id}
+						user={user}
+					/>
+				))
+			) : chats.length > 0 ? (
+				// Затем список чатов
+				chats.map((chat) => (
+					<ChatItem
+						key={chat.id}
+						chat={chat}
+					/>
+				))
+			) : (
+				// А если чатов нет, то плейсхолдер
+				<EmptyContent />
+			)}
 		</div>
 	);
 };

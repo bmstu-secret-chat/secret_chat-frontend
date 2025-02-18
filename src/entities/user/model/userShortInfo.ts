@@ -1,11 +1,7 @@
 export type TUserShortInfoApi = {
 	id: string;
 	username: string;
-	phone: string;
-	email: string;
 	avatar: string | null;
-	about_me: string | null;
-	birthday: string | null;
 };
 
 export type TUserShortInfoModel = {
@@ -25,12 +21,13 @@ export class UserShortInfo {
 		this.avatar = avatar;
 	}
 
-	static createFromApi(user: TUserShortInfoApi) {
+	static createFromApi(user: TUserShortInfoApi): UserShortInfo {
 		return new UserShortInfo({ ...user });
 	}
 
-	toApi() {
+	toApi(): TUserShortInfoApi {
 		return {
+			id: this.id,
 			username: this.username,
 			avatar: this.avatar,
 		};

@@ -19,7 +19,8 @@ export const Search: React.FC = () => {
 				placeholder='Поиск пользователей'
 				type='text'
 				value={searchValue}
-				onChange={handleChange}
+				onChange={(event) => handleChange(event.target.value)}
+				onClear={() => handleChange('')}
 			/>
 		</div>
 	);

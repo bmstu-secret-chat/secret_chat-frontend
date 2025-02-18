@@ -1,15 +1,19 @@
-export type {
-	TWsMessageMessageApi,
-	TWsMessageResponseApi,
-	TWsMessageModel,
-} from './wsMessage';
-export { WsMessage } from './wsMessage';
 export {
-	messageSlice,
-	messageReducer,
 	setMessagesAction,
 	addMessageAction,
 	updateMessageAction,
+	deleteMessagesFromChatAction,
 	deleteMessagesAction,
+	messageReducer,
 	selectMessages,
 } from './messageSlice';
+export type {
+	TWsMessageMessageApi,
+	TWsSendMessageModel,
+} from './wsSendMessage';
+export { WsSendMessage } from './wsSendMessage';
+export type {
+	TWsMessageResponseApi,
+	TWsMessageResponseModel,
+} from './wsSendMessageResponse';
+export { WsSendMessageResponse } from './wsSendMessageResponse';

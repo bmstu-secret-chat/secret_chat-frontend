@@ -9,16 +9,11 @@ import React, {
 	useContext,
 	useRef,
 	useCallback,
+	ComponentProps,
 } from 'react';
 import { useScreenWidth } from '@/shared/hooks/useScreenWidth';
 import { cn } from '@/shared/lib';
-
-interface Links {
-	label: string;
-	href: string;
-	action?: () => Promise<void>;
-	icon: React.JSX.Element | React.ReactNode;
-}
+import { TLink } from '@/widgets/sidebar/model';
 
 interface SidebarContextProps {
 	open: boolean;
@@ -95,7 +90,7 @@ const Sidebar = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof motion.div>) => {
+}: ComponentProps<typeof motion.div>) => {
 	const { isPcDevice } = useScreenWidth();
 
 	const { open, setOpen } = useSidebar();
@@ -193,7 +188,7 @@ const Sidebar = ({
 				transition={{ duration: isPcDevice ? 0.3 : 0.1 }}
 				{...props}
 			>
-				<>{children}</>
+				{children}
 			</motion.div>
 		</>
 	);
@@ -204,7 +199,7 @@ export const SidebarLink = ({
 	className,
 	...props
 }: {
-	link: Links;
+	link: TLink;
 	className?: string;
 	props?: LinkProps;
 }) => {
@@ -216,9 +211,7 @@ export const SidebarLink = ({
 
 		if (link.action) {
 			await link.action();
-		}
-
-		if (link.href) {
+		} else {
 			router.push(link.href);
 		}
 	};
@@ -226,7 +219,7 @@ export const SidebarLink = ({
 	return (
 		<a
 			className={cn(
-				'flex items-center justify-start gap-2  group/index.ts py-2 cursor-pointer',
+				'flex items-center justify-start gap-3 group/sidebar py-2 cursor-pointer',
 				className,
 			)}
 			onClick={handleClick}

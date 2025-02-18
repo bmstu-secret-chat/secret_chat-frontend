@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	deleteUserAction,
@@ -9,6 +10,7 @@ import {
 } from '@/entities/user/model';
 import { AuthorizationService } from '@/shared/api';
 import { showToast } from '@/shared/lib';
+import { TLink } from '@/widgets/sidebar/model';
 import {
 	chats,
 	logo,
@@ -18,26 +20,32 @@ import {
 
 export const useSidebar = () => {
 	const dispatch = useDispatch();
-
-	const authorizationService = new AuthorizationService();
+	const router = useRouter();
 
 	const isAuthorized = useSelector(selectIsAuthorized);
 	const currentUser = useSelector(selectCurrentUser);
 
 	const [open, setOpen] = useState(false);
 
-	const logout = async () => {
+	const logout = useCallback(async () => {
+		const authorizationService = new AuthorizationService();
+
 		try {
 			await authorizationService.logout();
 			dispatch(deleteUserAction());
-		} catch (error: any) {
-			showToast('error', error.message);
+			router.push('/login');
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				showToast('error', error.message);
+			} else {
+				showToast('error', 'Ошибка при выполнеии действия');
+			}
 		}
-	};
+	}, [dispatch, router]);
 
-	const logoLink = logo;
-	const upperLinks = [chats, profile(currentUser)];
-	const downLinks = [logoutLink(logout)];
+	const logoLink: TLink = logo;
+	const upperLinks: TLink[] = [chats, profile(currentUser)];
+	const downLinks: TLink[] = [logoutLink(logout)];
 
 	return {
 		isAuthorized,

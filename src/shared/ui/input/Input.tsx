@@ -1,6 +1,6 @@
 'use client';
 
-import { IconEye, IconEyeOff } from '@tabler/icons-react';
+import { IconEye, IconEyeOff, IconX } from '@tabler/icons-react';
 import { useMotionTemplate, useMotionValue, motion } from 'framer-motion';
 import * as React from 'react';
 import { cn } from '@/shared/lib';
@@ -8,6 +8,7 @@ import { RenderIf } from '@/shared/utils';
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 	isError?: boolean;
+	onClear?: () => void;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -20,6 +21,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		const mouseX = useMotionValue(0);
 		const mouseY = useMotionValue(0);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		function handleMouseMove({ currentTarget, clientX, clientY }: any) {
 			const { left, top } = currentTarget.getBoundingClientRect();
 
@@ -65,6 +67,27 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					ref={ref}
 					{...props}
 				/>
+
+				{/* Кнопка отчистки*/}
+				<RenderIf
+					condition={
+						// eslint-disable-next-line react/prop-types
+						!!props.onClear && (props.value as string).length > 0
+					}
+				>
+					<button
+						type='button'
+						onClick={props.onClear}
+						className={cn(
+							'absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2',
+							'text-gray-500 hover:text-gray-700',
+						)}
+					>
+						<IconX size={20} />
+					</button>
+				</RenderIf>
+
+				{/* Глазик для пароля*/}
 				<RenderIf
 					condition={
 						// eslint-disable-next-line react/prop-types

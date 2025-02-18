@@ -1,0 +1,1 @@
+export { DeleteSecretChatModal } from './ui';

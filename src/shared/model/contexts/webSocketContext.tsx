@@ -1,16 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import {
-	addMessageAction,
-	updateMessageAction,
-	WsMessage,
-} from '@/entities/message/model';
 import { selectCurrentUser } from '@/entities/user/model';
-import { EWsEvent, EWsMessageStatus } from '@/shared/model';
-import { useEnv } from '@/shared/model/contexts';
+import { EWsEvent, useEnv } from '@/shared/model';
 
 export type TWSListenerCallback = (
 	event: EWsEvent,
@@ -22,7 +16,7 @@ interface IWebSocketContextType {
 	lastMessage: MessageEvent | null;
 	addListener: (callback: TWSListenerCallback) => void;
 	removeListener: (callback: TWSListenerCallback) => void;
-	send: (data: string | ArrayBuffer | Blob | ArrayBufferView) => void;
+	sendWsMessage: (data: string) => void;
 }
 
 const WebSocketContext = createContext<IWebSocketContextType | undefined>(
@@ -49,17 +43,15 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const user = useSelector(selectCurrentUser);
 
 	const { apiUrl } = useEnv();
-	const wsUrl = `wss://${apiUrl}/api/realtime/${user?.id}`;
-
-	const dispatch = useDispatch();
+	const wsUrl = `wss://${apiUrl}/api/realtime/${user?.id}/`;
 
 	const {
-		sendMessage,
+		sendMessage: sendWsMessage,
 		lastMessage: message,
 		readyState: state,
 		getWebSocket,
-	} = useWebSocket(user ? wsUrl : null, {
 		// Подключаемся только если есть пользователь
+	} = useWebSocket(user ? wsUrl : null, {
 		onOpen: () => {
 			setReadyState(ReadyState.OPEN);
 			notifyListeners(EWsEvent.OPEN);
@@ -93,35 +85,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		setListeners((prev) => prev.filter((listener) => listener !== callback));
 	};
 
-	const send = (data: string | ArrayBuffer | Blob | ArrayBufferView) => {
-		if (typeof data !== 'string' || !user) return;
-
-		const messageContent = data.trim();
-		if (!messageContent || messageContent.length === 0) {
-			return;
-		}
-
-		const message = WsMessage.create(
-			user.id,
-			EWsMessageStatus.SENT,
-			messageContent,
-		);
-
-		dispatch(addMessageAction(message.toPlain()));
-
-		sendMessage(JSON.stringify(message.toApi()));
-
-		// Если сервер не отвечает в течение 5 секунд, ставим ошибку
-		setTimeout(() => {
-			dispatch(
-				updateMessageAction({
-					status: EWsMessageStatus.ERROR,
-					time: message.message.time,
-				}),
-			);
-		}, 5 * 1000);
-	};
-
 	useEffect(() => {
 		setLastMessage(message);
 		setReadyState(state);
@@ -136,7 +99,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	return (
 		<WebSocketContext.Provider
-			value={{ readyState, lastMessage, addListener, removeListener, send }}
+			value={{
+				readyState,
+				lastMessage,
+				addListener,
+				removeListener,
+				sendWsMessage,
+			}}
 		>
 			{children}
 		</WebSocketContext.Provider>

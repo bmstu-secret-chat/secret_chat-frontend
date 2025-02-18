@@ -1,7 +1,7 @@
 'use client';
 
 import { debounce } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { UsersService } from '@/entities/user/api';
 import { useChatListContext } from '@/features/chatList/model';
 import { showToast } from '@/shared/lib';
@@ -11,15 +11,9 @@ export const useSearch = () => {
 
 	const { foundedUsers, setFoundedUsers } = useChatListContext();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
+	const handleChange = (value: string) => {
 		setSearchValue(value);
-
-		if (value.trim().length > 2) {
-			updateSearchValue(value);
-		} else {
-			setFoundedUsers([]);
-		}
+		updateSearchValue(value.trim());
 	};
 
 	const searchUsers = useCallback(
@@ -35,12 +29,20 @@ export const useSearch = () => {
 		() =>
 			debounce(async (value: string) => {
 				try {
-					await searchUsers(value);
-				} catch (error: any) {
-					showToast('error', error.message);
+					if (value.length > 2) {
+						await searchUsers(value);
+					} else {
+						setFoundedUsers([]);
+					}
+				} catch (error: unknown) {
+					if (error instanceof Error) {
+						showToast('error', error.message);
+					} else {
+						showToast('error', 'Ошибка при выполнеии действия');
+					}
 				}
 			}, 500),
-		[searchUsers],
+		[searchUsers, setFoundedUsers],
 	);
 
 	return { searchValue, foundedUsers, handleChange };

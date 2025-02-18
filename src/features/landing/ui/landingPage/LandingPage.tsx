@@ -1,5 +1,10 @@
-import { BackgroundLinesLanding } from '@/features/landing/ui';
+import { Globe } from '@/features/landing/ui';
+import { cn } from '@/shared/lib';
 
 export const LandingPage = () => {
-	return <BackgroundLinesLanding />;
+	return (
+		<div className={cn('flex flex-col items-center justify-center bg-black')}>
+			<Globe />
+		</div>
+	);
 };

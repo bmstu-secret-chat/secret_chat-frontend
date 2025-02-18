@@ -12,7 +12,7 @@ export const ProfileModal: React.FC<{ children: React.ReactNode }> = ({
 	return (
 		<div
 			className={cn(
-				'absolute z-[500] top-0 left-0 backdrop-blur-sm',
+				'profile-modal absolute z-[500] top-0 left-0 backdrop-blur-sm',
 				'flex items-center justify-center',
 				'w-screen h-screen',
 			)}

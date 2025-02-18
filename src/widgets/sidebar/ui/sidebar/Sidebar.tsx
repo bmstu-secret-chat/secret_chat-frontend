@@ -1,14 +1,17 @@
 'use client';
 
 import React from 'react';
+import { useScreenWidth } from '@/shared/hooks';
 import { cn } from '@/shared/lib';
 import { SidebarLib, SidebarBody, SidebarLink } from '@/shared/ui';
 import { RenderIf } from '@/shared/utils';
-import { useSidebar } from '@/widgets/sidebar/model/useSidebar';
+import { useSidebar } from '@/widgets/sidebar/model';
 
 export const Sidebar = () => {
 	const { isAuthorized, logoLink, upperLinks, downLinks, open, setOpen } =
 		useSidebar();
+
+	const { isPcDevice } = useScreenWidth();
 
 	return (
 		<RenderIf condition={isAuthorized}>
@@ -36,7 +39,12 @@ export const Sidebar = () => {
 									/>
 								))}
 							</div>
-							<div className='mb-2 flex flex-col gap-2'>
+							<div
+								className={cn(
+									isPcDevice ? 'mb-4' : 'mb-16',
+									'flex flex-col gap-2',
+								)}
+							>
 								{downLinks.map((link, idx) => (
 									<SidebarLink
 										key={idx}
