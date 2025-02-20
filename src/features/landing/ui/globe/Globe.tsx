@@ -420,7 +420,7 @@ export const Globe = memo(() => {
 				>
 					<div
 						className={
-							'flex flex-col justify-center items-center relative z-[100]'
+							'flex flex-col justify-center items-center relative z-[50]'
 						}
 					>
 						<h2 className='text-center text-4xl md:text-6xl font-bold text-white'>
