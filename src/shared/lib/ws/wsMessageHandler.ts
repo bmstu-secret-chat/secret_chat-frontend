@@ -12,8 +12,8 @@ import {
 	EWsMessageType,
 	TWSListenerCallback,
 	WsMessageBase,
-	useWebSocketContext,
 } from '@/shared/model';
+import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
 import { EWsEvent } from '@/shared/model/enums';
 
 export const WsMessageHandler = () => {

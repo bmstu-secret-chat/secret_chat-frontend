@@ -71,10 +71,10 @@ export const useChat = (chatId: string) => {
 			}
 		};
 
-		window.addEventListener('keydown', handleEscape);
+		document.addEventListener('keydown', handleEscape);
 
 		return () => {
-			window.removeEventListener('keydown', handleEscape);
+			document.removeEventListener('keydown', handleEscape);
 		};
 	}, [pathname, router]);
 

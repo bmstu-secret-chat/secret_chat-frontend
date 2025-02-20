@@ -1,6 +1,6 @@
 import { TUserWithPwModel, UserInfo } from '@/entities/user/model';
-import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
+import { ServiceBase } from './ServiceBase';
 
 export class AuthorizationService extends ServiceBase {
 	private static instance: AuthorizationService;

@@ -10,8 +10,8 @@ import {
 	EWsMessageStatus,
 	EWsMessageType,
 	WsMessageBase,
-	useWebSocketContext,
 } from '@/shared/model';
+import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
 
 export const useSendMessage = () => {
 	const dispatch = useDispatch();

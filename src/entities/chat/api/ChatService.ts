@@ -1,4 +1,4 @@
-import { ServiceBase } from '@/shared/api';
+import { ServiceBase } from '@/shared/api/ServiceBase';
 import { ERequestMethods } from '@/shared/model';
 
 export class ChatService extends ServiceBase {

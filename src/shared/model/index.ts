@@ -2,7 +2,7 @@ export type { TWSListenerCallback } from '@/shared/model/contexts/webSocketConte
 export { EnvProvider, useEnv } from '@/shared/model/contexts/envContext';
 export { AppContextProvider } from '@/shared/model/contexts/appContextProvider';
 export {
-	useWebSocketContext,
+	// useWebSocketContext,
 	WebSocketProvider,
 } from '@/shared/model/contexts/webSocketContext';
 export * from './store';
