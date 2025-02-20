@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// const PAGES_PATHS = ['/', '/login', '/signup', '/chats'];
+// const PAGES_PATHS = ['/', '/login', '/signup', '/chatList'];
 
 // Разрешённые страницы без авторизации
 // const PUBLIC_PAGES_PATHS = ['/', '/login', '/signup'];
@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
 	// 		const loginUrl = new URL('/login', request.url);
 	// 		return NextResponse.redirect(loginUrl);
 	// 	} else if (isAuthorized && NON_AUTH_PAGES_PATHS.includes(pathname)) {
-	// 		const chatsUrl = new URL('/chats', request.url);
+	// 		const chatsUrl = new URL('/chatList', request.url);
 	// 		return NextResponse.redirect(chatsUrl);
 	// 	}
 	// }

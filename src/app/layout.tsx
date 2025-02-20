@@ -3,15 +3,15 @@ import ruRu from 'antd/locale/ru_RU';
 import type { Metadata } from 'next';
 import React from 'react';
 import './globals.css';
-import { Sidebar } from '@/components/ui/Sidebar/Sidebar';
-import BeforeRender from '@/components/utils/BeforeRender';
-import { AppContextProvider } from '@/contexts/AppContextProvider';
-import Ws from '@/utils/ws';
+import { BeforeRender } from '@/features/app/ui';
+import { WsMessageHandler } from '@/shared/lib';
+import { AppContextProvider } from '@/shared/model';
+import { Sidebar } from '@/widgets';
 
 type Locale = ConfigProviderProps['locale'];
 
 export const metadata: Metadata = {
-	title: 'Safe chat',
+	title: 'Safechat',
 	description: 'The most secure messenger',
 };
 
@@ -42,7 +42,7 @@ export default function RootLayout({
 						}}
 					>
 						<BeforeRender>
-							<Ws />
+							<WsMessageHandler />
 							<Sidebar />
 							{children}
 							{modal}

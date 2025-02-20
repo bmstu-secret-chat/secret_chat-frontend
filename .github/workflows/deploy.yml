@@ -1,0 +1,36 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_LAPTOP_PRIVATE_KEY }}
+
+      - name: Add server's SSH key to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 194.58.114.226 >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          ssh root@194.58.114.226 "bash -c '
+            export PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin:/root/.local/share/pnpm &&
+            cd safe_chat/secret_chat-frontend &&
+            git pull &&
+            pnpm install &&
+            pnpm run build &&
+            pm2 restart frontend ||
+            pm2 start npm --name \"frontend\" -- run start
+          '"

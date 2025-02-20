@@ -1,8 +1,8 @@
 import React from 'react';
-import Landing from '@/components/ui/Landing/Landing';
+import { LandingPage } from '@/features/landing/ui';
 
 const Home = () => {
-	return <Landing />;
+	return <LandingPage />;
 };
 
 export default Home;

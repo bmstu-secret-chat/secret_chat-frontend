@@ -7,11 +7,14 @@
     "dev:https": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
     "@radix-ui/react-label": "^2.1.0",
+    "@react-three/drei": "^9.121.5",
+    "@react-three/fiber": "^8.17.14",
     "@tabler/icons-react": "^3.24.0",
     "@tsparticles/engine": "^3.5.0",
     "@tsparticles/react": "^3.0.0",
@@ -19,17 +22,21 @@
     "antd": "^5.21.4",
     "clsx": "^2.1.1",
     "framer-motion": "^11.13.1",
+    "motion": "^12.4.3",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "react-use-websocket": "^4.9.0",
-    "tailwind-merge": "^2.5.5",
-    "tailwind-scrollbar": "^3.1.0"
+    "tailwind-merge": "^2.6.0",
+    "tailwind-scrollbar": "^3.1.0",
+    "three": "^0.173.0",
+    "three-globe": "^2.41.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.11.1",
     "@reduxjs/toolkit": "^2.4.0",
+    "@types/lodash": "^4.17.15",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -46,6 +53,9 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "eventemitter3": "^5.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "lodash": "^4.17.21",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "react-redux": "^9.1.2",
@@ -53,5 +63,11 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "uuid": "^11.0.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
