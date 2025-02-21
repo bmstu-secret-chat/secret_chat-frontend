@@ -25,12 +25,16 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh root@194.58.114.226 "bash -c '
-            export PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin:/root/.local/share/pnpm &&
+          ssh root@194.58.114.226 "
+            NPM_PATH=/root/.nvm/versions/node/v23.6.0/bin/npm
+            NODE_PATH=/root/.nvm/versions/node/v23.6.0/bin/node
+            PM2_PATH=/root/.nvm/versions/node/v23.6.0/bin/pm2
+          
             cd safe_chat/secret_chat-frontend &&
             git pull &&
-            pnpm install &&
-            pnpm run build &&
-            pm2 restart frontend ||
-            pm2 start npm --name \"frontend\" -- run start
-          '"
+            PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$NPM_PATH install &&
+            PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$NPM_PATH run build &&
+            PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$PM2_PATH restart frontend ||
+            PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$PM2_PATH start npm --name \"frontend\" -- run start
+          "
+
