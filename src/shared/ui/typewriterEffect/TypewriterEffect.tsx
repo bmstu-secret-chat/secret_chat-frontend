@@ -48,7 +48,12 @@ export const TypewriterEffectSmooth = ({
 	};
 
 	return (
-		<div className={cn('flex my-6 p-2 items-center justify-center', className)}>
+		<div
+			className={cn(
+				'flex h-[calc(100vh-77px)] w-full items-center justify-center',
+				className,
+			)}
+		>
 			<motion.div
 				className='overflow-hidden'
 				initial={{

@@ -77,6 +77,7 @@ const initialProps = {
 	arcLength: 0.9,
 	rings: 1,
 	maxRings: 3,
+	hexPolygonResolution: 2,
 };
 
 export const Globe = memo(({ globeConfig, data }: WorldProps) => {
@@ -157,7 +158,7 @@ export const Globe = memo(({ globeConfig, data }: WorldProps) => {
 		if (globeRef.current && globeData) {
 			globeRef.current
 				.hexPolygonsData(countries.features)
-				.hexPolygonResolution(2)
+				.hexPolygonResolution(defaultProps.hexPolygonResolution)
 				.hexPolygonMargin(0.7)
 				.showAtmosphere(defaultProps.showAtmosphere)
 				.atmosphereColor(defaultProps.atmosphereColor)

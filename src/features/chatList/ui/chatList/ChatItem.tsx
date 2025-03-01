@@ -13,7 +13,7 @@ export const ChatItem: React.FC<Props> = memo(({ chat }: Props) => {
 			<span
 				className={cn(
 					'flex justify-start items-center h-[100px] p-8',
-					'border-b border-neutral-700 overflow-hidden pc:hover:bg-black',
+					'border-y border-neutral-700 overflow-hidden pc:hover:bg-black',
 					'text-white',
 				)}
 			>

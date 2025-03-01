@@ -17,11 +17,24 @@ export class ChatService extends ServiceBase {
 				url: `/api/backend/chats/secret-chat/create/`,
 				method: ERequestMethods.POST,
 			},
+			{
+				name: 'createChat',
+				url: `/api/backend/chats/chat/create/`,
+				method: ERequestMethods.POST,
+			},
 		];
 	}
 
 	async createSecretChat(withUserId: string): Promise<void> {
 		const configItem = this.getConfigItem('createSecretChat');
+
+		return await this.makeHttpRequest(configItem.method, configItem.url, {
+			with_user_id: withUserId,
+		});
+	}
+
+	async createChat(withUserId: string): Promise<string> {
+		const configItem = this.getConfigItem('createChat');
 
 		return await this.makeHttpRequest(configItem.method, configItem.url, {
 			with_user_id: withUserId,

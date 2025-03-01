@@ -1,3 +1,4 @@
+import { Divider } from 'antd';
 import React from 'react';
 import { useChatList, useSearch } from '@/features/chatList/model';
 import {
@@ -23,20 +24,26 @@ export const ChatList = () => {
 			<Search />
 			{/* Сначала пользователи из поиска*/}
 			{foundedUsers.length > 0 ? (
-				foundedUsers.map((user) => (
-					<UserItem
-						key={user.id}
-						user={user}
-					/>
-				))
+				<>
+					<Divider orientation='left'>Пользователи</Divider>
+					{foundedUsers.map((user) => (
+						<UserItem
+							key={user.id}
+							user={user}
+						/>
+					))}
+				</>
 			) : chats.length > 0 ? (
 				// Затем список чатов
-				chats.map((chat) => (
-					<ChatItem
-						key={chat.id}
-						chat={chat}
-					/>
-				))
+				<>
+					<Divider orientation='left'>Чаты</Divider>
+					{chats.map((chat) => (
+						<ChatItem
+							key={chat.id}
+							chat={chat}
+						/>
+					))}
+				</>
 			) : (
 				// А если чатов нет, то плейсхолдер
 				<EmptyContent />
