@@ -2,7 +2,11 @@ import { Button, Image } from 'antd';
 import React from 'react';
 import { userDefaultAvatar } from '@/assets';
 import { UserInfo } from '@/entities/user/model';
-import { useCreateSecretChat, useProfileInfo } from '@/features/profile/model';
+import {
+	useCreateChat,
+	useCreateSecretChat,
+	useProfileInfo,
+} from '@/features/profile/model';
 import { cn } from '@/shared/lib';
 import { LabelValue, UploadImage } from '@/shared/ui';
 import { RenderIf } from '@/shared/utils';
@@ -25,7 +29,9 @@ export const ProfileInfo: React.FC<Props> = ({
 		currentUser,
 	);
 
-	const { isFetching, createSecretChat } = useCreateSecretChat();
+	const { createChat } = useCreateChat();
+	const { isFetching: isSecretChatFetching, createSecretChat } =
+		useCreateSecretChat();
 
 	return (
 		<div
@@ -57,11 +63,27 @@ export const ProfileInfo: React.FC<Props> = ({
 				</div>
 			</div>
 
-			<RenderIf condition={!isCurrentUser}>
+			<RenderIf
+				condition={!isCurrentUser}
+				className={'flex flex-col justify-center w-max gap-3'}
+			>
+				<button
+					className={cn(
+						'inline-flex animate-shimmer items-center justify-center',
+						'rounded-[8px] border border-slate-800 transition-colors',
+						'bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)]',
+						'bg-[length:200%_100%] font-medium text-slate-400',
+						'w-full flex-grow h-10',
+					)}
+					onClick={() => createChat(userInfo.id)}
+				>
+					Написать сообщение
+				</button>
 				<Button
 					className={'py-2 px-4'}
+					type={'default'}
 					size={'large'}
-					loading={isFetching}
+					loading={isSecretChatFetching}
 					onClick={() => createSecretChat(userInfo.id)}
 				>
 					Создать секретный чат
