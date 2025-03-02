@@ -1,4 +1,4 @@
-import { EWsMessageStatus } from '@/shared/model';
+import { EWsMessageStatus } from '@/shared/model/enums';
 
 export type TWsMessageMessageApi = {
 	user_id: string;

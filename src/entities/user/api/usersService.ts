@@ -1,6 +1,6 @@
 import { UserShortInfo } from '@/entities/user/model';
 import { UserInfo } from '@/entities/user/model/userInfo';
-import { ServiceBase } from '@/shared/api/ServiceBase';
+import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
 
 export class UsersService extends ServiceBase {

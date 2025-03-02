@@ -13,4 +13,5 @@ export {
 	formatTimeHHmm,
 	formatDateDDMMYYYY,
 	formatTimeDDMMYYHHmm,
+	formatLastOnline,
 } from './formatTime';

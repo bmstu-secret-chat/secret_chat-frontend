@@ -4,7 +4,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { selectCurrentUser } from '@/entities/user/model';
-import { EWsEvent, useEnv } from '@/shared/model';
+import { useEnv } from '@/shared/model';
+import { EWsEvent } from '@/shared/model/enums';
 
 export type TWSListenerCallback = (
 	event: EWsEvent,

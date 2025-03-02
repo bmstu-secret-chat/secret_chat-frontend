@@ -6,6 +6,7 @@ import { useLogin } from '@/features/login/model';
 import { cn } from '@/shared/lib';
 import {
 	BottomGradient,
+	ButtonShimmer,
 	Divider,
 	Input,
 	Label,
@@ -66,18 +67,12 @@ export function LoginForm() {
 				<Divider />
 				<BottomGradient />
 
-				<button
-					className={cn(
-						'inline-flex animate-shimmer items-center justify-center',
-						'rounded-md border border-slate-800 transition-colors',
-						'bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)]',
-						'bg-[length:200%_100%] font-medium text-slate-400',
-						'w-full flex-grow h-10',
-					)}
+				<ButtonShimmer
 					onClick={handleLoginButtonClick}
+					className={'w-full'}
 				>
 					Войти
-				</button>
+				</ButtonShimmer>
 			</div>
 
 			<div className={cn('absolute bottom-8 w-full text-white')}>

@@ -3,11 +3,14 @@ import React from 'react';
 import { useChatHeader } from '@/features/chat/model';
 import { cn } from '@/shared/lib';
 import { EChatType } from '@/shared/model';
-import { RenderIf } from '@/shared/utils';
 
 export const ChatHeader: React.FC = () => {
-	const { handleBackButtonClick, handleSecretChatExit, activeChat } =
-		useChatHeader();
+	const {
+		handleBackButtonClick,
+		handleSecretChatExit,
+		handleUsernameClick,
+		activeChat,
+	} = useChatHeader();
 
 	return (
 		<header
@@ -21,13 +24,22 @@ export const ChatHeader: React.FC = () => {
 				className={'cursor-pointer'}
 				onClick={handleBackButtonClick}
 			/>
-			<span>{activeChat?.user?.username}</span>
-			<RenderIf condition={activeChat?.type === EChatType.SECRET}>
+
+			<span
+				className={'cursor-pointer'}
+				onClick={handleUsernameClick}
+			>
+				{activeChat?.user?.username}
+			</span>
+
+			{activeChat?.type === EChatType.SECRET ? (
 				<IconTrashX
 					className={'cursor-pointer'}
 					onClick={handleSecretChatExit}
 				/>
-			</RenderIf>
+			) : (
+				<div />
+			)}
 		</header>
 	);
 };

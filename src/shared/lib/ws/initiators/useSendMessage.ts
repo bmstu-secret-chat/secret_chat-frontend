@@ -5,13 +5,15 @@ import {
 	updateMessageAction,
 } from '@/entities/message/model';
 import { selectCurrentUser } from '@/entities/user/model';
+import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
 import {
 	EWsMessageResponseStatus,
 	EWsMessageStatus,
-	EWsMessageType,
+} from '@/shared/model/enums';
+import {
 	WsMessageBase,
-} from '@/shared/model';
-import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
+	EWsMessageType,
+} from '@/shared/model/types/wsMessageBase';
 
 export const useSendMessage = () => {
 	const dispatch = useDispatch();
