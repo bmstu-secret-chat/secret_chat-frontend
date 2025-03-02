@@ -2,10 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { TChatModel } from '@/entities/chat/model';
 import { EmitterEvents, eventEmitter } from '@/shared/lib';
 import { useDeleteChat } from '@/shared/lib/ws/initiators';
+import { EChatType } from '@/shared/model';
 
-export const useDeleteSecretChatModal = (chatId?: string) => {
+export const useDeleteSecretChatModal = (chat?: TChatModel) => {
 	const router = useRouter();
 
 	const { deleteChat } = useDeleteChat();
@@ -13,12 +15,12 @@ export const useDeleteSecretChatModal = (chatId?: string) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOk = useCallback(async () => {
-		if (chatId) {
-			deleteChat(chatId);
+		if (chat?.id && chat.type === EChatType.SECRET) {
+			deleteChat(chat.id);
 		} else {
 			router.push('/chats');
 		}
-	}, [router, deleteChat, chatId]);
+	}, [router, deleteChat, chat]);
 
 	const handleCancel = useCallback(() => {
 		setIsOpen(false);

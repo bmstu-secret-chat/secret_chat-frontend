@@ -1,16 +1,21 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	selectActiveChat,
 	deleteActiveChatAction,
 	setActiveChatAction,
 } from '@/entities/chat/model';
-import { selectMessages, TWsSendMessageModel } from '@/entities/message/model';
+import { MessageService } from '@/entities/message/api';
+import {
+	selectMessages,
+	setMessagesAction,
+	TWsSendMessageModel,
+} from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { useSendMessage, vibrate } from '@/shared/lib';
+import { showToast, useSendMessage, vibrate } from '@/shared/lib';
 
 export const useChat = (chatId: string) => {
 	const router = useRouter();
@@ -37,6 +42,30 @@ export const useChat = (chatId: string) => {
 			),
 		[messages, activeChat],
 	);
+
+	const getMessages = useCallback(async () => {
+		try {
+			const messageService = new MessageService();
+
+			const receivedMessages = await messageService.getMessagesFromChat(
+				chatId,
+				0,
+				50,
+			);
+
+			dispatch(setMessagesAction(receivedMessages));
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				showToast('error', error.message);
+			} else {
+				showToast('error', 'Ошибка при выполнеии действия');
+			}
+		}
+	}, [dispatch, chatId]);
+
+	useEffect(() => {
+		getMessages();
+	}, [getMessages]);
 
 	useEffect(() => {
 		messagesContainerRef.current?.scrollTo({

@@ -12,28 +12,38 @@ export const useCreateChatHandler = () => {
 	const router = useRouter();
 
 	const createChatHandler = async (wsMessage: WsMessageBase) => {
-		const usersService = new UsersService();
-		const companion = await usersService.getUserInfo(
-			(wsMessage.payload as TWsCreateChatModel).withUserId,
-		);
+		try {
+			const usersService = new UsersService();
 
-		const newChat = new Chat(
-			(wsMessage.payload as TWsCreateChatModel).chatId,
-			(wsMessage.payload as TWsCreateChatModel).type,
-			[companion.toShortInfo()],
-		);
-
-		vibrate(20);
-		dispatch(addChatAction(newChat));
-
-		setTimeout(() => {
-			router.push(`/chats/${newChat.id}`);
-
-			showToast(
-				'info',
-				`Создан секретный час с пользователем ${companion.username}`,
+			const companion = await usersService.getUserInfo(
+				(wsMessage.payload as TWsCreateChatModel).withUserId,
 			);
-		}, 500);
+
+			const newChat = new Chat(
+				(wsMessage.payload as TWsCreateChatModel).chatId,
+				(wsMessage.payload as TWsCreateChatModel).type,
+				new Date().toISOString(),
+				companion.toShortInfo(),
+			);
+
+			vibrate(20);
+			dispatch(addChatAction(newChat));
+
+			setTimeout(() => {
+				router.push(`/chats/${newChat.id}`);
+
+				showToast(
+					'info',
+					`Создан секретный час с пользователем ${companion.username}`,
+				);
+			}, 500);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				showToast('error', error.message);
+			} else {
+				showToast('error', 'Ошибка при выполнеии действия');
+			}
+		}
 	};
 
 	return { createChatHandler };

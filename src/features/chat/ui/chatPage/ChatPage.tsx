@@ -3,7 +3,7 @@ import { useChat } from '@/features/chat/model';
 import { Message, MessageInput, ChatHeader } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
 import { RenderIf } from '@/shared/utils';
-import { DeleteSecretChatModal } from '@/widgets/modals/deleteSecretChat';
+import { DeleteSecretChatModal } from '@/widgets/modals/deleteSecretChat/ui';
 
 export const ChatPage = ({ chatId }: { chatId: string }) => {
 	const {
@@ -26,6 +26,7 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 				)}
 			>
 				<ChatHeader />
+
 				<div
 					ref={messagesContainerRef}
 					className={cn(
@@ -46,13 +47,14 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 						/>
 					))}
 				</div>
+
 				<MessageInput
 					value={content}
 					setValue={setContent}
 					onSubmit={onSubmit}
 				/>
 
-				<DeleteSecretChatModal chatId={activeChat?.id} />
+				<DeleteSecretChatModal chat={activeChat || undefined} />
 			</div>
 		</RenderIf>
 	);

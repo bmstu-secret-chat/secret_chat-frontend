@@ -17,7 +17,7 @@ export const ChatItem: React.FC<Props> = memo(({ chat }: Props) => {
 					'text-white',
 				)}
 			>
-				Чат c {chat.users[0].username}
+				Чат c {chat.user.username}
 			</span>
 		</Link>
 	);
