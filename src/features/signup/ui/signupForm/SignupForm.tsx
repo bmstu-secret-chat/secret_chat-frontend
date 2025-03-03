@@ -24,7 +24,9 @@ export function SignupForm() {
 		searchParams,
 		username,
 		usernameError,
+		phoneError,
 		email,
+		emailError,
 		password,
 		passwordError,
 		passwordConfirm,
@@ -83,7 +85,7 @@ export function SignupForm() {
 									placeholder='projectmayhem@fc.com'
 									type='email'
 									value={email}
-									// isError={emailError}
+									isError={emailError}
 									onChange={handleEmailChange}
 								/>
 							</LabelInputContainer>
@@ -94,6 +96,10 @@ export function SignupForm() {
 									length={11}
 									variant='filled'
 									type={'number'}
+									style={{
+										border: phoneError ? '1px solid red' : 'none',
+										borderRadius: 6,
+									}}
 									{...sharedProps}
 								/>
 							</LabelInputContainer>

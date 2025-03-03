@@ -27,7 +27,9 @@ export const useSignup = () => {
 	const [username, setUsername] = useState('');
 	const [usernameError, setUsernameError] = useState(false);
 	const [phone, setPhone] = useState('');
+	const [phoneError, setPhoneError] = useState(false);
 	const [email, setEmail] = useState('');
+	const [emailError, setEmailError] = useState(false);
 	const [password, setPassword] = useState('');
 	const [passwordError, setPasswordError] = useState(false);
 	const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -74,13 +76,32 @@ export const useSignup = () => {
 	);
 
 	const handleNextButtonClick = () => {
-		const { isValid, message, invalidFields } = validateSignupFields(username);
+		const { isValid, message, invalidFields } = validateSignupFields(
+			username,
+			phone,
+			email,
+			password,
+			passwordConfirm,
+		);
 
 		if (!isValid) {
+			console.log(isValid, invalidFields);
 			if (invalidFields.includes('username')) {
 				setUsernameError(true);
 			} else {
 				setUsernameError(false);
+			}
+
+			if (invalidFields.includes('email')) {
+				setEmailError(true);
+			} else {
+				setEmailError(false);
+			}
+
+			if (invalidFields.includes('phone')) {
+				setPhoneError(true);
+			} else {
+				setPhoneError(false);
 			}
 
 			showToast('error', message, 5);
@@ -88,6 +109,8 @@ export const useSignup = () => {
 		}
 
 		setUsernameError(false);
+		setEmailError(false);
+		setPhoneError(false);
 
 		setQueryParam(EQueryParams.PAGE, '2');
 	};
@@ -95,6 +118,8 @@ export const useSignup = () => {
 	const handleSignupButtonClick = async () => {
 		const { isValid, message, invalidFields } = validateSignupFields(
 			username,
+			phone,
+			email,
 			password,
 			passwordConfirm,
 		);
@@ -178,6 +203,8 @@ export const useSignup = () => {
 		username,
 		usernameError,
 		email,
+		emailError,
+		phoneError,
 		password,
 		passwordError,
 		passwordConfirm,

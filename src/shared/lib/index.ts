@@ -7,6 +7,7 @@ export {
 	isUsernameCorrect,
 	isEmailCorrect,
 	isPasswordCorrect,
+	isPhoneNumberCorrect,
 } from './validateFields';
 export * from './ws';
 export {

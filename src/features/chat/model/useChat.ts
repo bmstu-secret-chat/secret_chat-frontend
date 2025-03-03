@@ -10,6 +10,7 @@ import {
 } from '@/entities/chat/model';
 import { MessageService } from '@/entities/message/api';
 import {
+	deleteMessagesAction,
 	selectMessages,
 	setMessagesAction,
 	TWsSendMessageModel,
@@ -65,7 +66,11 @@ export const useChat = (chatId: string) => {
 
 	useEffect(() => {
 		getMessages();
-	}, [getMessages]);
+
+		return () => {
+			dispatch(deleteMessagesAction());
+		};
+	}, [dispatch, getMessages]);
 
 	useEffect(() => {
 		messagesContainerRef.current?.scrollTo({

@@ -1,12 +1,9 @@
 import {
 	isEmailCorrect,
+	isPhoneNumberCorrect,
 	isUsernameCorrect,
 	ValidationResponse,
 } from '@/shared/lib';
-
-const isPhoneNumberCorrect = (phoneNumber: string): boolean => {
-	return /^8\d{10}$/.test(phoneNumber);
-};
 
 export const validateUserInfoFields = (
 	username?: string,
