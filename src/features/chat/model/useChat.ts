@@ -1,29 +1,28 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ChatService } from '@/entities/chat/api';
 import {
-	selectActiveChat,
 	deleteActiveChatAction,
+	selectActiveChat,
 	setActiveChatAction,
 } from '@/entities/chat/model';
-import { MessageService } from '@/entities/message/api';
 import {
-	deleteMessagesAction,
-	selectMessages,
+	selectMessagesByChat,
 	setMessagesAction,
-	TWsSendMessageModel,
 } from '@/entities/message/model';
 import { useScreenWidth } from '@/shared/hooks';
 import { showToast, useSendMessage, vibrate } from '@/shared/lib';
+import { EChatType } from '@/shared/model';
 
 export const useChat = (chatId: string) => {
 	const router = useRouter();
 	const pathname = usePathname();
 	const dispatch = useDispatch();
 
-	const messages = useSelector(selectMessages);
+	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
 
 	const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -35,42 +34,34 @@ export const useChat = (chatId: string) => {
 
 	const { sendMessage } = useSendMessage();
 
-	const messagesFromActiveChat = useMemo(
-		() =>
-			messages.filter(
-				(message) =>
-					(message.payload as TWsSendMessageModel).chatId === activeChat?.id,
-			),
-		[messages, activeChat],
+	const getMessages = useCallback(
+		async (dialogId: string) => {
+			try {
+				const chatService = new ChatService();
+
+				const receivedMessages = await chatService.getMessagesFromChat(
+					dialogId,
+					0,
+					50,
+				);
+
+				dispatch(setMessagesAction({ dialogId, messages: receivedMessages }));
+			} catch (error: unknown) {
+				if (error instanceof Error) {
+					showToast('error', error.message);
+				} else {
+					showToast('error', 'Ошибка при выполнеии действия');
+				}
+			}
+		},
+		[dispatch],
 	);
 
-	const getMessages = useCallback(async () => {
-		try {
-			const messageService = new MessageService();
-
-			const receivedMessages = await messageService.getMessagesFromChat(
-				chatId,
-				0,
-				50,
-			);
-
-			dispatch(setMessagesAction(receivedMessages));
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				showToast('error', error.message);
-			} else {
-				showToast('error', 'Ошибка при выполнеии действия');
-			}
-		}
-	}, [dispatch, chatId]);
-
 	useEffect(() => {
-		getMessages();
-
-		return () => {
-			dispatch(deleteMessagesAction());
-		};
-	}, [dispatch, getMessages]);
+		if (activeChat && activeChat.type === EChatType.DEFAULT) {
+			getMessages(activeChat.id);
+		}
+	}, [getMessages, activeChat]);
 
 	useEffect(() => {
 		messagesContainerRef.current?.scrollTo({
@@ -83,7 +74,7 @@ export const useChat = (chatId: string) => {
 			top: messagesContainerRef.current.scrollHeight,
 			behavior: 'smooth',
 		});
-	}, [messages.length]);
+	}, [messages]);
 
 	useEffect(() => {
 		dispatch(setActiveChatAction(chatId));
@@ -113,13 +104,17 @@ export const useChat = (chatId: string) => {
 	}, [pathname, router]);
 
 	const onSubmit = () => {
-		sendMessage(chatId, content);
+		if (!activeChat) {
+			return;
+		}
+
+		sendMessage(chatId, content, activeChat.type);
 		if (isTabletDevice) vibrate(10);
 	};
 
 	return {
 		messagesContainerRef,
-		messagesFromActiveChat,
+		messages,
 		content,
 		activeChat,
 		canRender,

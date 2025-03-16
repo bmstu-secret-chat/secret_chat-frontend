@@ -3,7 +3,7 @@ import { EChatType } from '@/shared/model';
 export type TWsCreateChatApi = {
 	chat_id: string;
 	with_user_id: string;
-	type: EChatType;
+	chat_type: EChatType;
 };
 
 export type TWsCreateChatModel = {
@@ -30,7 +30,7 @@ export class WsCreateChat {
 		return new WsCreateChat({
 			chatId: from.chat_id,
 			withUserId: from.with_user_id,
-			type: from.type,
+			type: from.chat_type,
 		});
 	}
 
@@ -41,7 +41,7 @@ export class WsCreateChat {
 		return {
 			chat_id: this.chatId,
 			with_user_id: this.withUserId,
-			type: this.type,
+			chat_type: this.type,
 		};
 	}
 }

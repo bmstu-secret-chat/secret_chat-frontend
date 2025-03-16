@@ -1,8 +1,9 @@
 // 'use client';
 
-// import { useRouter } from 'next/navigation';
+import { ERequestMethods } from '../model/enums/requestMethods';
+import { TServiceConfig } from '../model/types/serviceConfig';
 
-import { ERequestMethods, TServiceConfig } from '@/shared/model';
+// import { useRouter } from 'next/navigation';
 
 const REFRESH_URL = '/api/auth/refresh/';
 const URLS_WITHOUT_TOKEN = ['/api/auth/login/', '/api/auth/signup/'];

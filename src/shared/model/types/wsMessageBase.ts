@@ -8,12 +8,13 @@ import {
 } from '@/entities/chat/model';
 import {
 	TWsMessageMessageApi,
-	TWsSendMessageModel,
-	WsSendMessage,
 	TWsMessageResponseApi,
 	TWsMessageResponseModel,
+	TWsSendMessageModel,
+	WsSendMessage,
 	WsSendMessageResponse,
 } from '@/entities/message/model';
+import { Message } from '@/shared/model';
 
 export enum EWsMessageType {
 	SEND_MESSAGE = 'send_message',
@@ -134,5 +135,23 @@ export class WsMessageBase {
 			...this,
 			payload,
 		};
+	}
+
+	toMessage(): Message {
+		if (this.type !== EWsMessageType.SEND_MESSAGE) {
+			throw new Error(
+				`Переданный тип сообщения не является корректным: ${this.type}`,
+			);
+		}
+
+		return new Message({
+			id: this.id,
+			serialNumber: 0,
+			dialogId: this.payload.chatId,
+			userId: (this.payload as WsSendMessage).userId,
+			status: (this.payload as WsSendMessage).status,
+			content: (this.payload as WsSendMessage).content,
+			timeCreate: (this.payload as WsSendMessage).time,
+		});
 	}
 }

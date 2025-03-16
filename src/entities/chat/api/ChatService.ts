@@ -1,6 +1,6 @@
 import { Chat } from '@/entities/chat/model';
-import { ServiceBase } from '@/shared/api/ServiceBase';
-import { ERequestMethods } from '@/shared/model';
+import { ServiceBase } from '@/shared/api';
+import { ERequestMethods, Message, MessageModel } from '@/shared/model';
 
 export class ChatService extends ServiceBase {
 	private static instance: ChatService;
@@ -21,6 +21,11 @@ export class ChatService extends ServiceBase {
 			{
 				name: 'getChatsList',
 				url: `/api/backend/chats/`,
+				method: ERequestMethods.GET,
+			},
+			{
+				name: 'getMessagesFromChat',
+				url: `/api/backend/chats/chat_id/messages`,
 				method: ERequestMethods.GET,
 			},
 			{
@@ -56,6 +61,21 @@ export class ChatService extends ServiceBase {
 		);
 
 		return response.map(Chat.createFromApi);
+	}
+
+	async getMessagesFromChat(
+		dialogId: string,
+		firstMessageIndex: number,
+		count: number,
+	): Promise<MessageModel[]> {
+		const configItem = this.getConfigItem('getMessagesFromChat');
+
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			`${configItem.url.replace('chat_id', dialogId)}?first_message_index=${firstMessageIndex}&count=${count}`,
+		);
+
+		return response.map(Message.createFromApi);
 	}
 
 	async createSecretChat(withUserId: string): Promise<void> {

@@ -1,5 +1,5 @@
+import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
-import { ServiceBase } from './ServiceBase';
 
 export class UtilsService extends ServiceBase {
 	private static instance: UtilsService;

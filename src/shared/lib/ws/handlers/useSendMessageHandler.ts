@@ -8,7 +8,7 @@ export const useSendMessageHandler = () => {
 
 	const sendMessageHandler = (wsMessage: WsMessageBase) => {
 		vibrate(20);
-		dispatch(addMessageAction(wsMessage));
+		dispatch(addMessageAction(wsMessage.toMessage()));
 	};
 
 	return { sendMessageHandler };

@@ -4,17 +4,17 @@ import {
 	LoadingOutlined,
 } from '@ant-design/icons';
 import React from 'react';
-import { EWsMessageStatus } from '@/shared/model';
+import { EMessageStatus } from '@/shared/model';
 
 export const MessageStatus: React.FC<{
-	status: EWsMessageStatus;
+	status: EMessageStatus;
 }> = ({ status }) => {
 	switch (status) {
-		case EWsMessageStatus.SENT:
+		case EMessageStatus.SENT:
 			return <LoadingOutlined />;
-		case EWsMessageStatus.RECEIVED:
+		case EMessageStatus.RECEIVED:
 			return <CheckOutlined />;
-		case EWsMessageStatus.ERROR:
+		case EMessageStatus.ERROR:
 			return <CloseOutlined />;
 	}
 };

@@ -5,15 +5,13 @@ import {
 	updateMessageAction,
 } from '@/entities/message/model';
 import { selectCurrentUser } from '@/entities/user/model';
-import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
+import { useWebSocketContext } from '@/shared/model/contexts';
 import {
+	EChatType,
 	EWsMessageResponseStatus,
-	EWsMessageStatus,
+	EMessageStatus,
 } from '@/shared/model/enums';
-import {
-	WsMessageBase,
-	EWsMessageType,
-} from '@/shared/model/types/wsMessageBase';
+import { EWsMessageType, WsMessageBase } from '@/shared/model/types';
 
 export const useSendMessage = () => {
 	const dispatch = useDispatch();
@@ -22,7 +20,7 @@ export const useSendMessage = () => {
 
 	const { sendWsMessage } = useWebSocketContext();
 
-	const sendMessage = (chatId: string, data: string) => {
+	const sendMessage = (chatId: string, data: string, chatType: EChatType) => {
 		const messageContent = data.trim();
 		if (!messageContent || messageContent.length === 0) {
 			return;
@@ -31,12 +29,13 @@ export const useSendMessage = () => {
 		const message = new WsMessageBase(uuidv4(), EWsMessageType.SEND_MESSAGE, {
 			userId: user!.id,
 			chatId,
-			status: EWsMessageStatus.SENT,
+			chatType,
+			status: EMessageStatus.SENT,
 			content: messageContent,
 			time: new Date().getTime().toString(),
 		});
 
-		dispatch(addMessageAction(message));
+		dispatch(addMessageAction(message.toMessage()));
 
 		sendWsMessage(JSON.stringify(message.toApi()));
 

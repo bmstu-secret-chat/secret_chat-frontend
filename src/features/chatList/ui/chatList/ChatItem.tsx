@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React, { memo } from 'react';
 import { userDefaultAvatar } from '@/assets';
 import { TChatModel } from '@/entities/chat/model/chat';
+import { useChatItem } from '@/features/chatList/model';
 import { cn } from '@/shared/lib';
 import { EChatType } from '@/shared/model';
 
@@ -10,6 +11,8 @@ type Props = {
 };
 
 export const ChatItem: React.FC<Props> = memo(({ chat }: Props) => {
+	const { isActiveChat } = useChatItem(chat.id);
+
 	return (
 		<Link href={`/chats/${chat.id}`}>
 			<span
@@ -17,6 +20,7 @@ export const ChatItem: React.FC<Props> = memo(({ chat }: Props) => {
 					'flex justify-start items-center h-[100px] p-8 gap-4',
 					'border-y border-neutral-700 overflow-hidden pc:hover:bg-black',
 					'text-white',
+					isActiveChat && 'bg-zinc-900',
 				)}
 			>
 				<img
@@ -24,7 +28,7 @@ export const ChatItem: React.FC<Props> = memo(({ chat }: Props) => {
 					src={chat.user.avatar || userDefaultAvatar.src}
 					alt={chat.user.username}
 				/>
-				{chat.type === EChatType.SECRET ? 'Секретный чат' : 'Чат'} c
+				{chat.type === EChatType.DEFAULT ? 'Чат' : 'Секретный чат'} c{' '}
 				{chat.user.username}
 			</span>
 		</Link>

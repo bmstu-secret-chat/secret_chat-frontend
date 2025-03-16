@@ -1,64 +1,64 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-	TWsSendMessageModel,
-	TWsMessageResponseModel,
-} from '@/entities/message/model';
-import { RootState, TWsMessageBaseModel } from '@/shared/model';
-import {
-	EWsMessageResponseStatus,
-	EWsMessageStatus,
-} from '@/shared/model/enums';
+import { TWsMessageResponseModel } from '@/entities/message/model';
+import { RootState } from '@/shared/model';
+import { EWsMessageResponseStatus } from '@/shared/model/enums/';
+import { EMessageStatus } from '@/shared/model/enums/messageStatus';
+import { MessageModel, WsMessageBase } from '@/shared/model/types';
 
 type MessageSlice = {
-	messages: TWsMessageBaseModel[];
+	messagesByChat: Record<string, MessageModel[]>; // Объект, где ключ — это dialogId, а значение — массив сообщений
 };
 
 const initialState: MessageSlice = {
-	messages: [],
+	messagesByChat: {},
 };
 
 export const messageSlice = createSlice({
 	name: 'message',
 	initialState,
 	reducers: {
-		setMessages: (state, action: PayloadAction<TWsMessageBaseModel[]>) => {
-			state.messages = action.payload;
+		setMessages: (
+			state,
+			action: PayloadAction<{ dialogId: string; messages: MessageModel[] }>,
+		) => {
+			const { dialogId, messages } = action.payload;
+			state.messagesByChat[dialogId] = messages;
 		},
-		addMessage: (state, action: PayloadAction<TWsMessageBaseModel>) => {
-			state.messages.push(action.payload);
+		addMessage: (state, action: PayloadAction<MessageModel>) => {
+			const { dialogId } = action.payload;
+			if (!state.messagesByChat[dialogId]) {
+				state.messagesByChat[dialogId] = [];
+			}
+			state.messagesByChat[dialogId].push(action.payload);
 		},
-		updateMessage: (state, action: PayloadAction<TWsMessageBaseModel>) => {
-			state.messages = state.messages.map((message) => {
-				if (message.id === action.payload.id) {
-					const currentPayload = message.payload as TWsSendMessageModel;
-					const responsePayload = action.payload
-						.payload as TWsMessageResponseModel;
+		updateMessage: (state, action: PayloadAction<WsMessageBase>) => {
+			const { id, payload } = action.payload;
+			const dialogId = (action.payload.payload as TWsMessageResponseModel)
+				.chatId;
 
-					if (currentPayload.status !== EWsMessageStatus.SENT) {
-						return message;
-					}
+			const chatMessages = state.messagesByChat[dialogId];
 
-					const newPayload: TWsSendMessageModel = {
-						...currentPayload,
-						status:
-							responsePayload.status === EWsMessageResponseStatus.OK
-								? EWsMessageStatus.RECEIVED
-								: EWsMessageStatus.ERROR,
-					};
-
-					return { ...message, payload: newPayload };
-				}
-				return message;
-			});
+			if (chatMessages) {
+				state.messagesByChat[dialogId] = chatMessages.map((message) =>
+					message.id === id && message.status === EMessageStatus.SENT
+						? {
+								...message,
+								status:
+									(payload as TWsMessageResponseModel).status ===
+									EWsMessageResponseStatus.OK
+										? EMessageStatus.RECEIVED
+										: EMessageStatus.ERROR,
+							}
+						: message,
+				);
+			}
 		},
 		deleteMessagesFromChat: (state, action: PayloadAction<string>) => {
-			state.messages = state.messages.filter(
-				(message) =>
-					(message.payload as TWsSendMessageModel).chatId !== action.payload,
-			);
+			const dialogId = action.payload;
+			delete state.messagesByChat[dialogId];
 		},
 		deleteMessages: (state) => {
-			state.messages = [];
+			state.messagesByChat = {};
 		},
 	},
 });
@@ -71,7 +71,9 @@ export const {
 	deleteMessages: deleteMessagesAction,
 } = messageSlice.actions;
 
-export const selectMessages = (state: RootState): MessageSlice['messages'] =>
-	(state.message as MessageSlice).messages;
+export const selectMessagesByChat =
+	(dialogId: string) =>
+	(state: RootState): MessageModel[] =>
+		(state.message as MessageSlice).messagesByChat[dialogId] || [];
 
 export const messageReducer = messageSlice.reducer;

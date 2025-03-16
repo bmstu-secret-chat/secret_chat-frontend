@@ -1,5 +1,4 @@
-import { UserShortInfo } from '@/entities/user/model';
-import { UserInfo } from '@/entities/user/model/userInfo';
+import { UserShortInfo, UserInfo } from '@/entities/user/model';
 import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
 

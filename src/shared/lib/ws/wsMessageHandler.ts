@@ -13,7 +13,7 @@ import {
 	TWSListenerCallback,
 	WsMessageBase,
 } from '@/shared/model';
-import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
+import { useWebSocketContext } from '@/shared/model/contexts';
 import { EWsEvent } from '@/shared/model/enums';
 
 export const WsMessageHandler = () => {
