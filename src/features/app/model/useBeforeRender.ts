@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setUserAction } from '@/entities/user/model';
 import { AuthorizationService } from '@/shared/api';
+import { showToast } from '@/shared/lib';
+import { initDB } from '@/shared/lib/db';
 
 export const useBeforeRender = () => {
 	const dispatch = useDispatch();
@@ -24,6 +26,17 @@ export const useBeforeRender = () => {
 	};
 
 	const beforeRender = async () => {
+		// Подключение к БД
+		try {
+			await initDB();
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				showToast('error', error.message);
+			} else {
+				showToast('error', 'Ошибка при выполнеии действия');
+			}
+		}
+
 		await checkAuthorization();
 		// Даем всем настройкам установиться, затем пропускаем дальше
 		setTimeout(() => setCanRender(true), 500);

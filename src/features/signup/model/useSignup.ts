@@ -85,7 +85,6 @@ export const useSignup = () => {
 		);
 
 		if (!isValid) {
-			console.log(isValid, invalidFields);
 			if (invalidFields.includes('username')) {
 				setUsernameError(true);
 			} else {
