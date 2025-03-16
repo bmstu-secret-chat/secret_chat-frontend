@@ -6,7 +6,7 @@ import { EMessageStatus } from '@/shared/model/enums/messageStatus';
 import { MessageModel, WsMessageBase } from '@/shared/model/types';
 
 type MessageSlice = {
-	messagesByChat: Record<string, MessageModel[]>; // Объект, где ключ — это dialogId, а значение — массив сообщений
+	messagesByChat: Record<string, MessageModel[]>;
 };
 
 const initialState: MessageSlice = {

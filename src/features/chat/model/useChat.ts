@@ -7,6 +7,7 @@ import { ChatService } from '@/entities/chat/api';
 import {
 	deleteActiveChatAction,
 	selectActiveChat,
+	selectChatList,
 	setActiveChatAction,
 } from '@/entities/chat/model';
 import {
@@ -22,6 +23,7 @@ export const useChat = (chatId: string) => {
 	const pathname = usePathname();
 	const dispatch = useDispatch();
 
+	const chats = useSelector(selectChatList);
 	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
 
@@ -82,7 +84,7 @@ export const useChat = (chatId: string) => {
 		return () => {
 			dispatch(deleteActiveChatAction());
 		};
-	}, [dispatch, chatId]);
+	}, [dispatch, chats, chatId]);
 
 	useEffect(() => {
 		setCanRender(!!activeChat?.id);
