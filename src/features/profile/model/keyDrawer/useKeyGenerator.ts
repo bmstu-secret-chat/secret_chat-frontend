@@ -5,7 +5,7 @@ import { encryptWithNonce } from '@/features/profile/lib';
 import { UtilsService } from '@/shared/api';
 import { showError } from '@/shared/lib';
 
-const INTERVAL = 10_000;
+const INTERVAL = 60_000;
 
 export const useKeyGenerator = () => {
 	const [key, setKey] = useState<number>(0);

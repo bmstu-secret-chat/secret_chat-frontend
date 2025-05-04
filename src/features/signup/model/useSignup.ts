@@ -14,14 +14,13 @@ import { EQueryParams } from '@/shared/model';
 
 export const useSignup = () => {
 	const dispatch = useDispatch();
-
-	const authorizationService = new AuthorizationService();
-
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
 	const { page, setQueryParam } = useQueryParams();
+
+	const authorizationService = new AuthorizationService();
 
 	const [stylesLoaded, setStylesLoaded] = useState(false);
 	const [username, setUsername] = useState('');

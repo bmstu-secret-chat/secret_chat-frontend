@@ -120,6 +120,7 @@ export function SignupForm() {
 								<BottomGradient />
 							</button>
 						</motion.div>
+
 						<motion.div
 							className={cn('absolute w-full')}
 							initial={{ x: '120%' }}
