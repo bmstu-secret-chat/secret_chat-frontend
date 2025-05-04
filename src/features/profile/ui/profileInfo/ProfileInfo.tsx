@@ -7,6 +7,7 @@ import {
 	useCreateSecretChat,
 	useProfileInfo,
 } from '@/features/profile/model';
+import { KeyDrawer } from '@/features/profile/ui';
 import { cn } from '@/shared/lib';
 import { ButtonShimmer, LabelValue, UploadImage } from '@/shared/ui';
 import { RenderIf } from '@/shared/utils';
@@ -24,10 +25,14 @@ export const ProfileInfo: React.FC<Props> = ({
 	setUserAvatar,
 	deleteUserAvatar,
 }) => {
-	const { isCurrentUser, upperFields, downFields } = useProfileInfo(
-		userInfo,
-		currentUser,
-	);
+	const {
+		openDrawer,
+		setOpenDrawer,
+		isCurrentUser,
+		upperFields,
+		downFields,
+		handleOpenDrawerBtnClick,
+	} = useProfileInfo(userInfo, currentUser);
 
 	const { createChat } = useCreateChat();
 	const { isFetching: isSecretChatFetching, createSecretChat } =
@@ -91,6 +96,22 @@ export const ProfileInfo: React.FC<Props> = ({
 					item={item}
 				/>
 			))}
+
+			<RenderIf condition={isCurrentUser}>
+				<Button
+					className={'py-2 px-4'}
+					type={'default'}
+					size={'large'}
+					onClick={handleOpenDrawerBtnClick}
+				>
+					Войти с нового устройства
+				</Button>
+
+				<KeyDrawer
+					open={openDrawer}
+					setOpen={setOpenDrawer}
+				/>
+			</RenderIf>
 		</div>
 	);
 };

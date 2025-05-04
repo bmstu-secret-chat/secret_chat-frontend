@@ -17,6 +17,11 @@ export class UtilsService extends ServiceBase {
 				url: '/api/backend/storage/upload-image/',
 				method: ERequestMethods.POST,
 			},
+			{
+				name: 'uploadKey',
+				url: '/api/backend/users/private-key-save/',
+				method: ERequestMethods.POST,
+			},
 		];
 	}
 
@@ -34,5 +39,17 @@ export class UtilsService extends ServiceBase {
 		);
 
 		return response.url;
+	}
+
+	/**
+	 * Загрузка ключа
+	 * @param secretKey
+	 */
+	async uploadKey(secretKey: Uint8Array): Promise<void> {
+		const configItem = this.getConfigItem('uploadKey');
+
+		await this.makeHttpRequest(configItem.method, configItem.url, {
+			private_key: secretKey,
+		});
 	}
 }

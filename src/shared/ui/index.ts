@@ -1,3 +1,4 @@
+export { AnimatedCounter } from './animatedCounter/AnimatedCounter';
 export { BackgroundGradient } from './backgroundGradient/BackgroundGradient';
 export { BackgroundLines } from './backgroundLines/BackgroundLines';
 export { BottomGradient } from './bottomGradient/BottomGradient';

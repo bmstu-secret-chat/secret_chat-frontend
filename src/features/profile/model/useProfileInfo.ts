@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { UserInfo } from '@/entities/user/model';
 import { formatLastOnline } from '@/shared/lib';
 
@@ -5,7 +8,11 @@ export const useProfileInfo = (
 	userInfo: UserInfo,
 	currentUser: UserInfo | null,
 ) => {
+	const [openDrawer, setOpenDrawer] = useState(false);
+
 	const isCurrentUser = userInfo.id === currentUser?.id;
+
+	const handleOpenDrawerBtnClick = () => setOpenDrawer(true);
 
 	const upperFields = [
 		{
@@ -36,5 +43,12 @@ export const useProfileInfo = (
 		},
 	].filter((item) => item.value);
 
-	return { isCurrentUser, upperFields, downFields };
+	return {
+		openDrawer,
+		setOpenDrawer,
+		isCurrentUser,
+		upperFields,
+		downFields,
+		handleOpenDrawerBtnClick,
+	};
 };

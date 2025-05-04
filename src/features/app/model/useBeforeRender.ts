@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setUserAction } from '@/entities/user/model';
 import { AuthorizationService } from '@/shared/api';
-import { showToast } from '@/shared/lib';
+import { showError } from '@/shared/lib';
 import { initDB } from '@/shared/lib/db';
 
 export const useBeforeRender = () => {
@@ -29,12 +29,8 @@ export const useBeforeRender = () => {
 		// Подключение к БД
 		try {
 			await initDB();
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				showToast('error', error.message);
-			} else {
-				showToast('error', 'Ошибка при выполнеии действия');
-			}
+		} catch (error) {
+			showError(error);
 		}
 
 		await checkAuthorization();

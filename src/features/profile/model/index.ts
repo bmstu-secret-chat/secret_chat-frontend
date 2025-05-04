@@ -6,3 +6,5 @@ export { useProfileEdit } from './useProfileEdit';
 export { useProfileInfo } from './useProfileInfo';
 export { useProfileModal } from './useProfileModal';
 export type { ErrorFiled } from './useProfile';
+export { useKeyDrawer } from './keyDrawer/useKeyDrawer';
+export { useKeyGenerator } from './keyDrawer/useKeyGenerator';
