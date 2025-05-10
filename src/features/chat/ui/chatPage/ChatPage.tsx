@@ -3,6 +3,7 @@ import { useChat } from '@/features/chat/model';
 import { Message, MessageInput, ChatHeader } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
 import { RenderIf } from '@/shared/utils';
+import { ClearChatModal } from '@/widgets/modals/clearChat/ui';
 import { DeleteSecretChatModal } from '@/widgets/modals/deleteSecretChat/ui';
 
 export const ChatPage = ({ chatId }: { chatId: string }) => {
@@ -54,6 +55,7 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 					onSubmit={onSubmit}
 				/>
 
+				<ClearChatModal chat={activeChat || undefined} />
 				<DeleteSecretChatModal chat={activeChat || undefined} />
 			</div>
 		</RenderIf>

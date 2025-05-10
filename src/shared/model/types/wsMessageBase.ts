@@ -1,8 +1,11 @@
 import {
+	TWsClearChatApi,
+	TWsClearChatModel,
 	TWsCreateChatApi,
 	TWsCreateChatModel,
 	TWsDeleteChatApi,
 	TWsDeleteChatModel,
+	WsClearChat,
 	WsCreateChat,
 	WsDeleteChat,
 } from '@/entities/chat/model';
@@ -21,6 +24,7 @@ export enum EWsMessageType {
 	SEND_MESSAGE_RESPONSE = 'send_message_response',
 	CREATE_CHAT = 'create_chat',
 	DELETE_CHAT = 'delete_chat',
+	CLEAR_CHAT = 'clear_chat',
 }
 
 export type TWsMessageBaseModel = {
@@ -30,7 +34,8 @@ export type TWsMessageBaseModel = {
 		| TWsSendMessageModel
 		| TWsMessageResponseModel
 		| TWsCreateChatModel
-		| TWsDeleteChatModel;
+		| TWsDeleteChatModel
+		| TWsClearChatModel;
 };
 
 type TWsMessageBaseApi = {
@@ -40,13 +45,19 @@ type TWsMessageBaseApi = {
 		| TWsMessageResponseApi
 		| TWsMessageMessageApi
 		| TWsCreateChatApi
-		| TWsDeleteChatApi;
+		| TWsDeleteChatApi
+		| TWsClearChatApi;
 };
 
 export class WsMessageBase {
 	id: string;
 	type: EWsMessageType;
-	payload: WsSendMessage | WsSendMessageResponse | WsCreateChat | WsDeleteChat;
+	payload:
+		| WsSendMessage
+		| WsSendMessageResponse
+		| WsCreateChat
+		| WsDeleteChat
+		| WsClearChat;
 
 	constructor(
 		id: string,
@@ -55,7 +66,8 @@ export class WsMessageBase {
 			| TWsSendMessageModel
 			| TWsMessageResponseModel
 			| TWsCreateChatModel
-			| TWsDeleteChatModel,
+			| TWsDeleteChatModel
+			| TWsClearChatModel,
 	) {
 		this.id = id;
 		this.type = type;
@@ -75,6 +87,9 @@ export class WsMessageBase {
 			case EWsMessageType.DELETE_CHAT:
 				this.payload = new WsDeleteChat(payload as TWsDeleteChatModel);
 				break;
+			case EWsMessageType.CLEAR_CHAT:
+				this.payload = new WsClearChat(payload as TWsClearChatModel);
+				break;
 			default:
 				throw new Error(`Неизвестный тип сообщения: ${type}`);
 		}
@@ -88,7 +103,8 @@ export class WsMessageBase {
 			| TWsSendMessageModel
 			| TWsMessageResponseModel
 			| TWsCreateChatModel
-			| TWsDeleteChatModel;
+			| TWsDeleteChatModel
+			| TWsClearChatModel;
 
 		switch (from.type) {
 			case EWsMessageType.SEND_MESSAGE:
@@ -106,6 +122,9 @@ export class WsMessageBase {
 				break;
 			case EWsMessageType.DELETE_CHAT:
 				payload = WsDeleteChat.createFromApi(from.payload as TWsDeleteChatApi);
+				break;
+			case EWsMessageType.CLEAR_CHAT:
+				payload = WsClearChat.createFromApi(from.payload as TWsClearChatApi);
 				break;
 			default:
 				throw new Error(`Неизвестный тип сообщения: ${from.type}`);
@@ -126,6 +145,9 @@ export class WsMessageBase {
 				break;
 			case EWsMessageType.DELETE_CHAT:
 				payload = (this.payload as WsDeleteChat).toApi();
+				break;
+			case EWsMessageType.CLEAR_CHAT:
+				payload = (this.payload as WsClearChat).toApi();
 				break;
 			default:
 				throw new Error(`Неизвестный тип сообщения: ${this.type}`);

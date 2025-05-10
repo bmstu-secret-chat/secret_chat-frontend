@@ -19,6 +19,11 @@ export const useChatHeader = () => {
 		[],
 	);
 
+	const handleClearChat = useCallback(
+		() => eventEmitter.emit(EmitterEvents.MODAL_OPEN_CHAT_CLEAR),
+		[],
+	);
+
 	const handleUsernameClick = useCallback(() => {
 		if (!activeChat?.user) return;
 
@@ -29,6 +34,7 @@ export const useChatHeader = () => {
 		handleBackButtonClick,
 		handleSecretChatExit,
 		handleUsernameClick,
+		handleClearChat,
 		activeChat,
 	};
 };

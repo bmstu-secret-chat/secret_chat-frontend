@@ -9,6 +9,7 @@ export const ChatHeader: React.FC = () => {
 		handleBackButtonClick,
 		handleSecretChatExit,
 		handleUsernameClick,
+		handleClearChat,
 		activeChat,
 	} = useChatHeader();
 
@@ -32,14 +33,14 @@ export const ChatHeader: React.FC = () => {
 				{activeChat?.user?.username}
 			</span>
 
-			{activeChat?.type === EChatType.SECRET ? (
-				<IconTrashX
-					className={'cursor-pointer'}
-					onClick={handleSecretChatExit}
-				/>
-			) : (
-				<div />
-			)}
+			<IconTrashX
+				className={'cursor-pointer'}
+				onClick={
+					activeChat?.type === EChatType.SECRET
+						? handleSecretChatExit
+						: handleClearChat
+				}
+			/>
 		</header>
 	);
 };

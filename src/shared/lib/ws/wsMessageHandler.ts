@@ -6,8 +6,11 @@ import {
 	useSendMessageResponseHandler,
 	useSendMessageHandler,
 } from '@/shared/lib/ws';
-import { useCreateChatHandler } from '@/shared/lib/ws/handlers/useCreateChatHandler';
-import { useDeleteChatHandler } from '@/shared/lib/ws/handlers/useDeleteChatHandler';
+import {
+	useCreateChatHandler,
+	useDeleteChatHandler,
+	useClearChatHandler,
+} from '@/shared/lib/ws/handlers';
 import {
 	EWsMessageType,
 	TWSListenerCallback,
@@ -25,6 +28,7 @@ export const WsMessageHandler = () => {
 	const { sendMessageResponseHandler } = useSendMessageResponseHandler();
 	const { createChatHandler } = useCreateChatHandler();
 	const { deleteChatHandler } = useDeleteChatHandler();
+	const { clearChatHandler } = useClearChatHandler();
 
 	useEffect(() => {
 		const messageListener: TWSListenerCallback = (event, data) => {
@@ -43,6 +47,9 @@ export const WsMessageHandler = () => {
 						break;
 					case EWsMessageType.DELETE_CHAT:
 						deleteChatHandler(wsMessage);
+						break;
+					case EWsMessageType.CLEAR_CHAT:
+						clearChatHandler(wsMessage);
 						break;
 					default:
 						break;
