@@ -113,7 +113,13 @@ export function LoginForm() {
 								}}
 								{...sharedProps}
 							/>
+
+							<span className={cn('text-center text-neutral-600 pt-4')}>
+								Код подтверждения находится в прифиле на авторизованном
+								устройстве
+							</span>
 						</LabelInputContainer>
+
 						<Divider className='mb-10' />
 						<div className={cn('flex flex-row items-center gap-4')}>
 							<button

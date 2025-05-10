@@ -10,6 +10,7 @@ const URLS_WITHOUT_TOKEN = [
 	'/api/auth/login/',
 	'/api/auth/signup/',
 	'/api/backend/users/user/by_name',
+	'/api/backend/users/private-key/get/',
 ];
 
 export abstract class ServiceBase {
@@ -95,8 +96,6 @@ export abstract class ServiceBase {
 		this.pendingRequests[url] = true;
 
 		try {
-			await this.checkAccessToken(url);
-
 			const options: RequestInit = {
 				method,
 				headers: {

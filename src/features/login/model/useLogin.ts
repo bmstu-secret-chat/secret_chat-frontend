@@ -5,12 +5,16 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UsersService } from '@/entities/user/api';
-import { deleteUserAction, setUserAction } from '@/entities/user/model';
+import {
+	deleteUserAction,
+	setUserAction,
+	UserShortInfo,
+} from '@/entities/user/model';
 import { LOGIN_URL } from '@/features/login/config';
 import { validateLoginFields } from '@/features/login/lib';
 import { AuthorizationService } from '@/shared/api/AuthorizationService';
 import { useQueryParams } from '@/shared/hooks';
-import { SafeChatDB, showError, showToast } from '@/shared/lib';
+import { decryptKey, SafeChatDB, showError, showToast } from '@/shared/lib';
 import { EQueryParams } from '@/shared/model';
 
 export const useLogin = () => {
@@ -21,6 +25,7 @@ export const useLogin = () => {
 
 	const { page, setQueryParam } = useQueryParams();
 
+	const db = new SafeChatDB();
 	const authorizationService = new AuthorizationService();
 	const usersService = new UsersService();
 
@@ -29,7 +34,8 @@ export const useLogin = () => {
 	const [usernameError, setUsernameError] = useState(false);
 	const [passwordError, setPasswordError] = useState(false);
 	const [key, setKey] = useState('');
-	const [keyError] = useState(false);
+	const [keyError, setKeyError] = useState(false);
+	const [user, setUser] = useState<UserShortInfo | null>(null);
 
 	const handleKeyChange = useCallback(
 		(value: string) => {
@@ -54,11 +60,6 @@ export const useLogin = () => {
 			throw error;
 		}
 	};
-
-	// 1 - отправить запрос за id по name
-	// 2 - если ключ с id есть, то запрос на login
-	// 3 - если ключа нет, то запрос за private key и отрисовка экрана расшифровки
-	// 4 - если запрос за ключем 404, то "разрешити авторизацию с устройств"
 
 	const handleNextButtonClick = async () => {
 		const db = new SafeChatDB();
@@ -96,30 +97,51 @@ export const useLogin = () => {
 				await login(username, password);
 				router.push('/chats');
 			} else {
-				// 3 - если ключа нет, то запрос за private key и отрисовка экрана расшифровки
-				try {
-					// const privateKey = await usersService.getPrivateKey(username);
-					setQueryParam(EQueryParams.PAGE, '2');
-				} catch (error) {
-					showError(error);
-				}
+				setUser(user);
+				setQueryParam(EQueryParams.PAGE, '2');
 			}
 		} catch (error) {
 			showError(error);
 
+			setUser(null);
 			setUsernameError(true);
 			setPasswordError(true);
 		}
 	};
 
 	const handleLoginButtonClick = async () => {
-		try {
+		if (!user) {
+			showToast('error', 'Пользователь не найден');
 			return;
+		}
 
-			// 4 - если запрос за ключем 404, то "разрешити авторизацию с устройств"
+		if (!key) {
+			showToast('error', 'Введите код подтверждения');
+			setKeyError(true);
+
+			return;
+		}
+		setKeyError(false);
+
+		try {
+			const encryptedKey = await usersService.getPrivateKey(username);
+			const decryptedKeyBytes = decryptKey(encryptedKey, +key);
+
+			if (!decryptedKeyBytes) {
+				showToast('error', 'Неверный код подтверждения');
+				setKeyError(true);
+
+				return;
+			}
+
+			const privateKey = new TextDecoder().decode(decryptedKeyBytes);
+			await db.saveValue(user.id, privateKey);
+
 			await login(username, password);
 			router.push('/chats');
-		} catch {
+		} catch (error) {
+			showError(error);
+
 			setUsernameError(true);
 			setPasswordError(true);
 		}
