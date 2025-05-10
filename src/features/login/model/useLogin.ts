@@ -125,16 +125,15 @@ export const useLogin = () => {
 
 		try {
 			const encryptedKey = await usersService.getPrivateKey(username);
-			const decryptedKeyBytes = decryptKey(encryptedKey, +key);
+			const privateKey = decryptKey(encryptedKey, +key);
 
-			if (!decryptedKeyBytes) {
+			if (!privateKey) {
 				showToast('error', 'Неверный код подтверждения');
 				setKeyError(true);
 
 				return;
 			}
 
-			const privateKey = new TextDecoder().decode(decryptedKeyBytes);
 			await db.saveValue(user.id, privateKey);
 
 			await login(username, password);

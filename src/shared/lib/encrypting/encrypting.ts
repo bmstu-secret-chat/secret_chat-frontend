@@ -16,21 +16,29 @@ export const decryptMessage = (
 	return decrypted.toString('utf8');
 };
 
-export const encryptKey = (data: Uint8Array, key: number) => {
+export const encryptKey = (data: string, key: number): string => {
+	const dataBytes = new TextEncoder().encode(data);
 	const keyBytes = nacl
 		.hash(new TextEncoder().encode(key.toString()))
 		.slice(0, 32);
 	const nonce = nacl.randomBytes(24);
-	const encrypted = nacl.secretbox(data, nonce, keyBytes);
-	return new Uint8Array([...nonce, ...encrypted]);
+	const encrypted = nacl.secretbox(dataBytes, nonce, keyBytes);
+	const combined = new Uint8Array([...nonce, ...encrypted]);
+	return Buffer.from(combined).toString('base64');
 };
 
-export const decryptKey = (encrypted: Uint8Array, key: number) => {
+export const decryptKey = (encrypted: string, key: number): string => {
+	const encryptedBytes = Buffer.from(encrypted, 'base64');
 	const keyBytes = nacl
 		.hash(new TextEncoder().encode(key.toString()))
 		.slice(0, 32);
-	const nonce = encrypted.slice(0, 24);
-	const data = encrypted.slice(24);
+	const nonce = encryptedBytes.slice(0, 24);
+	const data = encryptedBytes.slice(24);
+	const decrypted = nacl.secretbox.open(data, nonce, keyBytes);
 
-	return nacl.secretbox.open(data, nonce, keyBytes);
+	if (!decrypted) {
+		throw new Error('Failed to decrypt message');
+	}
+
+	return new TextDecoder().decode(decrypted);
 };

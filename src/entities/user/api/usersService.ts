@@ -172,7 +172,7 @@ export class UsersService extends ServiceBase {
 	 * Получение приватного ключа
 	 * @param username
 	 */
-	async getPrivateKey(username: string): Promise<Uint8Array> {
+	async getPrivateKey(username: string): Promise<string> {
 		const configItem = this.getConfigItem('getPrivateKey');
 
 		const response = await this.makeHttpRequest(
@@ -187,7 +187,7 @@ export class UsersService extends ServiceBase {
 	 * Загрузка приватного ключа
 	 * @param privateKey
 	 */
-	async uploadPrivateKey(privateKey: Uint8Array): Promise<void> {
+	async uploadPrivateKey(privateKey: string): Promise<void> {
 		const configItem = this.getConfigItem('uploadPrivateKey');
 
 		await this.makeHttpRequest(configItem.method, configItem.url, {
