@@ -6,7 +6,11 @@ import { TServiceConfig } from '../model/types/serviceConfig';
 // import { useRouter } from 'next/navigation';
 
 const REFRESH_URL = '/api/auth/refresh/';
-const URLS_WITHOUT_TOKEN = ['/api/auth/login/', '/api/auth/signup/'];
+const URLS_WITHOUT_TOKEN = [
+	'/api/auth/login/',
+	'/api/auth/signup/',
+	'/api/backend/users/user/by_name',
+];
 
 export abstract class ServiceBase {
 	// private router = useRouter();
@@ -56,7 +60,11 @@ export abstract class ServiceBase {
 	}
 
 	private async checkAccessToken(url: string): Promise<void> {
-		if (URLS_WITHOUT_TOKEN.includes(url)) {
+		if (
+			URLS_WITHOUT_TOKEN.some(
+				(allowedUrl) => url === allowedUrl || url.includes(allowedUrl),
+			)
+		) {
 			return;
 		}
 

@@ -4,12 +4,13 @@ import { OTPProps } from 'antd/es/input/OTP';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { UsersService } from '@/entities/user/api';
 import { deleteUserAction, setUserAction } from '@/entities/user/model';
 import { LOGIN_URL } from '@/features/login/config';
 import { validateLoginFields } from '@/features/login/lib';
 import { AuthorizationService } from '@/shared/api/AuthorizationService';
 import { useQueryParams } from '@/shared/hooks';
-import { showError, showToast } from '@/shared/lib';
+import { SafeChatDB, showError, showToast } from '@/shared/lib';
 import { EQueryParams } from '@/shared/model';
 
 export const useLogin = () => {
@@ -21,6 +22,7 @@ export const useLogin = () => {
 	const { page, setQueryParam } = useQueryParams();
 
 	const authorizationService = new AuthorizationService();
+	const usersService = new UsersService();
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -53,7 +55,14 @@ export const useLogin = () => {
 		}
 	};
 
-	const handleLoginButtonClick = async () => {
+	// 1 - отправить запрос за id по name
+	// 2 - если ключ с id есть, то запрос на login
+	// 3 - если ключа нет, то запрос за private key и отрисовка экрана расшифровки
+	// 4 - если запрос за ключем 404, то "разрешити авторизацию с устройств"
+
+	const handleNextButtonClick = async () => {
+		const db = new SafeChatDB();
+
 		const { isValid, message, invalidFields } = validateLoginFields(
 			username,
 			password,
@@ -80,9 +89,34 @@ export const useLogin = () => {
 		setPasswordError(false);
 
 		try {
-			setQueryParam(EQueryParams.PAGE, '2');
+			const user = await usersService.getUserInfoByName(username);
+			const privateKey = await db.getValue(user.id);
+
+			if (privateKey) {
+				await login(username, password);
+				router.push('/chats');
+			} else {
+				// 3 - если ключа нет, то запрос за private key и отрисовка экрана расшифровки
+				try {
+					// const privateKey = await usersService.getPrivateKey(username);
+					setQueryParam(EQueryParams.PAGE, '2');
+				} catch (error) {
+					showError(error);
+				}
+			}
+		} catch (error) {
+			showError(error);
+
+			setUsernameError(true);
+			setPasswordError(true);
+		}
+	};
+
+	const handleLoginButtonClick = async () => {
+		try {
 			return;
 
+			// 4 - если запрос за ключем 404, то "разрешити авторизацию с устройств"
 			await login(username, password);
 			router.push('/chats');
 		} catch {
@@ -113,6 +147,7 @@ export const useLogin = () => {
 		setQueryParam,
 		setUsername,
 		setPassword,
+		handleNextButtonClick,
 		handleLoginButtonClick,
 	};
 };

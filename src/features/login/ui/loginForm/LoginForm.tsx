@@ -30,6 +30,7 @@ export function LoginForm() {
 		setQueryParam,
 		setUsername,
 		setPassword,
+		handleNextButtonClick,
 		handleLoginButtonClick,
 	} = useLogin();
 
@@ -85,7 +86,7 @@ export function LoginForm() {
 						<BottomGradient />
 
 						<ButtonShimmer
-							onClick={handleLoginButtonClick}
+							onClick={handleNextButtonClick}
 							className={'w-full'}
 						>
 							Войти
@@ -130,7 +131,10 @@ export function LoginForm() {
 								<BottomGradient />
 							</button>
 
-							<ButtonShimmer className={'w-full mt-0 px-0'}>
+							<ButtonShimmer
+								className={'w-full mt-0 px-0'}
+								onClick={handleLoginButtonClick}
+							>
 								Войти
 							</ButtonShimmer>
 						</div>

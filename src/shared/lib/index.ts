@@ -16,5 +16,11 @@ export {
 	formatTimeDDMMYYHHmm,
 	formatLastOnline,
 } from './formatTime';
-export { generateKeyPair } from './generateKeyPair';
-export { encryptMessage, decryptMessage } from './encrypting';
+export {
+	generateKeyPair,
+	encryptMessage,
+	decryptMessage,
+	encryptKey,
+	decryptKey,
+} from './encrypting';
+export { SafeChatDB } from './db';

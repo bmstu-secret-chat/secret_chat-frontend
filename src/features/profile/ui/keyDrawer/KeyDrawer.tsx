@@ -1,5 +1,6 @@
 import { Drawer } from 'antd';
-import React from 'react';
+import type React from 'react';
+
 import { useKeyDrawer } from '@/features/profile/model';
 import { KeyGenerator } from '@/features/profile/ui';
 

@@ -3,6 +3,7 @@ import { ERequestMethods } from '@/shared/model';
 
 export class UtilsService extends ServiceBase {
 	private static instance: UtilsService;
+	private readonly baseUrl = '/api/backend';
 
 	constructor() {
 		super();
@@ -14,12 +15,7 @@ export class UtilsService extends ServiceBase {
 		this.config = [
 			{
 				name: 'uploadImage',
-				url: '/api/backend/storage/upload-image/',
-				method: ERequestMethods.POST,
-			},
-			{
-				name: 'uploadKey',
-				url: '/api/backend/users/private-key-save/',
+				url: `${this.baseUrl}/storage/upload-image/`,
 				method: ERequestMethods.POST,
 			},
 		];
@@ -39,17 +35,5 @@ export class UtilsService extends ServiceBase {
 		);
 
 		return response.url;
-	}
-
-	/**
-	 * Загрузка ключа
-	 * @param secretKey
-	 */
-	async uploadKey(secretKey: Uint8Array): Promise<void> {
-		const configItem = this.getConfigItem('uploadKey');
-
-		await this.makeHttpRequest(configItem.method, configItem.url, {
-			private_key: secretKey,
-		});
 	}
 }

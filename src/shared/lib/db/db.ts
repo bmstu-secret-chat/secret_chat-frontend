@@ -7,35 +7,39 @@ type TKeyValuePair = {
 	value: any;
 };
 
-class SafeChatDB extends Dexie {
-	keyValueStore: Dexie.Table<TKeyValuePair, string>;
+export class SafeChatDB extends Dexie {
+	private static instance: SafeChatDB;
+	keyValueStore!: Dexie.Table<TKeyValuePair, string>;
 
 	constructor() {
 		super('SafeChatDB');
 
+		if (SafeChatDB.instance) {
+			return SafeChatDB.instance;
+		}
+
+		SafeChatDB.instance = this;
 		this.version(1).stores({
 			keyValueStore: 'id',
 		});
 
 		this.keyValueStore = this.table('keyValueStore');
 	}
+
+	async init(): Promise<void> {
+		await this.open();
+	}
+
+	async saveValue(id: string, value: any): Promise<void> {
+		await this.keyValueStore.put({ id, value });
+	}
+
+	async getValue(id: string): Promise<any | null> {
+		const record = await this.keyValueStore.get(id);
+		return record ? record.value : null;
+	}
+
+	async deleteValue(id: string): Promise<void> {
+		await this.keyValueStore.delete(id);
+	}
 }
-
-export const db = new SafeChatDB();
-
-export const initDB = async () => {
-	await db.open();
-};
-
-export const saveValue = async (id: string, value: any): Promise<void> => {
-	await db.keyValueStore.put({ id, value });
-};
-
-export const getValue = async (id: string): Promise<any | null> => {
-	const record = await db.keyValueStore.get(id);
-	return record ? record.value : null;
-};
-
-export const deleteValue = async (id: string): Promise<void> => {
-	await db.keyValueStore.delete(id);
-};

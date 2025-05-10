@@ -1,9 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { encryptWithNonce } from '@/features/profile/lib';
-import { UtilsService } from '@/shared/api';
-import { showError } from '@/shared/lib';
+import { UsersService } from '@/entities/user/api';
+import { showError, encryptKey } from '@/shared/lib';
 
 const INTERVAL = 60_000;
 
@@ -11,10 +10,9 @@ export const useKeyGenerator = () => {
 	const [key, setKey] = useState<number>(0);
 
 	const setEncryptedKey = useCallback(async (secretKey: Uint8Array) => {
-		const utilsService = new UtilsService();
-
 		try {
-			await utilsService.uploadKey(secretKey);
+			const usersService = new UsersService();
+			await usersService.uploadPrivateKey(secretKey);
 		} catch (error) {
 			showError(error);
 		}
@@ -28,7 +26,7 @@ export const useKeyGenerator = () => {
 		// TODO: использовать приватный ключ
 		const secretKey = new TextEncoder().encode('PRIVATE_KEY');
 
-		const encryptedKey = encryptWithNonce(secretKey, numberToSet);
+		const encryptedKey = encryptKey(secretKey, numberToSet);
 		setEncryptedKey(encryptedKey);
 	}, [setEncryptedKey]);
 

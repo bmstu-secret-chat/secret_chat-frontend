@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setUserAction } from '@/entities/user/model';
 import { AuthorizationService } from '@/shared/api';
-import { showError } from '@/shared/lib';
-import { initDB } from '@/shared/lib/db';
+import { showError, SafeChatDB } from '@/shared/lib';
 
 export const useBeforeRender = () => {
 	const dispatch = useDispatch();
@@ -28,7 +27,8 @@ export const useBeforeRender = () => {
 	const beforeRender = async () => {
 		// Подключение к БД
 		try {
-			await initDB();
+			const db = new SafeChatDB();
+			await db.init();
 		} catch (error) {
 			showError(error);
 		}

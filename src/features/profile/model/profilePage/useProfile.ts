@@ -8,8 +8,13 @@ import {
 	TUserInfoModel,
 	selectCurrentUser,
 } from '@/entities/user/model';
-import { showToast, eventEmitter, EmitterEvents } from '@/shared/lib';
-import { validateUserInfoFields } from '../lib';
+import { validateUserInfoFields } from '@/features/profile/lib';
+import {
+	showToast,
+	eventEmitter,
+	EmitterEvents,
+	showError,
+} from '@/shared/lib';
 
 export type ErrorFiled = {
 	field: string;
@@ -35,8 +40,8 @@ export const useProfile = (id: string) => {
 				setUserInfo(user);
 				setIsCurrentUser(user.id === currentUser?.id);
 				setEditedUserInfo(user);
-			} catch (error: any) {
-				showToast('error', error.message);
+			} catch (error) {
+				showError(error);
 			}
 		},
 		[currentUser],
@@ -49,8 +54,8 @@ export const useProfile = (id: string) => {
 			await usersService.updateUserInfo(updatedUser);
 
 			return true;
-		} catch (error: any) {
-			showToast('error', error.message);
+		} catch (error) {
+			showError(error);
 
 			return false;
 		}

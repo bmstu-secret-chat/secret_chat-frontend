@@ -4,14 +4,19 @@ import { OTPProps } from 'antd/es/input/OTP';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { UsersService } from '@/entities/user/api';
 import { deleteUserAction, setUserAction } from '@/entities/user/model';
 import { SIGNUP_URL } from '@/features/signup/config';
 import { validateSignupFields } from '@/features/signup/lib';
 import { AuthorizationService } from '@/shared/api/AuthorizationService';
 import { useQueryParams } from '@/shared/hooks';
-import { showToast } from '@/shared/lib';
+import {
+	generateKeyPair,
+	SafeChatDB,
+	showError,
+	showToast,
+} from '@/shared/lib';
 import { EQueryParams } from '@/shared/model';
-
 export const useSignup = () => {
 	const dispatch = useDispatch();
 	const pathname = usePathname();
@@ -20,7 +25,9 @@ export const useSignup = () => {
 
 	const { page, setQueryParam } = useQueryParams();
 
+	const db = new SafeChatDB();
 	const authorizationService = new AuthorizationService();
+	const usersService = new UsersService();
 
 	const [stylesLoaded, setStylesLoaded] = useState(false);
 	const [username, setUsername] = useState('');
@@ -179,18 +186,25 @@ export const useSignup = () => {
 		password: string,
 	) => {
 		try {
+			const { publicKey, privateKey } = await generateKeyPair();
+
 			const user = await authorizationService.signup({
 				username,
 				phone,
 				email,
 				password,
 			});
+
+			await usersService.uploadPublicKey(user.id, publicKey);
+			await db.saveValue(user.id, privateKey);
+
 			dispatch(setUserAction(user));
-		} catch (error: any) {
-			showToast('error', error.message);
+		} catch (error) {
+			showError(error);
+
 			dispatch(deleteUserAction());
 
-			throw error;
+			return;
 		}
 	};
 
