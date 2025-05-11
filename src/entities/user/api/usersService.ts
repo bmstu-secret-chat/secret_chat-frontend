@@ -146,7 +146,7 @@ export class UsersService extends ServiceBase {
 
 		const response = await this.makeHttpRequest(
 			configItem.method,
-			`${configItem.url}/${userId}/key/`,
+			`${configItem.url}${userId}/key/`,
 		);
 
 		return response.public_key;

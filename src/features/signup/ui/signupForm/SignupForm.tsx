@@ -39,6 +39,8 @@ export function SignupForm() {
 		setQueryParam,
 		handleNextButtonClick,
 		handleSignupButtonClick,
+		handleFirstScreenKeyDown,
+		handleSecondScreenKeyDown,
 	} = useSignup();
 
 	return (
@@ -65,6 +67,7 @@ export function SignupForm() {
 							animate={{ x: page === '1' ? '0' : '-120%' }}
 							transition={{ duration: 0.5 }}
 							layout
+							onKeyDown={handleFirstScreenKeyDown}
 						>
 							<LabelInputContainer className='my-2'>
 								<Label htmlFor='username'>Имя пользователя</Label>
@@ -127,65 +130,64 @@ export function SignupForm() {
 							animate={{ x: page === '2' ? '0' : '120%' }}
 							transition={{ duration: 0.5 }}
 							layout
+							onKeyDown={handleSecondScreenKeyDown}
 						>
-							<>
-								<LabelInputContainer className='my-2'>
-									<Label htmlFor='username_info'>Имя пользователя</Label>
-									<Input
-										id='username_info'
-										placeholder='Tyler'
-										type='text'
-										value={username}
-										disabled
-									/>
-								</LabelInputContainer>
-								<LabelInputContainer className='my-2'>
-									<Label htmlFor='password'>Пароль</Label>
-									<Input
-										id='password'
-										placeholder='••••••••'
-										type='password'
-										value={password}
-										isError={passwordError}
-										onChange={handlePasswordChange}
-									/>
-								</LabelInputContainer>
-								<LabelInputContainer className='my-2 mb-8'>
-									<Label htmlFor='password_confirm'>Повторите пароль</Label>
-									<Input
-										id='password_confirm'
-										placeholder='••••••••'
-										type='password'
-										value={passwordConfirm}
-										isError={passwordConfirmError}
-										onChange={handlePasswordConfirmChange}
-									/>
-								</LabelInputContainer>
-								<Divider />
-								<div className={cn('flex flex-row items-center gap-4')}>
-									<button
-										className={cn(
-											'flex items-center justify-center gap-2',
-											'bg-gradient-to-br relative group/btn from-black',
-											'from-zinc-900 to-zinc-900 bg-zinc-800 w-full text-white',
-											'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
-											'w-full flex-grow',
-										)}
-										onClick={() => setQueryParam(EQueryParams.PAGE, '1')}
-									>
-										<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
-										Назад
-										<BottomGradient />
-									</button>
+							<LabelInputContainer className='my-2'>
+								<Label htmlFor='username_info'>Имя пользователя</Label>
+								<Input
+									id='username_info'
+									placeholder='Tyler'
+									type='text'
+									value={username}
+									disabled
+								/>
+							</LabelInputContainer>
+							<LabelInputContainer className='my-2'>
+								<Label htmlFor='password'>Пароль</Label>
+								<Input
+									id='password'
+									placeholder='••••••••'
+									type='password'
+									value={password}
+									isError={passwordError}
+									onChange={handlePasswordChange}
+								/>
+							</LabelInputContainer>
+							<LabelInputContainer className='my-2 mb-8'>
+								<Label htmlFor='password_confirm'>Повторите пароль</Label>
+								<Input
+									id='password_confirm'
+									placeholder='••••••••'
+									type='password'
+									value={passwordConfirm}
+									isError={passwordConfirmError}
+									onChange={handlePasswordConfirmChange}
+								/>
+							</LabelInputContainer>
+							<Divider />
+							<div className={cn('flex flex-row items-center gap-4')}>
+								<button
+									className={cn(
+										'flex items-center justify-center gap-2',
+										'bg-gradient-to-br relative group/btn from-black',
+										'from-zinc-900 to-zinc-900 bg-zinc-800 w-full text-white',
+										'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
+										'w-full flex-grow',
+									)}
+									onClick={() => setQueryParam(EQueryParams.PAGE, '1')}
+								>
+									<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+									Назад
+									<BottomGradient />
+								</button>
 
-									<ButtonShimmer
-										className={'w-full mt-0 px-0'}
-										onClick={handleSignupButtonClick}
-									>
-										Создать аккаунт
-									</ButtonShimmer>
-								</div>
-							</>
+								<ButtonShimmer
+									className={'w-full mt-0 px-0'}
+									onClick={handleSignupButtonClick}
+								>
+									Создать аккаунт
+								</ButtonShimmer>
+							</div>
 						</motion.div>
 					</div>
 

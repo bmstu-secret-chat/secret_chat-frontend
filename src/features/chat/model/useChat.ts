@@ -14,8 +14,9 @@ import {
 	selectMessagesByChat,
 	setMessagesAction,
 } from '@/entities/message/model';
+import { selectCurrentUser } from '@/entities/user/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { showToast, useSendMessage, vibrate } from '@/shared/lib';
+import { SafeChatDB, showError, useSendMessage, vibrate } from '@/shared/lib';
 import { EChatType } from '@/shared/model';
 
 export const useChat = (chatId: string) => {
@@ -23,6 +24,7 @@ export const useChat = (chatId: string) => {
 	const pathname = usePathname();
 	const dispatch = useDispatch();
 
+	const user = useSelector(selectCurrentUser);
 	const chats = useSelector(selectChatList);
 	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
@@ -38,8 +40,17 @@ export const useChat = (chatId: string) => {
 
 	const getMessages = useCallback(
 		async (dialogId: string) => {
+			if (!user) {
+				showError('Пользователь не найден');
+				return;
+			}
+
 			try {
+				const db = new SafeChatDB();
 				const chatService = new ChatService();
+
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const privateKey = await db.getValue(user.id);
 
 				const receivedMessages = await chatService.getMessagesFromChat(
 					dialogId,
@@ -48,34 +59,37 @@ export const useChat = (chatId: string) => {
 				);
 
 				dispatch(setMessagesAction({ dialogId, messages: receivedMessages }));
-			} catch (error: unknown) {
-				if (error instanceof Error) {
-					showToast('error', error.message);
-				} else {
-					showToast('error', 'Ошибка при выполнеии действия');
-				}
+			} catch (error) {
+				showError(error);
 			}
 		},
-		[dispatch],
+		[dispatch, user],
 	);
 
-	useEffect(() => {
-		if (activeChat && activeChat.type === EChatType.DEFAULT) {
-			getMessages(activeChat.id);
+	const onSubmit = () => {
+		if (!activeChat) {
+			return;
 		}
+
+		sendMessage(chatId, content, activeChat.type);
+		if (isTabletDevice) vibrate(10);
+	};
+
+	useEffect(() => {
+		if (!activeChat || activeChat.type !== EChatType.DEFAULT) {
+			return;
+		}
+
+		getMessages(activeChat.id);
 	}, [getMessages, activeChat]);
 
 	useEffect(() => {
-		messagesContainerRef.current?.scrollTo({
-			top: messagesContainerRef.current.scrollHeight,
-		});
-	}, []);
-
-	useEffect(() => {
-		messagesContainerRef.current?.scrollTo({
-			top: messagesContainerRef.current.scrollHeight,
-			behavior: 'smooth',
-		});
+		if (messages.length > 0) {
+			messagesContainerRef.current?.scrollTo({
+				top: messagesContainerRef.current.scrollHeight,
+				behavior: 'smooth',
+			});
+		}
 	}, [messages]);
 
 	useEffect(() => {
@@ -104,15 +118,6 @@ export const useChat = (chatId: string) => {
 			document.removeEventListener('keydown', handleEscape);
 		};
 	}, [pathname, router]);
-
-	const onSubmit = () => {
-		if (!activeChat) {
-			return;
-		}
-
-		sendMessage(chatId, content, activeChat.type);
-		if (isTabletDevice) vibrate(10);
-	};
 
 	return {
 		messagesContainerRef,

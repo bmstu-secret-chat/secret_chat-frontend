@@ -121,6 +121,12 @@ export const useSignup = () => {
 	};
 
 	const handleSignupButtonClick = async () => {
+		if (!password) {
+			setPasswordError(true);
+			showToast('error', 'Пароль не может быть пустым');
+			return;
+		}
+
 		const { isValid, message, invalidFields } = validateSignupFields(
 			username,
 			phone,
@@ -164,20 +170,24 @@ export const useSignup = () => {
 		}
 	};
 
-	useEffect(() => {
-		// рендерим после загрузки стилей
-		setStylesLoaded(true);
-	}, []);
-
-	useEffect(() => {
-		if (
-			pathname === SIGNUP_URL &&
-			searchParams.get(EQueryParams.PAGE) !== '1' &&
-			username === ''
-		) {
-			setQueryParam(EQueryParams.PAGE, '1');
+	const handleFirstScreenKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+		if (e.key === 'Enter') {
+			handleNextButtonClick();
 		}
-	}, [setQueryParam, pathname, searchParams, username]);
+	};
+
+	const handleSecondScreenKeyDown = (
+		e: React.KeyboardEvent<HTMLDivElement>,
+	) => {
+		switch (e.key) {
+			case 'Enter':
+				handleSignupButtonClick();
+				break;
+			case 'Escape':
+				setQueryParam(EQueryParams.PAGE, '1');
+				break;
+		}
+	};
 
 	const signup = async (
 		username: string,
@@ -208,6 +218,21 @@ export const useSignup = () => {
 		}
 	};
 
+	useEffect(() => {
+		// рендерим после загрузки стилей
+		setStylesLoaded(true);
+	}, []);
+
+	useEffect(() => {
+		if (
+			pathname === SIGNUP_URL &&
+			searchParams.get(EQueryParams.PAGE) !== '1' &&
+			username === ''
+		) {
+			setQueryParam(EQueryParams.PAGE, '1');
+		}
+	}, [setQueryParam, pathname, searchParams, username]);
+
 	return {
 		page,
 		stylesLoaded,
@@ -229,5 +254,7 @@ export const useSignup = () => {
 		setQueryParam,
 		handleNextButtonClick,
 		handleSignupButtonClick,
+		handleFirstScreenKeyDown,
+		handleSecondScreenKeyDown,
 	};
 };
