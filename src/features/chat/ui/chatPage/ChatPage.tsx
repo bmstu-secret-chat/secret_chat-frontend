@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
+import { Virtuoso } from 'react-virtuoso';
 import { useChat } from '@/features/chat/model';
 import { Message, MessageInput, ChatHeader } from '@/features/chat/ui';
 import { cn } from '@/shared/lib';
 import { RenderIf } from '@/shared/utils';
 import { ClearChatModal } from '@/widgets/modals/clearChat/ui';
 import { DeleteSecretChatModal } from '@/widgets/modals/deleteSecretChat/ui';
+
+const VirtuosoList = forwardRef<HTMLDivElement>((props, ref) => (
+	<div
+		{...props}
+		ref={ref}
+		className='px-2'
+	/>
+));
+VirtuosoList.displayName = 'VirtuosoList';
 
 export const ChatPage = ({ chatId }: { chatId: string }) => {
 	const {
@@ -29,24 +39,30 @@ export const ChatPage = ({ chatId }: { chatId: string }) => {
 				<ChatHeader />
 
 				<div
-					ref={messagesContainerRef}
 					className={cn(
-						'flex absolute flex-col items-center p-2 top-[64px]',
-						'w-full h-[calc(100vh-64px-76px)] overflow-y-auto bg-neutral-800',
+						'flex absolute flex-col items-center',
+						'w-full h-[calc(100vh-64px-76px)] top-[64px]',
+						'bg-neutral-800',
 					)}
 				>
-					{/*{isLoading && (*/}
-					{/*	<Skeleton*/}
-					{/*		active*/}
-					{/*		paragraph={{ rows: 5 }}*/}
-					{/*	/>*/}
-					{/*)}*/}
-					{messages.map((msg) => (
-						<Message
-							key={msg.id}
-							msg={msg}
-						/>
-					))}
+					<Virtuoso
+						ref={messagesContainerRef}
+						className='w-full h-full'
+						data={messages}
+						itemContent={(index, msg) => (
+							<Message
+								key={msg.id}
+								msg={msg}
+							/>
+						)}
+						alignToBottom
+						followOutput='smooth'
+						firstItemIndex={0}
+						initialTopMostItemIndex={messages.length - 1}
+						components={{
+							List: VirtuosoList,
+						}}
+					/>
 				</div>
 
 				<MessageInput

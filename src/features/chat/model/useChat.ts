@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { VirtuosoHandle } from 'react-virtuoso';
 import { ChatService } from '@/entities/chat/api';
 import {
 	deleteActiveChatAction,
@@ -11,6 +12,7 @@ import {
 	setActiveChatAction,
 } from '@/entities/chat/model';
 import {
+	deleteMessagesFromChatAction,
 	selectMessagesByChat,
 	setMessagesAction,
 } from '@/entities/message/model';
@@ -19,9 +21,12 @@ import { useScreenWidth } from '@/shared/hooks';
 import { SafeChatDB, showError, useSendMessage, vibrate } from '@/shared/lib';
 import { EChatType } from '@/shared/model';
 
+const TOTAL_MESSAGES = 1_000_000;
+
 export const useChat = (chatId: string) => {
 	const router = useRouter();
 	const pathname = usePathname();
+
 	const dispatch = useDispatch();
 
 	const user = useSelector(selectCurrentUser);
@@ -29,7 +34,7 @@ export const useChat = (chatId: string) => {
 	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
 
-	const messagesContainerRef = useRef<HTMLDivElement>(null);
+	const messagesContainerRef = useRef<VirtuosoHandle>(null);
 
 	const [content, setContent] = useState('');
 	const [canRender, setCanRender] = useState(false);
@@ -55,7 +60,7 @@ export const useChat = (chatId: string) => {
 				const receivedMessages = await chatService.getMessagesFromChat(
 					dialogId,
 					0,
-					50,
+					TOTAL_MESSAGES,
 				);
 
 				dispatch(setMessagesAction({ dialogId, messages: receivedMessages }));
@@ -84,18 +89,10 @@ export const useChat = (chatId: string) => {
 	}, [getMessages, activeChat]);
 
 	useEffect(() => {
-		if (messages.length > 0) {
-			messagesContainerRef.current?.scrollTo({
-				top: messagesContainerRef.current.scrollHeight,
-				behavior: 'smooth',
-			});
-		}
-	}, [messages]);
-
-	useEffect(() => {
 		dispatch(setActiveChatAction(chatId));
 
 		return () => {
+			dispatch(deleteMessagesFromChatAction(chatId));
 			dispatch(deleteActiveChatAction());
 		};
 	}, [dispatch, chats, chatId]);
