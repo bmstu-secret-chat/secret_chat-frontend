@@ -37,7 +37,7 @@ export const decryptKey = (encrypted: string, key: number): string => {
 	const decrypted = nacl.secretbox.open(data, nonce, keyBytes);
 
 	if (!decrypted) {
-		throw new Error('Failed to decrypt message');
+		throw new Error('Неверный ключ');
 	}
 
 	return new TextDecoder().decode(decrypted);

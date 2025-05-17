@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { TChatModel } from '@/entities/chat/model';
+import type { TChatModel } from '@/entities/chat/model';
 import { EmitterEvents, eventEmitter, useClearChat } from '@/shared/lib';
 import { EChatType } from '@/shared/model';
 
@@ -14,6 +14,8 @@ export const useClearChatModal = (chat?: TChatModel) => {
 		if (chat?.id && chat.type === EChatType.DEFAULT) {
 			clearChat(chat.id);
 		}
+
+		setIsOpen(false);
 	}, [clearChat, chat]);
 
 	const handleCancel = useCallback(() => {

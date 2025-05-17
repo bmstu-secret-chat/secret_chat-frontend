@@ -66,19 +66,21 @@ export function VanishInput({
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 
-		const remInPx = parseFloat(
+		const remInPx = Number.parseFloat(
 			getComputedStyle(document.documentElement).fontSize,
 		);
 
 		const width =
-			window.innerWidth * (isMobileDevice ? 0.8 : 0.5) - remInPx * 4;
+			window?.innerWidth * (isMobileDevice ? 0.8 : 0.5) - remInPx * 4;
 		const height = 48;
 		canvas.width = width;
 		canvas.height = height;
 		ctx.clearRect(0, 0, MAX_DISPLAY_WIDTH, MAX_DISPLAY_WIDTH);
 		const computedStyles = getComputedStyle(inputRef.current);
 
-		const fontSize = parseFloat(computedStyles.getPropertyValue('font-size'));
+		const fontSize = Number.parseFloat(
+			computedStyles.getPropertyValue('font-size'),
+		);
 		ctx.font = `${fontSize}px ${computedStyles.fontFamily}`;
 		ctx.fillStyle = '#FFF';
 		ctx.fillText(value, 40, 29);

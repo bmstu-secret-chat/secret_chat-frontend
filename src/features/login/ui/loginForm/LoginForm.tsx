@@ -123,6 +123,7 @@ export function LoginForm() {
 						<Divider className='mb-10' />
 						<div className={cn('flex flex-row items-center gap-4')}>
 							<button
+								type='button'
 								className={cn(
 									'flex items-center justify-center gap-2',
 									'bg-gradient-to-br relative group/btn from-black',

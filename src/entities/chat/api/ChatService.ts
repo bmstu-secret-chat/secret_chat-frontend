@@ -1,6 +1,6 @@
 import { Chat } from '@/entities/chat/model';
 import { ServiceBase } from '@/shared/api';
-import { ERequestMethods, Message, MessageModel } from '@/shared/model';
+import { ERequestMethods, Message, type MessageModel } from '@/shared/model';
 
 export class ChatService extends ServiceBase {
 	private static instance: ChatService;
@@ -81,16 +81,22 @@ export class ChatService extends ServiceBase {
 	async createSecretChat(withUserId: string): Promise<void> {
 		const configItem = this.getConfigItem('createSecretChat');
 
-		return await this.makeHttpRequest(configItem.method, configItem.url, {
+		await this.makeHttpRequest(configItem.method, configItem.url, {
 			with_user_id: withUserId,
 		});
 	}
 
-	async createChat(withUserId: string): Promise<string> {
+	async createChat(withUserId: string): Promise<Chat> {
 		const configItem = this.getConfigItem('createChat');
 
-		return await this.makeHttpRequest(configItem.method, configItem.url, {
-			with_user_id: withUserId,
-		});
+		const response = await this.makeHttpRequest(
+			configItem.method,
+			configItem.url,
+			{
+				with_user_id: withUserId,
+			},
+		);
+
+		return Chat.createFromApi(response);
 	}
 }

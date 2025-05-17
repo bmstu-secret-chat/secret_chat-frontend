@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addChatAction, Chat, TWsCreateChatModel } from '@/entities/chat/model';
 import { UsersService } from '@/entities/user/api';
 import { showToast, vibrate } from '@/shared/lib';
-import { WsMessageBase } from '@/shared/model';
+import { EChatType, WsMessageBase } from '@/shared/model';
 
 export const useCreateChatHandler = () => {
 	const dispatch = useDispatch();
@@ -34,7 +34,7 @@ export const useCreateChatHandler = () => {
 
 				showToast(
 					'info',
-					`Создан секретный час с пользователем ${companion.username}`,
+					`Создан ${newChat.type === EChatType.SECRET ? 'секретный' : ''} чат с пользователем ${companion.username}`,
 				);
 			}, 500);
 		} catch (error: unknown) {

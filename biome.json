@@ -1,0 +1,72 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.1/schema.json",
+	"files": {
+		"ignore": ["node_modules/**", "*.d.ts"],
+		"include": ["*.tsx", "*.ts"]
+	},
+	"organizeImports": {
+		"enabled": false
+	},
+	"javascript": {
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		},
+		"formatter": {
+			"enabled": true,
+			"quoteStyle": "single",
+			"lineWidth": 80,
+			"trailingCommas": "all",
+			"semicolons": "always",
+			"indentStyle": "tab"
+		},
+		"jsxRuntime": "reactClassic"
+	},
+	"json": {
+		"formatter": {
+			"enabled": true,
+			"indentStyle": "tab"
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"style": {
+				"useTemplate": "off",
+				"useDefaultParameterLast": "off",
+				"noUnusedTemplateLiteral": "off",
+				"useNodejsImportProtocol": "off",
+				"useImportType": "off"
+			},
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noPrototypeBuiltins": "off",
+				"noArrayIndexKey": "off",
+				"noDuplicateTestHooks": "off",
+				"noFocusedTests": "off"
+			},
+			"correctness": {
+				"useJsxKeyInIterable": "off",
+				"useExhaustiveDependencies": "off",
+				"noConstantCondition": "off",
+				"noUnusedImports": "error",
+				"noConstructorReturn": "off"
+			},
+			"complexity": {
+				"noForEach": "off",
+				"useRegexLiterals": "off",
+				"noBannedTypes": "off",
+				"useArrowFunction": "off",
+				"noUselessFragments": "off"
+			},
+			"a11y": {
+				"useKeyWithClickEvents": "off",
+				"useMediaCaption": "off",
+				"noSvgWithoutTitle": "off"
+			},
+			"performance": {
+				"noAccumulatingSpread": "off"
+			}
+		}
+	}
+}

@@ -1,3 +1,5 @@
+'use client';
+
 export const vibrate = (pattern: number) => {
-	window.navigator.vibrate(pattern);
+	window?.navigator.vibrate(pattern);
 };
