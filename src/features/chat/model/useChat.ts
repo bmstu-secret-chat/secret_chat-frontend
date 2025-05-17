@@ -12,7 +12,6 @@ import {
 	setActiveChatAction,
 } from '@/entities/chat/model';
 import {
-	deleteMessagesFromChatAction,
 	selectMessagesByChat,
 	setMessagesAction,
 } from '@/entities/message/model';
@@ -92,7 +91,6 @@ export const useChat = (chatId: string) => {
 		dispatch(setActiveChatAction(chatId));
 
 		return () => {
-			dispatch(deleteMessagesFromChatAction(chatId));
 			dispatch(deleteActiveChatAction());
 		};
 	}, [dispatch, chats, chatId]);
