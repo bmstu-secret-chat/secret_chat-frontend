@@ -9,6 +9,7 @@ const REFRESH_URL = '/api/auth/refresh/';
 const URLS_WITHOUT_TOKEN = [
 	'/api/auth/login/',
 	'/api/auth/signup/',
+	'/api/auth/code/',
 	'/api/backend/users/user/by_name',
 	'/api/backend/users/private-key/get/',
 ];
