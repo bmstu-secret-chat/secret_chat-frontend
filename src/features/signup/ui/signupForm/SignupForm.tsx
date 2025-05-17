@@ -1,7 +1,7 @@
 'use client';
 
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { Input as AntInput } from 'antd';
+import { Input as AntInput, Button } from 'antd';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import React from 'react';
@@ -31,14 +31,20 @@ export function SignupForm() {
 		passwordError,
 		passwordConfirm,
 		passwordConfirmError,
-		sharedProps,
+		phoneProps,
+		codeProps,
+		codeError,
+		isCodeButtonDisabled,
+		codeButtonTimer,
 		handleUsernameChange,
 		handleEmailChange,
 		handlePasswordChange,
 		handlePasswordConfirmChange,
 		setQueryParam,
-		handleNextButtonClick,
-		handleSignupButtonClick,
+		handleNext1ButtonClick,
+		handleNext2ButtonClick,
+		handleSendCodeButtonClick,
+		handleCreateAccountButtonClick,
 		handleFirstScreenKeyDown,
 		handleSecondScreenKeyDown,
 	} = useSignup();
@@ -103,20 +109,21 @@ export function SignupForm() {
 										border: phoneError ? '1px solid red' : 'none',
 										borderRadius: 6,
 									}}
-									{...sharedProps}
+									{...phoneProps}
 								/>
 							</LabelInputContainer>
 
 							<Divider />
 
 							<button
+								type='button'
 								className={cn(
 									'flex items-center justify-center gap-2',
 									'bg-gradient-to-br relative group/btn from-black',
 									'from-zinc-900 to-zinc-900 bg-zinc-800 w-full text-white',
 									'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
 								)}
-								onClick={handleNextButtonClick}
+								onClick={handleNext1ButtonClick}
 							>
 								<span>Далее</span>
 								<IconArrowRight className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
@@ -127,7 +134,9 @@ export function SignupForm() {
 						<motion.div
 							className={cn('absolute w-full')}
 							initial={{ x: '120%' }}
-							animate={{ x: page === '2' ? '0' : '120%' }}
+							animate={{
+								x: page === '2' ? '0' : page === '3' ? '-120%' : '120%',
+							}}
 							transition={{ duration: 0.5 }}
 							layout
 							onKeyDown={handleSecondScreenKeyDown}
@@ -167,6 +176,7 @@ export function SignupForm() {
 							<Divider />
 							<div className={cn('flex flex-row items-center gap-4')}>
 								<button
+									type='button'
 									className={cn(
 										'flex items-center justify-center gap-2',
 										'bg-gradient-to-br relative group/btn from-black',
@@ -181,9 +191,84 @@ export function SignupForm() {
 									<BottomGradient />
 								</button>
 
+								<button
+									type='button'
+									className={cn(
+										'flex items-center justify-center gap-2',
+										'bg-gradient-to-br relative group/btn from-black',
+										'from-zinc-900 to-zinc-900 bg-zinc-800 w-full text-white',
+										'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
+									)}
+									onClick={handleNext2ButtonClick}
+								>
+									<span>Далее</span>
+									<IconArrowRight className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+									<BottomGradient />
+								</button>
+							</div>
+						</motion.div>
+
+						<motion.div
+							className={cn('absolute w-full')}
+							initial={{ x: '120%' }}
+							animate={{ x: page === '3' ? '0' : '120%' }}
+							transition={{ duration: 0.5 }}
+							layout
+						>
+							<LabelInputContainer className='my-2 h-[150px]'>
+								<Label htmlFor='phone'>Введите код подтверждения</Label>
+								<AntInput.OTP
+									length={6}
+									size={'large'}
+									variant='filled'
+									type={'number'}
+									style={{
+										border: codeError ? '1px solid red' : 'none',
+										borderRadius: 6,
+									}}
+									{...codeProps}
+								/>
+
+								<span className={cn('text-center text-neutral-600 pt-4 px-1')}>
+									Для подтверждения регистрации введите код, отправленный на
+									почту, указанную на предыдущем шаге
+								</span>
+							</LabelInputContainer>
+
+							<div className='flex justify-center pt-[16px]'>
+								<Button
+									type='primary'
+									size={'large'}
+									onClick={handleSendCodeButtonClick}
+									disabled={isCodeButtonDisabled}
+								>
+									{isCodeButtonDisabled
+										? `Подождите ${codeButtonTimer}с`
+										: 'Отправить код'}
+								</Button>
+							</div>
+
+							<Divider className='mb-10' />
+							<div className={cn('flex flex-row items-center gap-4')}>
+								<button
+									type='button'
+									className={cn(
+										'flex items-center justify-center gap-2',
+										'bg-gradient-to-br relative group/btn from-black',
+										'from-zinc-900 to-zinc-900 bg-zinc-800 w-full text-white',
+										'rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]',
+										'w-full flex-grow',
+									)}
+									onClick={() => setQueryParam(EQueryParams.PAGE, '2')}
+								>
+									<IconArrowLeft className='text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0' />
+									Назад
+									<BottomGradient />
+								</button>
+
 								<ButtonShimmer
 									className={'w-full mt-0 px-0'}
-									onClick={handleSignupButtonClick}
+									onClick={handleCreateAccountButtonClick}
 								>
 									Создать аккаунт
 								</ButtonShimmer>

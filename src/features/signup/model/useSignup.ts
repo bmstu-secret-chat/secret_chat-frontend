@@ -17,6 +17,7 @@ import {
 	showToast,
 } from '@/shared/lib';
 import { EQueryParams } from '@/shared/model';
+
 export const useSignup = () => {
 	const dispatch = useDispatch();
 	const pathname = usePathname();
@@ -40,6 +41,10 @@ export const useSignup = () => {
 	const [passwordError, setPasswordError] = useState(false);
 	const [passwordConfirm, setPasswordConfirm] = useState('');
 	const [passwordConfirmError, setPasswordConfirmError] = useState(false);
+	const [code, setCode] = useState('');
+	const [codeError, setCodeError] = useState(false);
+	const [isCodeButtonDisabled, setIsCodeButtonDisabled] = useState(false);
+	const [codeButtonTimer, setCodeButtonTimer] = useState(0);
 
 	const handlePhoneChange = useCallback(
 		(value: string) => {
@@ -48,9 +53,21 @@ export const useSignup = () => {
 		[setPhone],
 	);
 
-	const sharedProps: OTPProps = {
+	const handleCodeChange = useCallback(
+		(value: string) => {
+			setCode(value);
+		},
+		[setCode],
+	);
+
+	const phoneProps: OTPProps = {
 		onChange: handlePhoneChange,
 		value: phone,
+	};
+
+	const codeProps: OTPProps = {
+		onChange: handleCodeChange,
+		value: code,
 	};
 
 	const handleUsernameChange = useCallback(
@@ -81,7 +98,7 @@ export const useSignup = () => {
 		[],
 	);
 
-	const handleNextButtonClick = () => {
+	const handleNext1ButtonClick = () => {
 		const { isValid, message, invalidFields } = validateSignupFields(
 			username,
 			phone,
@@ -120,7 +137,7 @@ export const useSignup = () => {
 		setQueryParam(EQueryParams.PAGE, '2');
 	};
 
-	const handleSignupButtonClick = async () => {
+	const handleNext2ButtonClick = async () => {
 		if (!password) {
 			setPasswordError(true);
 			showToast('error', 'Пароль не может быть пустым');
@@ -162,17 +179,38 @@ export const useSignup = () => {
 		setPasswordError(false);
 		setPasswordConfirmError(false);
 
+		setQueryParam(EQueryParams.PAGE, '3');
+	};
+
+	const handleSendCodeButtonClick = async () => {
+		if (!email) {
+			showToast('error', 'Введите почту');
+			return;
+		}
+
 		try {
-			await signup(username, phone, email, password);
-			router.push('/chats');
-		} catch {
-			// TODO: handle error
+			await authorizationService.sendCode(email);
+			setIsCodeButtonDisabled(true);
+			setCodeButtonTimer(30);
+
+			const interval = setInterval(() => {
+				setCodeButtonTimer((prev) => {
+					if (prev <= 1) {
+						clearInterval(interval);
+						setIsCodeButtonDisabled(false);
+						return 0;
+					}
+					return prev - 1;
+				});
+			}, 1000);
+		} catch (error) {
+			showError(error);
 		}
 	};
 
 	const handleFirstScreenKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === 'Enter') {
-			handleNextButtonClick();
+			handleNext1ButtonClick();
 		}
 	};
 
@@ -181,7 +219,7 @@ export const useSignup = () => {
 	) => {
 		switch (e.key) {
 			case 'Enter':
-				handleSignupButtonClick();
+				handleNext2ButtonClick();
 				break;
 			case 'Escape':
 				setQueryParam(EQueryParams.PAGE, '1');
@@ -189,26 +227,45 @@ export const useSignup = () => {
 		}
 	};
 
+	const handleCreateAccountButtonClick = async () => {
+		if (!code) {
+			showToast('error', 'Введите код подтверждения');
+			setCodeError(true);
+
+			return;
+		}
+
+		setCodeError(false);
+
+		await signup(username, phone, email, password, code);
+	};
+
 	const signup = async (
 		username: string,
 		phone: string,
 		email: string,
 		password: string,
+		code: string,
 	) => {
 		try {
 			const { publicKey, privateKey } = await generateKeyPair();
 
-			const user = await authorizationService.signup({
-				username,
-				phone,
-				email,
-				password,
-			});
+			const user = await authorizationService.signup(
+				{
+					username,
+					phone,
+					email,
+					password,
+				},
+				code,
+			);
 
 			await usersService.uploadPublicKey(user.id, publicKey);
 			await db.saveValue(user.id, privateKey);
 
 			dispatch(setUserAction(user));
+
+			router.push('/chats');
 		} catch (error) {
 			showError(error);
 
@@ -246,14 +303,20 @@ export const useSignup = () => {
 		passwordError,
 		passwordConfirm,
 		passwordConfirmError,
-		sharedProps,
+		phoneProps,
+		codeProps,
+		codeError,
+		isCodeButtonDisabled,
+		codeButtonTimer,
 		handleUsernameChange,
 		handleEmailChange,
 		handlePasswordChange,
 		handlePasswordConfirmChange,
 		setQueryParam,
-		handleNextButtonClick,
-		handleSignupButtonClick,
+		handleNext1ButtonClick,
+		handleNext2ButtonClick,
+		handleSendCodeButtonClick,
+		handleCreateAccountButtonClick,
 		handleFirstScreenKeyDown,
 		handleSecondScreenKeyDown,
 	};
