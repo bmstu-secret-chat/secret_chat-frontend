@@ -7,14 +7,18 @@ import { VirtuosoHandle } from 'react-virtuoso';
 import { ChatService } from '@/entities/chat/api';
 import {
 	deleteActiveChatAction,
+	deleteTheirPublicKeyAction,
 	selectActiveChat,
 	selectChatList,
+	selectTheirPublicKey,
 	setActiveChatAction,
+	setTheirPublicKeyAction,
 } from '@/entities/chat/model';
 import {
 	selectMessagesByChat,
 	setMessagesAction,
 } from '@/entities/message/model';
+import { UsersService } from '@/entities/user/api';
 import { selectCurrentUser } from '@/entities/user/model';
 import { useScreenWidth } from '@/shared/hooks';
 import { SafeChatDB, showError, useSendMessage, vibrate } from '@/shared/lib';
@@ -32,6 +36,10 @@ export const useChat = (chatId: string) => {
 	const chats = useSelector(selectChatList);
 	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const theirPublicKey = useSelector(selectTheirPublicKey);
+
+	const companionId = activeChat?.user.id;
 
 	const messagesContainerRef = useRef<VirtuosoHandle>(null);
 
@@ -70,6 +78,24 @@ export const useChat = (chatId: string) => {
 		[dispatch, user],
 	);
 
+	const getTheirPublicKey = useCallback(async () => {
+		if (!companionId) {
+			showError('Собеседник не найдет');
+			return;
+		}
+
+		const usersService = new UsersService();
+
+		try {
+			const theirPubKey = await usersService.getPublicKey(companionId);
+
+			dispatch(setTheirPublicKeyAction(theirPubKey));
+		} catch (error) {
+			dispatch(deleteTheirPublicKeyAction());
+			showError(error);
+		}
+	}, [dispatch, companionId]);
+
 	const onSubmit = () => {
 		if (!activeChat) {
 			return;
@@ -94,6 +120,14 @@ export const useChat = (chatId: string) => {
 			dispatch(deleteActiveChatAction());
 		};
 	}, [dispatch, chats, chatId]);
+
+	useEffect(() => {
+		getTheirPublicKey();
+
+		return () => {
+			dispatch(deleteTheirPublicKeyAction());
+		};
+	}, [dispatch, getTheirPublicKey]);
 
 	useEffect(() => {
 		setCanRender(!!activeChat?.id);

@@ -5,11 +5,13 @@ import { RootState } from '@/shared/model';
 type ChatSlice = {
 	chatList: TChatModel[];
 	activeChat: TChatModel | null;
+	theirPublicKey: string | null;
 };
 
 const initialState: ChatSlice = {
 	chatList: [],
 	activeChat: null,
+	theirPublicKey: null,
 };
 
 export const chatSlice = createSlice({
@@ -47,6 +49,12 @@ export const chatSlice = createSlice({
 		deleteActiveChat: (state) => {
 			state.activeChat = null;
 		},
+		setTheirPublicKey: (state, action: PayloadAction<string>) => {
+			state.theirPublicKey = action.payload;
+		},
+		deleteTheirPublicKey: (state) => {
+			state.theirPublicKey = null;
+		},
 	},
 });
 
@@ -57,6 +65,8 @@ export const {
 	deleteChats: deleteChatsAction,
 	setActiveChat: setActiveChatAction,
 	deleteActiveChat: deleteActiveChatAction,
+	setTheirPublicKey: setTheirPublicKeyAction,
+	deleteTheirPublicKey: deleteTheirPublicKeyAction,
 } = chatSlice.actions;
 
 export const selectChatList = (state: RootState): ChatSlice['chatList'] =>
@@ -64,5 +74,9 @@ export const selectChatList = (state: RootState): ChatSlice['chatList'] =>
 
 export const selectActiveChat = (state: RootState): ChatSlice['activeChat'] =>
 	(state.chat as ChatSlice).activeChat;
+
+export const selectTheirPublicKey = (
+	state: RootState,
+): ChatSlice['theirPublicKey'] => (state.chat as ChatSlice).theirPublicKey;
 
 export const chatReducer = chatSlice.reducer;

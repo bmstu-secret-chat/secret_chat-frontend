@@ -7,9 +7,12 @@ export {
 	deleteChatsAction,
 	setActiveChatAction,
 	deleteActiveChatAction,
+	setTheirPublicKeyAction,
+	deleteTheirPublicKeyAction,
 	chatReducer,
 	selectChatList,
 	selectActiveChat,
+	selectTheirPublicKey,
 } from './chatSlice';
 export type { TChatModel } from './chat';
 export type { TWsCreateChatApi, TWsCreateChatModel } from './wsCreateChat';

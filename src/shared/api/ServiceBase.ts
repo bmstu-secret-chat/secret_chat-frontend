@@ -1,9 +1,5 @@
-// 'use client';
-
 import { ERequestMethods } from '../model/enums/requestMethods';
 import { TServiceConfig } from '../model/types/serviceConfig';
-
-// import { useRouter } from 'next/navigation';
 
 const REFRESH_URL = '/api/auth/refresh/';
 const URLS_WITHOUT_TOKEN = [
@@ -15,8 +11,6 @@ const URLS_WITHOUT_TOKEN = [
 ];
 
 export abstract class ServiceBase {
-	// private router = useRouter();
-
 	protected pendingRequests: { [key: string]: boolean } = {};
 	protected config: TServiceConfig[] = [];
 
@@ -42,7 +36,7 @@ export abstract class ServiceBase {
 			const currentTime = Math.floor(Date.now() / 1000);
 			const expirationTime = payload.exp || 0;
 
-			return expirationTime - currentTime < 10; // хотим чтобы время до истечение было более 10 секунд
+			return expirationTime - currentTime < 5 * 60;
 		} catch {
 			return true;
 		}
@@ -56,7 +50,6 @@ export abstract class ServiceBase {
 
 		if (!response.ok) {
 			const errorData = await response.json();
-			// this.router.push('/login');
 			throw errorData.error || 'Не удалось обновить токен';
 		}
 	}
