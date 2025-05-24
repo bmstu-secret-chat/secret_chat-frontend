@@ -7,21 +7,25 @@ import { VirtuosoHandle } from 'react-virtuoso';
 import { ChatService } from '@/entities/chat/api';
 import {
 	deleteActiveChatAction,
-	deleteTheirPublicKeyAction,
 	selectActiveChat,
 	selectChatList,
-	selectTheirPublicKey,
 	setActiveChatAction,
-	setTheirPublicKeyAction,
 } from '@/entities/chat/model';
 import {
 	selectMessagesByChat,
 	setMessagesAction,
 } from '@/entities/message/model';
 import { UsersService } from '@/entities/user/api';
-import { selectCurrentUser } from '@/entities/user/model';
+import { selectCurrentUser, selectMyPublicKey } from '@/entities/user/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { SafeChatDB, showError, useSendMessage, vibrate } from '@/shared/lib';
+import {
+	SafeChatDB,
+	showError,
+	useSendMessage,
+	vibrate,
+	decryptMessage,
+	encryptMessage,
+} from '@/shared/lib';
 import { EChatType } from '@/shared/model';
 
 const TOTAL_MESSAGES = 1_000_000;
@@ -36,9 +40,7 @@ export const useChat = (chatId: string) => {
 	const chats = useSelector(selectChatList);
 	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const theirPublicKey = useSelector(selectTheirPublicKey);
-
+	const myPublicKey = useSelector(selectMyPublicKey);
 	const companionId = activeChat?.user.id;
 
 	const messagesContainerRef = useRef<VirtuosoHandle>(null);
@@ -61,8 +63,11 @@ export const useChat = (chatId: string) => {
 				const db = new SafeChatDB();
 				const chatService = new ChatService();
 
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const privateKey = await db.getValue(user.id);
+				const myPrivateKey = await db.getValue(user.id);
+				if (!myPrivateKey) {
+					showError('Ключ шифрования не найден');
+					return;
+				}
 
 				const receivedMessages = await chatService.getMessagesFromChat(
 					dialogId,
@@ -70,7 +75,23 @@ export const useChat = (chatId: string) => {
 					TOTAL_MESSAGES,
 				);
 
-				dispatch(setMessagesAction({ dialogId, messages: receivedMessages }));
+				const decryptedMessages = await Promise.all(
+					receivedMessages.map(async (message) => {
+						if (!message.content) return message;
+
+						try {
+							const decryptedContent = await decryptMessage(
+								message.content,
+								myPrivateKey,
+							);
+							return { ...message, content: decryptedContent };
+						} catch {
+							return { ...message, content: 'Ошибка расшифровки сообщения' };
+						}
+					}),
+				);
+
+				dispatch(setMessagesAction({ dialogId, messages: decryptedMessages }));
 			} catch (error) {
 				showError(error);
 			}
@@ -78,31 +99,33 @@ export const useChat = (chatId: string) => {
 		[dispatch, user],
 	);
 
-	const getTheirPublicKey = useCallback(async () => {
-		if (!companionId) {
-			showError('Собеседник не найдет');
+	const onSubmit = async () => {
+		if (!activeChat || !content.trim() || !user || !companionId) {
 			return;
 		}
-
-		const usersService = new UsersService();
 
 		try {
-			const theirPubKey = await usersService.getPublicKey(companionId);
+			const usersService = new UsersService();
+			const theirPublicKey = await usersService.getPublicKey(companionId);
 
-			dispatch(setTheirPublicKeyAction(theirPubKey));
+			if (!myPublicKey || !theirPublicKey) {
+				showError('Ключи шифрования не найдены');
+				return;
+			}
+
+			const encryptedContent = await encryptMessage(
+				content,
+				myPublicKey,
+				theirPublicKey,
+			);
+
+			sendMessage(chatId, content, encryptedContent, activeChat.type);
+
+			if (isTabletDevice) vibrate(10);
+			setContent('');
 		} catch (error) {
-			dispatch(deleteTheirPublicKeyAction());
-			showError(error);
+			showError('Ошибка отправки сообщения: ' + error);
 		}
-	}, [dispatch, companionId]);
-
-	const onSubmit = () => {
-		if (!activeChat) {
-			return;
-		}
-
-		sendMessage(chatId, content, activeChat.type);
-		if (isTabletDevice) vibrate(10);
 	};
 
 	useEffect(() => {
@@ -120,14 +143,6 @@ export const useChat = (chatId: string) => {
 			dispatch(deleteActiveChatAction());
 		};
 	}, [dispatch, chats, chatId]);
-
-	useEffect(() => {
-		getTheirPublicKey();
-
-		return () => {
-			dispatch(deleteTheirPublicKeyAction());
-		};
-	}, [dispatch, getTheirPublicKey]);
 
 	useEffect(() => {
 		setCanRender(!!activeChat?.id);

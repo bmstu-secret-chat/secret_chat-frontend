@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteChatsAction } from '@/entities/chat/model';
 import { deleteMessagesAction } from '@/entities/message/model';
 import {
+	deleteMyPublicKeyAction,
 	deleteUserAction,
 	selectCurrentUser,
 	selectIsAuthorized,
@@ -36,6 +37,7 @@ export const useSidebar = () => {
 			await authorizationService.logout();
 
 			dispatch(deleteUserAction());
+			dispatch(deleteMyPublicKeyAction());
 			dispatch(deleteChatsAction());
 			dispatch(deleteMessagesAction());
 

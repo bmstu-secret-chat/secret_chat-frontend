@@ -4,8 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UsersService } from '@/entities/user/api';
-import { deleteUserAction, UserInfo } from '@/entities/user/model';
-import { EmitterEvents, eventEmitter, showToast } from '@/shared/lib';
+import {
+	deleteMyPublicKeyAction,
+	deleteUserAction,
+	UserInfo,
+} from '@/entities/user/model';
+import { EmitterEvents, eventEmitter, showError } from '@/shared/lib';
 
 export const useProfileDelete = (currentUser: UserInfo | null) => {
 	const router = useRouter();
@@ -21,8 +25,9 @@ export const useProfileDelete = (currentUser: UserInfo | null) => {
 			try {
 				await usersService.deleteUserAccount(userId);
 				dispatch(deleteUserAction());
-			} catch (error: any) {
-				showToast('error', error.message);
+				dispatch(deleteMyPublicKeyAction());
+			} catch (error) {
+				showError(error);
 			}
 		},
 		[dispatch],
@@ -38,8 +43,8 @@ export const useProfileDelete = (currentUser: UserInfo | null) => {
 		try {
 			await deleteUserAccount(currentUser.id);
 			return true;
-		} catch (error: any) {
-			console.error(error);
+		} catch (error) {
+			showError(error);
 
 			return false;
 		} finally {

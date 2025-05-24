@@ -6,7 +6,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UsersService } from '@/entities/user/api';
 import {
+	deleteMyPublicKeyAction,
 	deleteUserAction,
+	setMyPublicKeyAction,
 	setUserAction,
 	UserShortInfo,
 } from '@/entities/user/model';
@@ -52,10 +54,14 @@ export const useLogin = () => {
 	const login = async (username: string, password: string) => {
 		try {
 			const user = await authorizationService.login({ username, password });
+			const myPublicKey = await usersService.getPublicKey(user.id);
+
+			dispatch(setMyPublicKeyAction(myPublicKey));
 			dispatch(setUserAction(user));
 		} catch (error) {
 			showError(error);
 			dispatch(deleteUserAction());
+			dispatch(deleteMyPublicKeyAction());
 
 			throw error;
 		}

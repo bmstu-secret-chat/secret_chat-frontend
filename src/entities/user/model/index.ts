@@ -8,6 +8,9 @@ export {
 	userReducer,
 	setUserAction,
 	deleteUserAction,
+	setMyPublicKeyAction,
+	deleteMyPublicKeyAction,
 	selectCurrentUser,
 	selectIsAuthorized,
+	selectMyPublicKey,
 } from './userSlice';

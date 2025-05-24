@@ -20,28 +20,42 @@ export const useSendMessage = () => {
 
 	const { sendWsMessage } = useWebSocketContext();
 
-	const sendMessage = (chatId: string, data: string, chatType: EChatType) => {
-		const messageContent = data.trim();
-		if (!messageContent || messageContent.length === 0) {
-			return;
-		}
+	const sendMessage = (
+		chatId: string,
+		content: string,
+		encryptedContent: string,
+		chatType: EChatType,
+	) => {
+		if (!user) return;
 
-		const message = new WsMessageBase(uuidv4(), EWsMessageType.SEND_MESSAGE, {
-			userId: user!.id,
+		const id = uuidv4();
+		const time = new Date().getTime().toString();
+
+		const messagetoSend = new WsMessageBase(id, EWsMessageType.SEND_MESSAGE, {
+			userId: user.id,
 			chatId,
 			chatType,
 			status: EMessageStatus.SENT,
-			content: messageContent,
-			time: new Date().getTime().toString(),
+			content: encryptedContent,
+			time,
 		});
 
-		dispatch(addMessageAction(message.toMessage()));
+		const messageToShow = new WsMessageBase(id, EWsMessageType.SEND_MESSAGE, {
+			userId: user.id,
+			chatId,
+			chatType,
+			status: EMessageStatus.SENT,
+			content,
+			time,
+		});
 
-		sendWsMessage(JSON.stringify(message.toApi()));
+		dispatch(addMessageAction(messageToShow.toMessage()));
+
+		sendWsMessage(JSON.stringify(messagetoSend.toApi()));
 
 		// Если сервер не отвечает в течение 5 секунд, ставим ошибку
 		const messageWithError = new WsMessageBase(
-			message.id,
+			messageToShow.id,
 			EWsMessageType.SEND_MESSAGE_RESPONSE,
 			{
 				chatId,

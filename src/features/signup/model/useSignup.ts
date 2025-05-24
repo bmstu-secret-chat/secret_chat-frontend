@@ -5,7 +5,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UsersService } from '@/entities/user/api';
-import { deleteUserAction, setUserAction } from '@/entities/user/model';
+import {
+	deleteMyPublicKeyAction,
+	deleteUserAction,
+	setMyPublicKeyAction,
+	setUserAction,
+} from '@/entities/user/model';
 import { SIGNUP_URL } from '@/features/signup/config';
 import { validateSignupFields } from '@/features/signup/lib';
 import { AuthorizationService } from '@/shared/api/AuthorizationService';
@@ -262,7 +267,9 @@ export const useSignup = () => {
 
 			await usersService.uploadPublicKey(user.id, publicKey);
 			await db.saveValue(user.id, privateKey);
+			const myPublicKey = await usersService.getPublicKey(user.id);
 
+			dispatch(setMyPublicKeyAction(myPublicKey));
 			dispatch(setUserAction(user));
 
 			router.push('/chats');
@@ -270,6 +277,7 @@ export const useSignup = () => {
 			showError(error);
 
 			dispatch(deleteUserAction());
+			dispatch(deleteMyPublicKeyAction());
 
 			return;
 		}
