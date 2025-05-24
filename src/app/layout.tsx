@@ -11,7 +11,7 @@ import { Sidebar } from '@/widgets';
 type Locale = ConfigProviderProps['locale'];
 
 export const metadata: Metadata = {
-	title: 'SafeChat - Самый безопасный мессенджер для конфиденциального общения',
+	title: 'SafeChat',
 	description:
 		'SafeChat - защищенный мессенджер с end-to-end шифрованием для безопасного общения. Конфиденциальность ваших данных - наш главный приоритет.',
 	keywords:
