@@ -215,7 +215,7 @@ export function SignupForm() {
 							transition={{ duration: 0.5 }}
 							layout
 						>
-							<LabelInputContainer className='my-2 h-[150px]'>
+							<LabelInputContainer className='my-2 h-[142px]'>
 								<Label htmlFor='phone'>Введите код подтверждения</Label>
 								<AntInput.OTP
 									length={6}
