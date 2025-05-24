@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 	},
 	verification: {
 		google: 'DkzgMUQapXjzr_nyt8DzTLunAbeJ8VNt4RBYlikkb2Y',
-		yandex: '8a2e561756cded9f',
+		yandex: '25b4c84eab2dca13',
 	},
 	alternates: {
 		canonical: 'https://safe-chat.ru',

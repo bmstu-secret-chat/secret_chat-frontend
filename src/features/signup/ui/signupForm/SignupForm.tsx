@@ -230,8 +230,8 @@ export function SignupForm() {
 								/>
 
 								<span className={cn('text-center text-neutral-600 pt-4 px-1')}>
-									Для подтверждения регистрации введите код, отправленный на
-									почту, указанную на предыдущем шаге
+									Для отправки кода подтверждения на почту нажмите на кнопку
+									ниже
 								</span>
 							</LabelInputContainer>
 
