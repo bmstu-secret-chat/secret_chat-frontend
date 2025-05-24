@@ -1,26 +1,49 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { VirtuosoHandle } from 'react-virtuoso';
+import { ChatService } from '@/entities/chat/api';
 import {
-	selectActiveChat,
 	deleteActiveChatAction,
+	selectActiveChat,
+	selectChatList,
 	setActiveChatAction,
 } from '@/entities/chat/model';
-import { selectMessages, TWsSendMessageModel } from '@/entities/message/model';
+import {
+	selectMessagesByChat,
+	setMessagesAction,
+} from '@/entities/message/model';
+import { UsersService } from '@/entities/user/api';
+import { selectCurrentUser, selectMyPublicKey } from '@/entities/user/model';
 import { useScreenWidth } from '@/shared/hooks';
-import { useSendMessage, vibrate } from '@/shared/lib';
+import {
+	SafeChatDB,
+	showError,
+	useSendMessage,
+	vibrate,
+	decryptMessage,
+	encryptMessage,
+} from '@/shared/lib';
+import { EChatType } from '@/shared/model';
+
+const TOTAL_MESSAGES = 1_000_000;
 
 export const useChat = (chatId: string) => {
 	const router = useRouter();
 	const pathname = usePathname();
+
 	const dispatch = useDispatch();
 
-	const messages = useSelector(selectMessages);
+	const user = useSelector(selectCurrentUser);
+	const chats = useSelector(selectChatList);
+	const messages = useSelector(selectMessagesByChat(chatId));
 	const activeChat = useSelector(selectActiveChat);
+	const myPublicKey = useSelector(selectMyPublicKey);
+	const companionId = activeChat?.user.id;
 
-	const messagesContainerRef = useRef<HTMLDivElement>(null);
+	const messagesContainerRef = useRef<VirtuosoHandle>(null);
 
 	const [content, setContent] = useState('');
 	const [canRender, setCanRender] = useState(false);
@@ -29,27 +52,89 @@ export const useChat = (chatId: string) => {
 
 	const { sendMessage } = useSendMessage();
 
-	const messagesFromActiveChat = useMemo(
-		() =>
-			messages.filter(
-				(message) =>
-					(message.payload as TWsSendMessageModel).chatId === activeChat?.id,
-			),
-		[messages, activeChat],
+	const getMessages = useCallback(
+		async (dialogId: string) => {
+			if (!user) {
+				showError('Пользователь не найден');
+				return;
+			}
+
+			try {
+				const db = new SafeChatDB();
+				const chatService = new ChatService();
+
+				const myPrivateKey = await db.getValue(user.id);
+				if (!myPrivateKey) {
+					showError('Ключ шифрования не найден');
+					return;
+				}
+
+				const receivedMessages = await chatService.getMessagesFromChat(
+					dialogId,
+					0,
+					TOTAL_MESSAGES,
+				);
+
+				const decryptedMessages = await Promise.all(
+					receivedMessages.map(async (message) => {
+						if (!message.content) return message;
+
+						try {
+							const decryptedContent = await decryptMessage(
+								message.content,
+								myPrivateKey,
+							);
+							return { ...message, content: decryptedContent };
+						} catch {
+							return { ...message, content: 'Ошибка расшифровки сообщения' };
+						}
+					}),
+				);
+
+				dispatch(setMessagesAction({ dialogId, messages: decryptedMessages }));
+			} catch (error) {
+				showError(error);
+			}
+		},
+		[dispatch, user],
 	);
 
-	useEffect(() => {
-		messagesContainerRef.current?.scrollTo({
-			top: messagesContainerRef.current.scrollHeight,
-		});
-	}, []);
+	const onSubmit = async () => {
+		if (!activeChat || !content.trim() || !user || !companionId) {
+			return;
+		}
+
+		try {
+			const usersService = new UsersService();
+			const theirPublicKey = await usersService.getPublicKey(companionId);
+
+			if (!myPublicKey || !theirPublicKey) {
+				showError('Ключи шифрования не найдены');
+				return;
+			}
+
+			const encryptedContent = await encryptMessage(
+				content,
+				myPublicKey,
+				theirPublicKey,
+			);
+
+			sendMessage(chatId, content, encryptedContent, activeChat.type);
+
+			if (isTabletDevice) vibrate(10);
+			setContent('');
+		} catch (error) {
+			showError('Ошибка отправки сообщения: ' + error);
+		}
+	};
 
 	useEffect(() => {
-		messagesContainerRef.current?.scrollTo({
-			top: messagesContainerRef.current.scrollHeight,
-			behavior: 'smooth',
-		});
-	}, [messages.length]);
+		if (!activeChat || activeChat.type !== EChatType.DEFAULT) {
+			return;
+		}
+
+		getMessages(activeChat.id);
+	}, [getMessages, activeChat]);
 
 	useEffect(() => {
 		dispatch(setActiveChatAction(chatId));
@@ -57,7 +142,7 @@ export const useChat = (chatId: string) => {
 		return () => {
 			dispatch(deleteActiveChatAction());
 		};
-	}, [dispatch, chatId]);
+	}, [dispatch, chats, chatId]);
 
 	useEffect(() => {
 		setCanRender(!!activeChat?.id);
@@ -78,14 +163,9 @@ export const useChat = (chatId: string) => {
 		};
 	}, [pathname, router]);
 
-	const onSubmit = () => {
-		sendMessage(chatId, content);
-		if (isTabletDevice) vibrate(10);
-	};
-
 	return {
 		messagesContainerRef,
-		messagesFromActiveChat,
+		messages,
 		content,
 		activeChat,
 		canRender,

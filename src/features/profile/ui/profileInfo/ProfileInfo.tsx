@@ -7,8 +7,9 @@ import {
 	useCreateSecretChat,
 	useProfileInfo,
 } from '@/features/profile/model';
+import { KeyDrawer } from '@/features/profile/ui';
 import { cn } from '@/shared/lib';
-import { LabelValue, UploadImage } from '@/shared/ui';
+import { ButtonShimmer, LabelValue, UploadImage } from '@/shared/ui';
 import { RenderIf } from '@/shared/utils';
 
 type Props = {
@@ -24,10 +25,14 @@ export const ProfileInfo: React.FC<Props> = ({
 	setUserAvatar,
 	deleteUserAvatar,
 }) => {
-	const { isCurrentUser, upperFields, downFields } = useProfileInfo(
-		userInfo,
-		currentUser,
-	);
+	const {
+		openDrawer,
+		setOpenDrawer,
+		isCurrentUser,
+		upperFields,
+		downFields,
+		handleOpenDrawerBtnClick,
+	} = useProfileInfo(userInfo, currentUser);
 
 	const { createChat } = useCreateChat();
 	const { isFetching: isSecretChatFetching, createSecretChat } =
@@ -67,18 +72,13 @@ export const ProfileInfo: React.FC<Props> = ({
 				condition={!isCurrentUser}
 				className={'flex flex-col justify-center w-max gap-3'}
 			>
-				<button
-					className={cn(
-						'inline-flex animate-shimmer items-center justify-center',
-						'rounded-[8px] border border-slate-800 transition-colors',
-						'bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)]',
-						'bg-[length:200%_100%] font-medium text-slate-400',
-						'w-full flex-grow h-10',
-					)}
+				<ButtonShimmer
+					className={'w-full'}
 					onClick={() => createChat(userInfo.id)}
 				>
 					Написать сообщение
-				</button>
+				</ButtonShimmer>
+
 				<Button
 					className={'py-2 px-4'}
 					type={'default'}
@@ -96,6 +96,22 @@ export const ProfileInfo: React.FC<Props> = ({
 					item={item}
 				/>
 			))}
+
+			<RenderIf condition={isCurrentUser}>
+				<Button
+					className={'py-2 px-4'}
+					type={'default'}
+					size={'large'}
+					onClick={handleOpenDrawerBtnClick}
+				>
+					Войти с нового устройства
+				</Button>
+
+				<KeyDrawer
+					open={openDrawer}
+					setOpen={setOpenDrawer}
+				/>
+			</RenderIf>
 		</div>
 	);
 };

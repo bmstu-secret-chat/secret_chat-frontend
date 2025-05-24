@@ -1,8 +1,9 @@
+import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
-import { ServiceBase } from './ServiceBase';
 
 export class UtilsService extends ServiceBase {
 	private static instance: UtilsService;
+	private readonly baseUrl = '/api/backend';
 
 	constructor() {
 		super();
@@ -14,7 +15,7 @@ export class UtilsService extends ServiceBase {
 		this.config = [
 			{
 				name: 'uploadImage',
-				url: '/api/backend/storage/upload-image/',
+				url: `${this.baseUrl}/storage/upload-image/`,
 				method: ERequestMethods.POST,
 			},
 		];

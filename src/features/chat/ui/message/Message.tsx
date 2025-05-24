@@ -1,20 +1,17 @@
 import React, { memo } from 'react';
-import { TWsSendMessageModel } from '@/entities/message/model';
 import { useMessage } from '@/features/chat/model';
 import { MessageMenu, MessageStatus } from '@/features/chat/ui';
 import { cn, formatTimeHHmm } from '@/shared/lib';
-import { TWsMessageBaseModel } from '@/shared/model';
+import { MessageModel } from '@/shared/model';
 import { Popover } from '@/shared/ui';
 
 type Props = {
-	msg: TWsMessageBaseModel;
+	msg: MessageModel;
 };
 
-export const Message: React.FC<Props> = memo(({ msg: { payload } }: Props) => {
-	const { content, time, status, userId } = payload as TWsSendMessageModel;
-
+export const Message: React.FC<Props> = memo(({ msg: message }: Props) => {
 	const { popoverRef, isMenuOpen, fromMe, handleClick, handleContextMenu } =
-		useMessage(userId);
+		useMessage(message.userId);
 
 	return (
 		<div
@@ -37,11 +34,11 @@ export const Message: React.FC<Props> = memo(({ msg: { payload } }: Props) => {
 					onClick={handleClick}
 				>
 					<span className={cn('text-white leading-tight break-words')}>
-						{content}
+						{message.content}
 					</span>
 					<div className={cn('flex justify-end mt-2 gap-2 text-white')}>
-						<span>{formatTimeHHmm(time)}</span>
-						<MessageStatus status={status} />
+						<span>{formatTimeHHmm(message.timeCreate)}</span>
+						<MessageStatus status={message.status} />
 					</div>
 				</div>
 			</Popover>

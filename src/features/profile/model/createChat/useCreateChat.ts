@@ -2,11 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { ChatService } from '@/entities/chat/api';
+import { addChatAction } from '@/entities/chat/model';
 import { showToast } from '@/shared/lib';
 
 export const useCreateChat = () => {
 	const router = useRouter();
+	const dispatch = useDispatch();
 
 	const [isFetching, setIsFetching] = useState(false);
 
@@ -18,13 +21,17 @@ export const useCreateChat = () => {
 
 			try {
 				const chatService = new ChatService();
-				const dialogId = await chatService.createChat(withUserId);
+				const newChat = await chatService.createChat(withUserId);
 
 				if (isProfileModalOpen) {
 					router.back();
 				}
 
-				router.push(`/chats/${dialogId}`);
+				dispatch(addChatAction(newChat));
+
+				setTimeout(() => {
+					router.push(`/chats/${newChat.id}`);
+				}, 500);
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					showToast('error', error.message);
@@ -35,7 +42,7 @@ export const useCreateChat = () => {
 				setIsFetching(false);
 			}
 		},
-		[router, isProfileModalOpen],
+		[dispatch, router, isProfileModalOpen],
 	);
 
 	return {

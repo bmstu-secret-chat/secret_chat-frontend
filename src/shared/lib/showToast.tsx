@@ -63,3 +63,12 @@ export const showToast = (
 
 	openToast(type, message, duration, description, placement);
 };
+
+export const showError = (error: unknown) => {
+	showToast(
+		'error',
+		error instanceof Error && error.message
+			? error.message
+			: 'Ошибка при выполнении действия',
+	);
+};

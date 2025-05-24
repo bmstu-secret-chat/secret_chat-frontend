@@ -5,11 +5,13 @@ import { RootState } from '@/shared/model';
 type UserSlice = {
 	isAuthorized: boolean;
 	user: UserInfo | null;
+	myPublicKey: string | null;
 };
 
 const initialState: UserSlice = {
 	isAuthorized: false,
 	user: null,
+	myPublicKey: null,
 };
 
 export const userSlice = createSlice({
@@ -24,6 +26,12 @@ export const userSlice = createSlice({
 			state.user = null;
 			state.isAuthorized = false;
 		},
+		setMyPublicKey: (state, action: PayloadAction<string>) => {
+			state.myPublicKey = action.payload;
+		},
+		deleteMyPublicKey: (state) => {
+			state.myPublicKey = null;
+		},
 	},
 });
 
@@ -34,7 +42,14 @@ export const selectIsAuthorized = (
 	state: RootState,
 ): UserSlice['isAuthorized'] => state.user.isAuthorized;
 
-export const { setUser: setUserAction, deleteUser: deleteUserAction } =
-	userSlice.actions;
+export const selectMyPublicKey = (state: RootState): UserSlice['myPublicKey'] =>
+	state.user.myPublicKey;
+
+export const {
+	setUser: setUserAction,
+	deleteUser: deleteUserAction,
+	setMyPublicKey: setMyPublicKeyAction,
+	deleteMyPublicKey: deleteMyPublicKeyAction,
+} = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

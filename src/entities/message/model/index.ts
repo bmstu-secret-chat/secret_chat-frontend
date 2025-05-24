@@ -5,7 +5,7 @@ export {
 	deleteMessagesFromChatAction,
 	deleteMessagesAction,
 	messageReducer,
-	selectMessages,
+	selectMessagesByChat,
 } from './messageSlice';
 export type {
 	TWsMessageMessageApi,
