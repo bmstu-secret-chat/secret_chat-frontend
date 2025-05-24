@@ -61,7 +61,6 @@ export const validateSignupFields = (
 	}
 
 	if (passwordTrimmed !== passwordConfirmTrimmed) {
-		console.log(passwordTrimmed, passwordConfirmTrimmed);
 		return {
 			isValid: false,
 			message: 'Пароли не совпадают',
