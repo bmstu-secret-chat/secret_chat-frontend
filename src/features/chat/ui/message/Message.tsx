@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const Message: React.FC<Props> = memo(({ msg: message }: Props) => {
-	const { popoverRef, isMenuOpen, fromMe, handleClick, handleContextMenu } =
+	const { isMenuOpen, fromMe, setIsMenuOpen, handleClick, handleContextMenu } =
 		useMessage(message.userId);
 
 	return (
@@ -18,11 +18,15 @@ export const Message: React.FC<Props> = memo(({ msg: message }: Props) => {
 			className={cn('w-full flex', fromMe ? 'justify-end' : 'justify-start')}
 		>
 			<Popover
-				content={<MessageMenu />}
+				content={
+					<MessageMenu
+						content={message.content}
+						setIsMenuOpen={setIsMenuOpen}
+					/>
+				}
 				open={isMenuOpen}
 			>
 				<div
-					ref={popoverRef}
 					className={cn(
 						'flex flex-col my-2 px-4 py-2 max-w-max',
 						'rounded-tl-[18px] rounded-tr-[18px] tablet:max-w-[40vw] max-w-[70vw]',

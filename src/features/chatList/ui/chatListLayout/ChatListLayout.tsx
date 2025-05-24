@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ChatListProvider, useChatList } from '@/features/chatList/model';
-import { ChatList, CreateDialogButton } from '@/features/chatList/ui';
+import { ChatList } from '@/features/chatList/ui';
 import { cn } from '@/shared/lib';
 import { AuthRoute } from '@/shared/utils';
 
@@ -16,7 +16,7 @@ export function ChatListLayout({ children }: { children: React.ReactNode }) {
 					<div className={cn(isChatListPage ? '' : 'md:block hidden')}>
 						<ChatList />
 					</div>
-					<CreateDialogButton />
+					{/* <CreateDialogButton /> */}
 					{children}
 				</div>
 			</ChatListProvider>
