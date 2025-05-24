@@ -1,6 +1,6 @@
 import { TUserWithPwModel, UserInfo } from '@/entities/user/model';
+import { ServiceBase } from '@/shared/api';
 import { ERequestMethods } from '@/shared/model';
-import { ServiceBase } from './ServiceBase';
 
 export class AuthorizationService extends ServiceBase {
 	private static instance: AuthorizationService;
@@ -29,16 +29,21 @@ export class AuthorizationService extends ServiceBase {
 				method: ERequestMethods.POST,
 			},
 			{ name: 'check', url: `/api/auth/check/`, method: ERequestMethods.GET },
+			{
+				name: 'sendCode',
+				url: `/api/auth/code/`,
+				method: ERequestMethods.POST,
+			},
 		];
 	}
 
-	async signup(user: TUserWithPwModel): Promise<UserInfo> {
+	async signup(user: TUserWithPwModel, code: string): Promise<UserInfo> {
 		const configItem = this.getConfigItem('signup');
 
 		const response = await this.makeHttpRequest(
 			configItem.method,
 			configItem.url,
-			user,
+			{ user, code },
 		);
 
 		return UserInfo.createFromApi(response);
@@ -71,5 +76,11 @@ export class AuthorizationService extends ServiceBase {
 		);
 
 		return UserInfo.createFromApi(response);
+	}
+
+	async sendCode(email: string): Promise<void> {
+		const configItem = this.getConfigItem('sendCode');
+
+		await this.makeHttpRequest(configItem.method, configItem.url, { email });
 	}
 }

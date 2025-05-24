@@ -1,6 +1,8 @@
+export { AnimatedCounter } from './animatedCounter/AnimatedCounter';
 export { BackgroundGradient } from './backgroundGradient/BackgroundGradient';
 export { BackgroundLines } from './backgroundLines/BackgroundLines';
 export { BottomGradient } from './bottomGradient/BottomGradient';
+export { ButtonShimmer } from './buttonShimmer/ButtonShimmer';
 export { Cascader } from './cascader/Cascader';
 export { DatePicker } from './datePicker/DatePicker';
 export { Divider } from './divider/Divider';

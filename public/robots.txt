@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /login/
+Disallow: /signup/
+
+Sitemap: https://safe-chat.ru/sitemap.xml 

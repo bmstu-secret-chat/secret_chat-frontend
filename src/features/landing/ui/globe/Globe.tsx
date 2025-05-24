@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { memo, useCallback } from 'react';
 import { cn } from '@/shared/lib';
+import { ButtonShimmer } from '@/shared/ui';
 
 const World = dynamic(() => import('@/shared/ui').then((m) => m.World), {
 	ssr: false,
@@ -434,18 +435,10 @@ export const Globe = memo(() => {
 						>
 							{'Передавайте защищенные сообщения \n из любой точки мира'}
 						</p>
-						<button
-							className={cn(
-								'inline-flex animate-shimmer items-center justify-center',
-								'rounded-md border border-slate-800 transition-colors',
-								'bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)]',
-								'bg-[length:200%_100%] font-medium text-slate-400',
-								'w-max flex-grow h-10 mt-2 px-4',
-							)}
-							onClick={handleButtonClick}
-						>
+
+						<ButtonShimmer onClick={handleButtonClick}>
 							Начать общаться
-						</button>
+						</ButtonShimmer>
 					</div>
 				</motion.div>
 				<div className='absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40' />

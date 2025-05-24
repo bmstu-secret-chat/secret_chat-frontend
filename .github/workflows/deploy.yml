@@ -35,6 +35,6 @@ jobs:
             PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$NPM_PATH install &&
             PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$NPM_PATH run build &&
             PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$PM2_PATH restart frontend ||
-            PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$PM2_PATH start npm --name \"frontend\" -- run start
+            PATH=\$PATH:/root/.nvm/versions/node/v23.6.0/bin \$PM2_PATH start npm --name frontend -- run start
           "
 

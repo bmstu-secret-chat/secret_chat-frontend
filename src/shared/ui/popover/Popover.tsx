@@ -7,6 +7,7 @@ type Props = {
 	title?: string;
 	content: React.ReactNode;
 	children: React.ReactNode;
+	trigger?: 'click' | 'hover' | 'focus';
 };
 
 export const Popover: React.FC<Props> = ({
@@ -15,8 +16,10 @@ export const Popover: React.FC<Props> = ({
 	title,
 	content,
 	children,
+	trigger,
 }) => (
 	<AntdPopover
+		trigger={trigger}
 		className={className}
 		open={open}
 		title={title}

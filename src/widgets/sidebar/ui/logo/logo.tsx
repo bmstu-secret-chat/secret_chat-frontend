@@ -13,8 +13,8 @@ const LogoLabel = () => {
 		const handleOnline = () => setIsOnline(true);
 		const handleOffline = () => setIsOnline(false);
 
-		window.addEventListener('online', handleOnline);
-		window.addEventListener('offline', handleOffline);
+		document.addEventListener('online', handleOnline);
+		document.addEventListener('offline', handleOffline);
 
 		let interval: NodeJS.Timeout;
 		if (!isOnline) {
@@ -28,8 +28,8 @@ const LogoLabel = () => {
 		}
 
 		return () => {
-			window.removeEventListener('online', handleOnline);
-			window.removeEventListener('offline', handleOffline);
+			document.removeEventListener('online', handleOnline);
+			document.removeEventListener('offline', handleOffline);
 			if (interval) clearInterval(interval);
 		};
 	}, [isOnline]);
@@ -51,12 +51,12 @@ const LogoIcon = () => {
 		const handleOnline = () => setIsOnline(true);
 		const handleOffline = () => setIsOnline(false);
 
-		window.addEventListener('online', handleOnline);
-		window.addEventListener('offline', handleOffline);
+		document.addEventListener('online', handleOnline);
+		document.addEventListener('offline', handleOffline);
 
 		return () => {
-			window.removeEventListener('online', handleOnline);
-			window.removeEventListener('offline', handleOffline);
+			document.removeEventListener('online', handleOnline);
+			document.removeEventListener('offline', handleOffline);
 		};
 	}, []);
 

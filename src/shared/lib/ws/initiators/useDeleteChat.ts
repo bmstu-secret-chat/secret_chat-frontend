@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { EWsMessageType, WsMessageBase } from '@/shared/model';
-import { useWebSocketContext } from '@/shared/model/contexts/webSocketContext';
+import { useWebSocketContext } from '@/shared/model/contexts';
 
 export const useDeleteChat = () => {
 	const { sendWsMessage } = useWebSocketContext();

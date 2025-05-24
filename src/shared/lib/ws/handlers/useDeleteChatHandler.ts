@@ -2,10 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { deleteChatAction, TWsDeleteChatModel } from '@/entities/chat/model';
+import {
+	deleteChatAction,
+	type TWsDeleteChatModel,
+} from '@/entities/chat/model';
 import { deleteMessagesFromChatAction } from '@/entities/message/model';
 import { showToast } from '@/shared/lib';
-import { WsMessageBase } from '@/shared/model';
+import type { WsMessageBase } from '@/shared/model';
 
 export const useDeleteChatHandler = () => {
 	const dispatch = useDispatch();

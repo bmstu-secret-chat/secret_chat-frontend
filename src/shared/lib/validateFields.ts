@@ -24,3 +24,7 @@ export const isPasswordCorrect = (password: string): boolean => {
 		/^[a-zA-Z0-9]+$/.test(password)
 	);
 };
+
+export const isPhoneNumberCorrect = (phoneNumber: string): boolean => {
+	return /^8\d{10}$/.test(phoneNumber);
+};

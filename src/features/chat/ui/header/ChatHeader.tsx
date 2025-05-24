@@ -2,10 +2,16 @@ import { IconArrowLeft, IconTrashX } from '@tabler/icons-react';
 import React from 'react';
 import { useChatHeader } from '@/features/chat/model';
 import { cn } from '@/shared/lib';
+import { EChatType } from '@/shared/model';
 
 export const ChatHeader: React.FC = () => {
-	const { handleBackButtonClick, handleSecretChatExit, activeChat } =
-		useChatHeader();
+	const {
+		handleBackButtonClick,
+		handleSecretChatExit,
+		handleUsernameClick,
+		handleClearChat,
+		activeChat,
+	} = useChatHeader();
 
 	return (
 		<header
@@ -19,10 +25,21 @@ export const ChatHeader: React.FC = () => {
 				className={'cursor-pointer'}
 				onClick={handleBackButtonClick}
 			/>
-			<span>{activeChat?.users?.[0].username}</span>
+
+			<span
+				className={'cursor-pointer'}
+				onClick={handleUsernameClick}
+			>
+				{activeChat?.user?.username}
+			</span>
+
 			<IconTrashX
 				className={'cursor-pointer'}
-				onClick={handleSecretChatExit}
+				onClick={
+					activeChat?.type === EChatType.SECRET
+						? handleSecretChatExit
+						: handleClearChat
+				}
 			/>
 		</header>
 	);

@@ -82,12 +82,11 @@ body {
 
 /* Убираем стрелки для всех браузеров */
 input[type="number"] {
-  -moz-appearance: textfield; /* Для Firefox */
+  -moz-appearance: none; /* Для Firefox */
   -webkit-appearance: none; /* Для Safari и Chrome */
   appearance: none; /* Для современных браузеров */
 }
 
-/* Убираем дополнительные стили для Chrome */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

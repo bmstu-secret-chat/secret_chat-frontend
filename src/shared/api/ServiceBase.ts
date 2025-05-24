@@ -1,15 +1,16 @@
-// 'use client';
-
-// import { useRouter } from 'next/navigation';
-
-import { ERequestMethods, TServiceConfig } from '@/shared/model';
+import { ERequestMethods } from '../model/enums/requestMethods';
+import { TServiceConfig } from '../model/types/serviceConfig';
 
 const REFRESH_URL = '/api/auth/refresh/';
-const URLS_WITHOUT_TOKEN = ['/api/auth/login/', '/api/auth/signup/'];
+const URLS_WITHOUT_TOKEN = [
+	'/api/auth/login/',
+	'/api/auth/signup/',
+	'/api/auth/code/',
+	'/api/backend/users/user/by_name',
+	'/api/backend/users/private-key/get/',
+];
 
 export abstract class ServiceBase {
-	// private router = useRouter();
-
 	protected pendingRequests: { [key: string]: boolean } = {};
 	protected config: TServiceConfig[] = [];
 
@@ -35,7 +36,7 @@ export abstract class ServiceBase {
 			const currentTime = Math.floor(Date.now() / 1000);
 			const expirationTime = payload.exp || 0;
 
-			return expirationTime - currentTime < 10; // хотим чтобы время до истечение было более 10 секунд
+			return expirationTime - currentTime < 5 * 60;
 		} catch {
 			return true;
 		}
@@ -49,13 +50,16 @@ export abstract class ServiceBase {
 
 		if (!response.ok) {
 			const errorData = await response.json();
-			// this.router.push('/login');
 			throw errorData.error || 'Не удалось обновить токен';
 		}
 	}
 
 	private async checkAccessToken(url: string): Promise<void> {
-		if (URLS_WITHOUT_TOKEN.includes(url)) {
+		if (
+			URLS_WITHOUT_TOKEN.some(
+				(allowedUrl) => url === allowedUrl || url.includes(allowedUrl),
+			)
+		) {
 			return;
 		}
 
@@ -86,8 +90,6 @@ export abstract class ServiceBase {
 		this.pendingRequests[url] = true;
 
 		try {
-			await this.checkAccessToken(url);
-
 			const options: RequestInit = {
 				method,
 				headers: {

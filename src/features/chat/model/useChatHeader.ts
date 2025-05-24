@@ -19,5 +19,22 @@ export const useChatHeader = () => {
 		[],
 	);
 
-	return { handleBackButtonClick, handleSecretChatExit, activeChat };
+	const handleClearChat = useCallback(
+		() => eventEmitter.emit(EmitterEvents.MODAL_OPEN_CHAT_CLEAR),
+		[],
+	);
+
+	const handleUsernameClick = useCallback(() => {
+		if (!activeChat?.user) return;
+
+		router.push(`/profile/${activeChat.user.id}`);
+	}, [router, activeChat]);
+
+	return {
+		handleBackButtonClick,
+		handleSecretChatExit,
+		handleUsernameClick,
+		handleClearChat,
+		activeChat,
+	};
 };

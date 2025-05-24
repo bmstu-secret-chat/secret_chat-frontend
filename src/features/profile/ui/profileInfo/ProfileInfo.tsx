@@ -2,9 +2,14 @@ import { Button, Image } from 'antd';
 import React from 'react';
 import { userDefaultAvatar } from '@/assets';
 import { UserInfo } from '@/entities/user/model';
-import { useCreateSecretChat, useProfileInfo } from '@/features/profile/model';
+import {
+	useCreateChat,
+	useCreateSecretChat,
+	useProfileInfo,
+} from '@/features/profile/model';
+import { KeyDrawer } from '@/features/profile/ui';
 import { cn } from '@/shared/lib';
-import { LabelValue, UploadImage } from '@/shared/ui';
+import { ButtonShimmer, LabelValue, UploadImage } from '@/shared/ui';
 import { RenderIf } from '@/shared/utils';
 
 type Props = {
@@ -20,12 +25,18 @@ export const ProfileInfo: React.FC<Props> = ({
 	setUserAvatar,
 	deleteUserAvatar,
 }) => {
-	const { isCurrentUser, upperFields, downFields } = useProfileInfo(
-		userInfo,
-		currentUser,
-	);
+	const {
+		openDrawer,
+		setOpenDrawer,
+		isCurrentUser,
+		upperFields,
+		downFields,
+		handleOpenDrawerBtnClick,
+	} = useProfileInfo(userInfo, currentUser);
 
-	const { isFetching, createSecretChat } = useCreateSecretChat();
+	const { createChat } = useCreateChat();
+	const { isFetching: isSecretChatFetching, createSecretChat } =
+		useCreateSecretChat();
 
 	return (
 		<div
@@ -57,11 +68,22 @@ export const ProfileInfo: React.FC<Props> = ({
 				</div>
 			</div>
 
-			<RenderIf condition={!isCurrentUser}>
+			<RenderIf
+				condition={!isCurrentUser}
+				className={'flex flex-col justify-center w-max gap-3'}
+			>
+				<ButtonShimmer
+					className={'w-full'}
+					onClick={() => createChat(userInfo.id)}
+				>
+					Написать сообщение
+				</ButtonShimmer>
+
 				<Button
 					className={'py-2 px-4'}
+					type={'default'}
 					size={'large'}
-					loading={isFetching}
+					loading={isSecretChatFetching}
 					onClick={() => createSecretChat(userInfo.id)}
 				>
 					Создать секретный чат
@@ -74,6 +96,22 @@ export const ProfileInfo: React.FC<Props> = ({
 					item={item}
 				/>
 			))}
+
+			<RenderIf condition={isCurrentUser}>
+				<Button
+					className={'py-2 px-4'}
+					type={'default'}
+					size={'large'}
+					onClick={handleOpenDrawerBtnClick}
+				>
+					Войти с нового устройства
+				</Button>
+
+				<KeyDrawer
+					open={openDrawer}
+					setOpen={setOpenDrawer}
+				/>
+			</RenderIf>
 		</div>
 	);
 };

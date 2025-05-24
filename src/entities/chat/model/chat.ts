@@ -4,24 +4,33 @@ import { EChatType } from '@/shared/model';
 type TChatApi = {
 	id: string;
 	type: EChatType;
-	users: TUserShortInfoApi[];
+	last_action_time: string;
+	user: TUserShortInfoApi;
 };
 
 export type TChatModel = {
 	id: string;
 	type: EChatType;
-	users: UserShortInfo[];
+	lastActionTime: string;
+	user: UserShortInfo;
 };
 
 export class Chat {
 	id: string;
 	type: EChatType;
-	users: UserShortInfo[];
+	lastActionTime: string;
+	user: UserShortInfo;
 
-	constructor(id: string, chatType: EChatType, users: UserShortInfo[]) {
+	constructor(
+		id: string,
+		chatType: EChatType,
+		lastActionTime: string,
+		user: UserShortInfo,
+	) {
 		this.id = id;
 		this.type = chatType;
-		this.users = users;
+		this.lastActionTime = lastActionTime;
+		this.user = user;
 	}
 
 	/**
@@ -31,7 +40,8 @@ export class Chat {
 		return new Chat(
 			from.id,
 			from.type,
-			from.users.map((user) => UserShortInfo.createFromApi(user)),
+			from.last_action_time,
+			UserShortInfo.createFromApi(from.user),
 		);
 	}
 
@@ -42,7 +52,8 @@ export class Chat {
 		return {
 			id: this.id,
 			type: this.type,
-			users: this.users.map((user) => user.toApi()),
+			last_action_time: this.lastActionTime,
+			user: this.user.toApi(),
 		};
 	}
 }

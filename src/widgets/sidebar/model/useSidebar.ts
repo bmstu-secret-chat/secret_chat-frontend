@@ -3,7 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteChatsAction } from '@/entities/chat/model';
+import { deleteMessagesAction } from '@/entities/message/model';
 import {
+	deleteMyPublicKeyAction,
 	deleteUserAction,
 	selectCurrentUser,
 	selectIsAuthorized,
@@ -32,7 +35,12 @@ export const useSidebar = () => {
 
 		try {
 			await authorizationService.logout();
+
 			dispatch(deleteUserAction());
+			dispatch(deleteMyPublicKeyAction());
+			dispatch(deleteChatsAction());
+			dispatch(deleteMessagesAction());
+
 			router.push('/login');
 		} catch (error: unknown) {
 			if (error instanceof Error) {

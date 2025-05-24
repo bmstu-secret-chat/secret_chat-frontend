@@ -65,6 +65,7 @@ export const ProfileEdit: React.FC<Props> = ({
 			<LabelInputContainer className='my-2'>
 				<Label htmlFor='phone'>Номер телефона (8‑123‑456‑78‑90)</Label>
 				<AntInput.OTP
+					disabled
 					length={11}
 					variant='filled'
 					type={'number'}
@@ -73,9 +74,10 @@ export const ProfileEdit: React.FC<Props> = ({
 				/>
 			</LabelInputContainer>
 
-			<LabelInputContainer className='my-2'>
+			<LabelInputContainer className='my-2 cursor-not-allowed pointer-events-none'>
 				<Label htmlFor='email'>Почта</Label>
 				<Input
+					disabled
 					id='email'
 					placeholder='projectmayhem@fc.com'
 					type='email'

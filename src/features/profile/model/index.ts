@@ -1,7 +1,10 @@
-export { useCreateSecretChat } from './useCreateSecretChat';
-export { useProfile } from './useProfile';
-export { useProfileDelete } from './useProfileDelete';
-export { useProfileEdit } from './useProfileEdit';
-export { useProfileInfo } from './useProfileInfo';
-export { useProfileModal } from './useProfileModal';
-export type { ErrorFiled } from './useProfile';
+export { useCreateChat } from './createChat/useCreateChat';
+export { useCreateSecretChat } from './createSecretChat/useCreateSecretChat';
+export { useProfile } from './profilePage/useProfile';
+export { useProfileDelete } from './profileDelete/useProfileDelete';
+export { useProfileEdit } from './profileEdit/useProfileEdit';
+export { useProfileInfo } from './profileInfo/useProfileInfo';
+export { useProfileModal } from './profileModal/useProfileModal';
+export type { ErrorFiled } from './profilePage/useProfile';
+export { useKeyDrawer } from './keyDrawer/useKeyDrawer';
+export { useKeyGenerator } from './keyDrawer/useKeyGenerator';

@@ -20,7 +20,13 @@ export const chatSlice = createSlice({
 			state.chatList = action.payload;
 		},
 		addChat: (state, action: PayloadAction<TChatModel>) => {
-			state.chatList.push(action.payload);
+			const chatExists = state.chatList.some(
+				(chat) => chat.id === action.payload.id,
+			);
+
+			if (!chatExists) {
+				state.chatList.push(action.payload);
+			}
 		},
 		deleteChat: (state, action: PayloadAction<string>) => {
 			state.chatList = state.chatList.filter(

@@ -77,6 +77,7 @@ const initialProps = {
 	arcLength: 0.9,
 	rings: 1,
 	maxRings: 3,
+	hexPolygonResolution: 2,
 };
 
 export const Globe = memo(({ globeConfig, data }: WorldProps) => {
@@ -157,7 +158,7 @@ export const Globe = memo(({ globeConfig, data }: WorldProps) => {
 		if (globeRef.current && globeData) {
 			globeRef.current
 				.hexPolygonsData(countries.features)
-				.hexPolygonResolution(2)
+				.hexPolygonResolution(defaultProps.hexPolygonResolution)
 				.hexPolygonMargin(0.7)
 				.showAtmosphere(defaultProps.showAtmosphere)
 				.atmosphereColor(defaultProps.atmosphereColor)
@@ -243,7 +244,7 @@ export function WebGLRendererConfig() {
 	const { gl, size } = useThree();
 
 	useEffect(() => {
-		gl.setPixelRatio(window.devicePixelRatio);
+		gl.setPixelRatio(window?.devicePixelRatio);
 		gl.setSize(size.width, size.height);
 		gl.setClearColor(0xffaaff, 0);
 	}, [gl, size.height, size.width]);
@@ -308,9 +309,9 @@ export function hexToRgb(hex: string) {
 	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result
 		? {
-				r: parseInt(result[1], 16),
-				g: parseInt(result[2], 16),
-				b: parseInt(result[3], 16),
+				r: Number.parseInt(result[1], 16),
+				g: Number.parseInt(result[2], 16),
+				b: Number.parseInt(result[3], 16),
 			}
 		: null;
 }

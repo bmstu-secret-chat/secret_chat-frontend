@@ -16,3 +16,5 @@ export type { TWsCreateChatApi, TWsCreateChatModel } from './wsCreateChat';
 export { WsCreateChat } from './wsCreateChat';
 export type { TWsDeleteChatApi, TWsDeleteChatModel } from './wsDeleteChat';
 export { WsDeleteChat } from './wsDeleteChat';
+export type { TWsClearChatApi, TWsClearChatModel } from './wsClearChat';
+export { WsClearChat } from './wsClearChat';

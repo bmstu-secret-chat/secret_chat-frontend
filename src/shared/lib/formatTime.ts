@@ -1,11 +1,22 @@
-import dayjs, { extend, locale } from 'dayjs';
+/* eslint-disable import/no-named-as-default-member */
+import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import timezone from 'dayjs/plugin/timezone';
+
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import duration from 'dayjs/plugin/duration';
+import isBetween from 'dayjs/plugin/isBetween';
+import quarterOfYear from 'dayjs/plugin/quarterOfYear';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 
-locale('ru');
-extend(utc);
-extend(timezone);
+dayjs.extend(customParseFormat);
+dayjs.extend(duration);
+dayjs.extend(isBetween);
+dayjs.extend(quarterOfYear);
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
+
+dayjs.locale('ru');
 
 export const formatTimeHHmm = (time: string): string => {
 	try {
@@ -31,4 +42,12 @@ export const formatDateDDMMYYYY = (
 	date: Date | dayjs.Dayjs | string,
 ): string => {
 	return dayjs(date).format('DD.MM.YYYY');
+};
+
+export const formatLastOnline = (lastOnline: string) => {
+	const now = dayjs();
+	const lastOnlineDate = dayjs(+lastOnline * 1000);
+	const delta = dayjs.duration(lastOnlineDate.diff(now));
+
+	return delta.humanize(true);
 };
