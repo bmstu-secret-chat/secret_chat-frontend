@@ -65,6 +65,12 @@ export const showToast = (
 };
 
 export const showError = (error: unknown) => {
+	if (
+		error instanceof Error &&
+		error.message === 'Access токен не предоставлен'
+	)
+		return;
+
 	showToast(
 		'error',
 		error instanceof Error && error.message

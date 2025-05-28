@@ -433,7 +433,7 @@ export const Globe = memo(() => {
 								'max-w-md mt-4 mx-auto whitespace-pre-line',
 							)}
 						>
-							{'Передавайте защищенные сообщения \n из любой точки мира'}
+							{'Общайтесь свободно, \n оставаясь в безопасности'}
 						</p>
 
 						<ButtonShimmer onClick={handleButtonClick}>

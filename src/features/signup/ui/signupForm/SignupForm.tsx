@@ -79,7 +79,7 @@ export function SignupForm() {
 								<Label htmlFor='username'>Имя пользователя</Label>
 								<Input
 									id='username'
-									placeholder='Tyler'
+									placeholder='SafechatUser'
 									type='text'
 									value={username}
 									isError={usernameError}
@@ -91,7 +91,7 @@ export function SignupForm() {
 								<Label htmlFor='email'>Почта</Label>
 								<Input
 									id='email'
-									placeholder='projectmayhem@fc.com'
+									placeholder='user@safechat.com'
 									type='email'
 									value={email}
 									isError={emailError}
@@ -145,7 +145,7 @@ export function SignupForm() {
 								<Label htmlFor='username_info'>Имя пользователя</Label>
 								<Input
 									id='username_info'
-									placeholder='Tyler'
+									placeholder='SafechatUser'
 									type='text'
 									value={username}
 									disabled

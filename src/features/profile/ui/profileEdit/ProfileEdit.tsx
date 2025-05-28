@@ -53,7 +53,7 @@ export const ProfileEdit: React.FC<Props> = ({
 				<Label htmlFor='password_confirm'>Имя пользователя</Label>
 				<Input
 					id='username'
-					placeholder='Tyler'
+					placeholder='SafechatUser'
 					type='text'
 					value={username}
 					isError={usernameError}
@@ -79,7 +79,7 @@ export const ProfileEdit: React.FC<Props> = ({
 				<Input
 					disabled
 					id='email'
-					placeholder='projectmayhem@fc.com'
+					placeholder='user@safechat.com'
 					type='email'
 					value={email}
 					isError={emailError}
@@ -92,7 +92,7 @@ export const ProfileEdit: React.FC<Props> = ({
 				<Label htmlFor='about_me'>О себе</Label>
 				<TextArea
 					id='about_me'
-					placeholder='Герой нашего времени'
+					placeholder='Я использую Safechat'
 					value={aboutMe || ''}
 					onChange={handleAboutMeChange}
 					onBlur={handleAboutMeBlur}

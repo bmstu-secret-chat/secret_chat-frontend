@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatService } from '@/entities/chat/api';
 import { selectChatList, setChatsAction } from '@/entities/chat/model';
-import { showToast } from '@/shared/lib';
+import { showError } from '@/shared/lib';
 
 export const useChatList = () => {
 	const pathname = usePathname();
@@ -23,12 +23,8 @@ export const useChatList = () => {
 			const receivedChats = await chatService.getChatsList();
 
 			dispatch(setChatsAction(receivedChats));
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				showToast('error', error.message);
-			} else {
-				showToast('error', 'Ошибка при выполнеии действия');
-			}
+		} catch (error) {
+			showError(error);
 		}
 	}, [dispatch]);
 

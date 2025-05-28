@@ -62,7 +62,7 @@ export function LoginForm() {
 							<Label htmlFor='username'>Имя пользователя</Label>
 							<Input
 								id='username'
-								placeholder='Tyler'
+								placeholder='SafechatUser'
 								type='text'
 								value={username}
 								isError={usernameError}
